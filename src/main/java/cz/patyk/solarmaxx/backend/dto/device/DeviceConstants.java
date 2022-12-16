@@ -1,5 +1,9 @@
 package cz.patyk.solarmaxx.backend.dto.device;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DeviceConstants {
     public static final String PORT_STATUS_ON = "ON";
     public static final String PORT_STATUS_OFF = "OFF";
