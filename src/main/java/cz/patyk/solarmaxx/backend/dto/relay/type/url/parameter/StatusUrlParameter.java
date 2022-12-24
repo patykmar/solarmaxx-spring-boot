@@ -1,4 +1,4 @@
-package cz.patyk.solarmaxx.backend.dto.device.type.url.parameter;
+package cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter;
 
 import lombok.Data;
 

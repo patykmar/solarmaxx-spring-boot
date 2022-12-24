@@ -3,7 +3,7 @@ package cz.patyk.solarmaxx.backend.dto.in;
 import lombok.Data;
 
 @Data
-public class DeviceDtoIn {
+public class RelayDtoIn {
     private Long id;
     private Long userId;
     private Long deviceTypeDtoId;

@@ -1,9 +1,11 @@
 package cz.patyk.solarmaxx.backend.dto.in;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class DeviceTypeDtoIn {
+@Builder
+public class RelayTypeDtoIn {
     private Long id;
     private String name;
     private String urlStatus;

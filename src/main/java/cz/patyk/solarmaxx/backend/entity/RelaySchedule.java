@@ -10,15 +10,15 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-public class DeviceSchedule implements Serializable {
+public class RelaySchedule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "device_id", nullable = false)
-    private Device device;
+    @JoinColumn(name = "relay_id", nullable = false)
+    private Relay relay;
     private LocalDateTime onStart;
     private LocalDateTime onEnd;
     private Byte dayNumber;

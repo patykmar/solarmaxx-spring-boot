@@ -1,9 +1,9 @@
-package cz.patyk.solarmaxx.backend.dto.device.output;
+package cz.patyk.solarmaxx.backend.dto.relay.output;
 
 import lombok.Data;
 
 @Data
-public class DeviceOutputDto {
+public class RelayOutputDto {
     private Long outputId;
     private String outputStatus;
     private String statusUrl;

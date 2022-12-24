@@ -1,11 +1,11 @@
-package cz.patyk.solarmaxx.backend.dto.device.output;
+package cz.patyk.solarmaxx.backend.dto.relay.output;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ShellyDeviceOutputDto extends DeviceOutputDto {
+public class ShellyRelayOutputDto extends RelayOutputDto {
     private Float voltage;
     private Float temperatureC;
     private Float temperatureF;

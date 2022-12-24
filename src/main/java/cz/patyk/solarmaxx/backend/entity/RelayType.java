@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import lombok.Builder;
 import lombok.Data;
 import lombok.ToString;
 
@@ -14,15 +15,16 @@ import java.util.List;
 
 @Data
 @Entity
-public class DeviceType implements Serializable {
+@Builder
+public class RelayType implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
     @ToString.Exclude
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "deviceType")
-    private List<Device> devices;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "relayType")
+    private List<Relay> relays;
     private String urlStatus;
     private String urlToggle;
     private String turnOn;
