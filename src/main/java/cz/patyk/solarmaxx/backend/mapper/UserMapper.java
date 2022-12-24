@@ -1,4 +1,13 @@
 package cz.patyk.solarmaxx.backend.mapper;
 
-public interface UserMapper {
+import cz.patyk.solarmaxx.backend.dto.in.UserDtoIn;
+import cz.patyk.solarmaxx.backend.dto.out.UserDtoOut;
+import cz.patyk.solarmaxx.backend.entity.User;
+import org.mapstruct.Mapper;
+
+@Mapper()
+public interface UserMapper extends BasicMapper<User, UserDtoIn, UserDtoOut> {
+    UserDtoOut toDtoOut(User user);
+
+    User toEntity(UserDtoIn userDtoIn);
 }
