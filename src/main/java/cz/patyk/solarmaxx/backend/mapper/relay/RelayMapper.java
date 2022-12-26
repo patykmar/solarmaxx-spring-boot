@@ -3,11 +3,10 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.entity.Relay;
+import cz.patyk.solarmaxx.backend.mapper.BasicMapper;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public abstract class DeviceMapper {
-    public abstract RelayDtoOut toDtoOut(Relay relay);
+@Mapper()
+public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, RelayDtoOut> {
 
-    public abstract Relay toEntityDevice(RelayDtoIn relayDtoIn);
 }

@@ -22,7 +22,7 @@ public class Tariff implements Serializable {
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "country_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private String name;
     private Long price;
