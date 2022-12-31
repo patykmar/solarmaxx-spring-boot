@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserDtoIn {
+public class UserDtoIn implements IDtoIn{
     private Long id;
     private String email;
     private String roles;

@@ -12,13 +12,14 @@ import java.util.List;
 
 /**
  * Specify methods for basic CRUD operations
+ *
  * @param <I> input DTO object
  * @param <O> return DTO object
  * @param <E> entity object
  * @param <D> Datatype of entity ID
  */
 @RequiredArgsConstructor
-public class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E extends IEntity<D>, D extends Number> {
+public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E extends IEntity<D>, D extends Number> implements CrudService<I, O, E> {
     protected final JpaRepository<E, D> repository;
     protected final BasicMapper<E, I, O> mapper;
     protected final ErrorHandleService<D> errorHandleService;
@@ -61,4 +62,5 @@ public class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E extends 
             throw errorHandleService.handleNotFoundError(id, notFoundErrorMessage);
         }
     }
+
 }
