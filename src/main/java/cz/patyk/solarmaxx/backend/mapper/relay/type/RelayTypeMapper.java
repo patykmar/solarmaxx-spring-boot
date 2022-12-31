@@ -7,10 +7,15 @@ import cz.patyk.solarmaxx.backend.mapper.BasicMapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface RelayTypeMapper extends BasicMapper<RelayType, RelayTypeDtoIn, RelayTypeDtoOut> {
+
     @Override
     @Mapping(source = "urlStatus", target = "urlStatusTemplate")
     @Mapping(source = "urlToggle", target = "urlToggleTemplate")
     RelayTypeDtoOut toDtoOut(RelayType entity);
+
+    @Mapping(target = "relays", ignore = true)
+    RelayType toEntity(RelayTypeDtoIn relayTypeDtoIn);
+
 }
