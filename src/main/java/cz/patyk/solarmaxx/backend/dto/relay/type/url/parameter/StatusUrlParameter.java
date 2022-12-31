@@ -6,8 +6,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class StatusUrlParameter {
-    private String template;
-    private String ip;
+    private String urlTemplate;
+    private String ipAddress;
     private Short port;
     private Byte outputId;
 }

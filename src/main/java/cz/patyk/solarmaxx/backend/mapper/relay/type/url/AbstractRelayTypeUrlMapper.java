@@ -1,6 +1,6 @@
 package cz.patyk.solarmaxx.backend.mapper.relay.type.url;
 
-import cz.patyk.solarmaxx.backend.config.DeviceTypeUrlPattern;
+import cz.patyk.solarmaxx.backend.dto.relay.type.url.RelayTypeUrlPatternDto;
 import cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter.StatusUrlParameter;
 import cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter.ToggleUrlParameter;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 public class AbstractRelayTypeUrlMapper implements RelayTypeUrlMapper {
-    protected final DeviceTypeUrlPattern deviceTypeUrlPattern;
+    protected final RelayTypeUrlPatternDto relayTypeUrlPatternDto;
     protected Byte defaultOutputId = 0;
 
     @Override
@@ -19,11 +19,11 @@ public class AbstractRelayTypeUrlMapper implements RelayTypeUrlMapper {
             statusUrlParameter.setOutputId(defaultOutputId);
         }
 
-        String[] searchList = {deviceTypeUrlPattern.getIp(), deviceTypeUrlPattern.getId(), deviceTypeUrlPattern.getPort()};
-        String[] replacementList = {statusUrlParameter.getIp(), String.valueOf(statusUrlParameter.getOutputId()), String.valueOf(statusUrlParameter.getPort())};
+        String[] searchList = {relayTypeUrlPatternDto.getIp(), relayTypeUrlPatternDto.getId(), relayTypeUrlPatternDto.getPort()};
+        String[] replacementList = {statusUrlParameter.getIpAddress(), String.valueOf(statusUrlParameter.getOutputId()), String.valueOf(statusUrlParameter.getPort())};
 
         return StringUtils.replaceEach(
-                statusUrlParameter.getTemplate(),
+                statusUrlParameter.getUrlTemplate(),
                 searchList,
                 replacementList
         );
@@ -35,11 +35,11 @@ public class AbstractRelayTypeUrlMapper implements RelayTypeUrlMapper {
             toggleUrlParameter.setOutputId(defaultOutputId);
         }
 
-        String[] searchList = {deviceTypeUrlPattern.getIp(), deviceTypeUrlPattern.getId(), deviceTypeUrlPattern.getPort(), deviceTypeUrlPattern.getToggle()};
-        String[] replacementList = {toggleUrlParameter.getIp(), String.valueOf(toggleUrlParameter.getOutputId()), String.valueOf(toggleUrlParameter.getPort()), toggleUrlParameter.getToggle()};
+        String[] searchList = {relayTypeUrlPatternDto.getIp(), relayTypeUrlPatternDto.getId(), relayTypeUrlPatternDto.getPort(), relayTypeUrlPatternDto.getToggle()};
+        String[] replacementList = {toggleUrlParameter.getIpAddress(), String.valueOf(toggleUrlParameter.getOutputId()), String.valueOf(toggleUrlParameter.getPort()), toggleUrlParameter.getToggle()};
 
         return StringUtils.replaceEach(
-                toggleUrlParameter.getTemplate(),
+                toggleUrlParameter.getUrlTemplate(),
                 searchList,
                 replacementList
         );
