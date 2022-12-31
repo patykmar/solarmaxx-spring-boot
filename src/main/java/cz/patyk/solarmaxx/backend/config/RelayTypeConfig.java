@@ -3,7 +3,9 @@ package cz.patyk.solarmaxx.backend.config;
 import cz.patyk.solarmaxx.backend.dto.relay.type.RelayTypeConstants;
 import cz.patyk.solarmaxx.backend.dto.relay.type.url.RelayTypeUrlPatternDto;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class RelayTypeConfig {
 
     @Bean
@@ -15,4 +17,5 @@ public class RelayTypeConfig {
                 .toggle(RelayTypeConstants.RELAY_TYPE_URL_PATTERN_TOGGLE)
                 .build();
     }
+
 }

@@ -3,7 +3,9 @@ package cz.patyk.solarmaxx.backend.mapper.relay.type.url;
 import cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter.ToggleUrlParameter;
 import cz.patyk.solarmaxx.backend.dto.relay.type.RelayTypeConstants;
 import cz.patyk.solarmaxx.backend.dto.relay.type.url.RelayTypeUrlPatternDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ShellyProUrlMapper extends AbstractRelayTypeUrlMapper {
     public ShellyProUrlMapper(RelayTypeUrlPatternDto relayTypeUrlPatternDto) {
         super(relayTypeUrlPatternDto);

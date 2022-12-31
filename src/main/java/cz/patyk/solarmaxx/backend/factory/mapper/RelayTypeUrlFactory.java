@@ -5,7 +5,9 @@ import cz.patyk.solarmaxx.backend.mapper.relay.type.url.RelayTypeUrlMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.ShellyProUrlMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.TasmotaUrlMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class RelayTypeUrlFactory {
     private final ShellyProUrlMapper shellyProUrlMapper;
