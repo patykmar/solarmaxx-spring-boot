@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RelayTypeDtoOut {
+public class RelayTypeDtoOut implements IDtoOut {
     private Long id;
     private String name;
     private String urlStatusTemplate;

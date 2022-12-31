@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RelayTypeDtoIn {
+public class RelayTypeDtoIn implements IDtoIn {
     private Long id;
     private String name;
     private String urlStatus;

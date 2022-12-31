@@ -1,12 +1,14 @@
 package cz.patyk.solarmaxx.backend.dto.out;
 
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class RelayDtoOut {
+@Builder
+public class RelayDtoOut implements IDtoOut {
     private Long id;
     private UserDtoOut user;
     private RelayTypeDtoOut relayTypeDtoOut;
