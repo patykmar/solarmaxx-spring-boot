@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-public class RelayType implements Serializable {
+public class RelayType implements Serializable, IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

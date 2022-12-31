@@ -20,14 +20,14 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-public class Relay implements Serializable {
+public class Relay implements Serializable, IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String ipAddress;
     private Short port;
-    private Short outputCount;
+    private Byte outputCount;
 
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
