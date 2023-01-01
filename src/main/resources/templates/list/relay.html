@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/layout :: head-for-grid"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="fragments/layout :: header_main_nav"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5">Relays list</h1>
+        <hr />
+        <table class="table table-bordered table-striped table-hover" id="relayList">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>IP address</th>
+                <th>Port</th>
+                <th>Output count</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="relay: ${relays}">
+                    <td th:text="${relay.name}" />
+                    <td th:text="${relay.ipAddress}"/>
+                    <td th:text="${relay.port}"/>
+                    <td th:text="${relay.outputCount}"/>
+                    <td>
+                        <a th:href="@{/relay/detail(id=${relay.getId()})}" class="btn btn-info">Detail</a>
+                        <a href="#" class="btn btn-primary">Edit</a>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+        <span class="text-muted">Place sticky footer content here.</span>
+    </div>
+</footer>
+
+<div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $("#relayList").DataTable({
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        });
+    })
+</script>
+</div>
+
+</body>
+</html>
