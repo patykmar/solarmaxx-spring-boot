@@ -31,6 +31,13 @@ public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E
                 .toList();
     }
 
+    @Override
+    public List<O> getAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDtoOut)
+                .toList();
+    }
+
     public O getOne(D id) {
         return mapper.toDtoOut(getOneEntity(id));
     }
@@ -42,13 +49,23 @@ public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E
 
     public O newItem(I dtoIn) {
         E entity = mapper.toEntity(dtoIn);
-        return mapper.toDtoOut(repository.save(entity));
+        return newItemByEntity(repository.save(entity));
+    }
+
+    @Override
+    public O newItemByEntity(E newEntity) {
+        return mapper.toDtoOut(repository.save(newEntity));
     }
 
     public O editItem(I dtoIn, D id) {
-        checkIfExistEntity(id);
         E entity = mapper.toEntity(dtoIn);
         entity.setId(id);
+        return editItemByEntity(entity);
+    }
+
+    @Override
+    public O editItemByEntity(E entity) {
+        checkIfExistEntity(entity.getId());
         return mapper.toDtoOut(repository.save(entity));
     }
 
