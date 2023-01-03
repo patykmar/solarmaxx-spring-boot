@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header_relay}"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5" th:text="${h1}">Relay form</h1>
+
+        <hr/>
+
+        <form th:action="@{/relay/save}" th:object="${relayEntity}" method="POST">
+
+            <div class="mb-3 row">
+                <label for="name" class="col-sm-2 col-form-label">Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{name}" class="form-control col-4 mb-4" placeholder="Enter Name"
+                           id="name"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="ipAddress">IP address:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:field="*{ipAddress}" class="form-control col-4 mb-4"
+                           placeholder="Enter IP Address" id="ipAddress"/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="port" class="col-sm-2 col-form-label">Application port:</label>
+                <div class="col-sm-10">
+                    <input type="number" th:field="*{port}" class="form-control col-4 mb-4" placeholder="Enter port"
+                           min="0" max="65535" id="port"/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="outputCount">Output count:</label>
+                <div class="col-sm-10">
+                    <input type="number" th:field="*{outputCount}" class="form-control col-4 mb-4"
+                           placeholder="Enter output count" min="1" max="8" id="outputCount"/>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="relayType">Relay type:</label>
+                <div class="col-sm-10">
+                    <select th:field="*{relayType}" id="relayType" class="form-select col-4 mb-4">
+                        <option th:each="relayType : ${relayTypeService.getAll()}"
+                                th:value="${relayType.getId()}"
+                                th:text="${relayType.getName()}"
+                                th:selected="${relayEntity.getRelayType().getId() == relayType.getId()}"
+                                th:if="${relayEntity.getId() != null}">Options for edit
+                        </option>
+                        <option value="0" selected th:if="${relayEntity.getId() == null}"> - - -</option>
+                        <option th:each="relayType : ${relayTypeService.getAll()}"
+                                th:value="${relayType.getId()}"
+                                th:text="${relayType.getName()}"
+                                th:if="${relayEntity.getId() == null}">Options for new item
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="relayType">Owner:</label>
+                <div class="col-sm-10">
+                    <select th:field="*{user}" id="user" class="form-select col-4 mb-4">
+                        <option th:each="user : ${userService.getAll()}"
+                                th:value="${user.getId()}"
+                                th:text="${user.getEmail()}"
+                                th:selected="${relayEntity.getUser().getId() == user.getId()}"
+                                th:if="${relayEntity.getId() != null}">Options for edit
+                        </option>
+                        <option value="0" selected th:if="${relayEntity.getId() == null}"> - - -</option>
+                        <option th:each="user : ${userService.getAll()}"
+                                th:value="${user.getId()}"
+                                th:text="${user.getEmail()}"
+                                th:if="${relayEntity.getId() == null}">Options for new item
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary col-2">Save</button>
+            <a th:href="@{/relay/list}" class="btn btn-danger col-2">Cancel</a>
+
+            <input type="hidden" th:field="*{id}"/>
+
+        </form>
+
+        <hr/>
+
+        <a th:href="@{/relay/list}">Back to list</a>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: basicFooter}"/>
+
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523}"/>
+
+</body>
+</html>
