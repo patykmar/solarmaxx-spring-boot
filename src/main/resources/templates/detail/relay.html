@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header_relay}"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5" th:text="${h1}">Relay detail - </h1>
+        <hr />
+
+        <table class="table">
+            <tbody>
+            <tr>
+                <th>Name</th>
+                <td th:text="${relayDtoOut.getName()}">cell</td>
+            </tr>
+            <tr>
+                <th>IP address</th>
+                <td th:text="${relayDtoOut.getIpAddress()}">cell</td>
+            </tr>
+            <tr>
+                <th>Port</th>
+                <td th:text="${relayDtoOut.getPort()}">cell</td>
+            </tr>
+            <tr>
+                <th>Output count</th>
+                <td th:text="${relayDtoOut.getOutputCount()}">cell</td>
+            </tr>
+            <tr>
+                <th>Relay type</th>
+                <td th:text="${relayDtoOut.getRelayTypeDtoOut().getName()}">cell</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <hr/>
+
+        <table class="table table-bordered table-striped" id="relayOutputList">
+            <thead>
+            <tr>
+                <th>OutputId</th>
+                <th>Output status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr th:each="relayOutput: ${relayDtoOut.getRelayOutputDtos()}">
+                    <td th:text="${relayOutput.outputId}" />
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'NA'}">N/A</button>
+                        <button type="button" class="btn btn-success btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'ON'}">ON</button>
+                        <button type="button" class="btn btn-secondary btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}">OFF</button>
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-success btn-sm">Turn ON</a>
+                        <a href="#" class="btn btn-secondary btn-sm">Turn OFF</a>
+                        <button type="button" class="btn btn-danger btn-sm" disabled>N/A</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <hr/>
+
+        <a th:href="@{/relay/list}">Back to list</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: basicFooter}" />
+
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523}" />
+
+</body>
+</html>

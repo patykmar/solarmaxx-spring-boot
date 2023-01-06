@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head-for-grid}"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header_relay}"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5">Relays list</h1>
+        <hr/>
+        <table class="table table-bordered table-striped table-hover" id="relayList">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>IP address</th>
+                <th>Port</th>
+                <th>Output count</th>
+                <th>Relay type</th>
+                <th>Owner</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="relay: ${relays}">
+                <td th:text="${relay.name}"/>
+                <td th:text="${relay.ipAddress}"/>
+                <td th:text="${relay.port}"/>
+                <td th:text="${relay.outputCount}"/>
+                <td th:text="${relay.relayTypeDtoOut.name}"/>
+                <td th:text="${relay.user.email}"/>
+                <td>
+                    <a th:href="@{/relay/detail/{id}(id=${relay.getId()})}" class="btn btn-info btn-sm">Detail</a>
+                    <a th:href="@{/relay/edit/{id}(id=${relay.getId()})}" class="btn btn-primary btn-sm">Edit</a>
+                    <a th:href="@{/relay/delete/{id}(id=${relay.getId()})}" class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure to delete?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/relay/new}" class="btn btn-primary">New relay</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: basicFooter}"/>
+
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523_JQuery361Min_DatatablesMin}"/>
+<script>
+    $(document).ready(function () {
+        $("#relayList").DataTable({
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        });
+    })
+</script>
+
+</body>
+</html>
