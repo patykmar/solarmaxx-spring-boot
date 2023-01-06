@@ -31,8 +31,8 @@
                 <td th:text="${relay.relayTypeDtoOut.name}"/>
                 <td th:text="${relay.user.email}"/>
                 <td>
-                    <a th:href="@{/relay/detail(id=${relay.getId()})}" class="btn btn-info btn-sm">Detail</a>
-                    <a th:href="@{/relay/edit(id=${relay.getId()})}" class="btn btn-primary btn-sm">Edit</a>
+                    <a th:href="@{/relay/detail/{id}(id=${relay.getId()})}" class="btn btn-info btn-sm">Detail</a>
+                    <a th:href="@{/relay/edit/{id}(id=${relay.getId()})}" class="btn btn-primary btn-sm">Edit</a>
                     <a th:href="@{/relay/delete/{id}(id=${relay.getId()})}" class="btn btn-danger btn-sm"
                        onclick="return confirm('Are you sure to delete?')">Delete</a>
                 </td>
