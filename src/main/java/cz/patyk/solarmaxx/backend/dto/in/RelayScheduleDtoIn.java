@@ -3,14 +3,14 @@ package cz.patyk.solarmaxx.backend.dto.in;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Builder
-public class RelayScheduleDtoIn {
+public class RelayScheduleDtoIn implements IDtoIn {
     private Long id;
     private Long relayId;
-    private LocalDateTime onStart;
-    private LocalDateTime onEnd;
+    private Date onStart;
+    private Date onEnd;
     private Byte dayNumber;
 }
