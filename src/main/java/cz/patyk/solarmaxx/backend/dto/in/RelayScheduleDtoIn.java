@@ -1,16 +1,18 @@
 package cz.patyk.solarmaxx.backend.dto.in;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-
-import java.util.Date;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RelayScheduleDtoIn implements IDtoIn {
     private Long id;
     private Long relayId;
-    private Date onStart;
-    private Date onEnd;
+    private String onStart;
+    private String onEnd;
     private Byte dayNumber;
 }
