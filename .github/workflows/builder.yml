@@ -1,9 +1,12 @@
-# Verifies commits, does not generate any artifact
+# Creat tag when
 
-name: Builder
+name: Create a tag
 
 on:
   pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -17,14 +20,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: Extract artifact version
-        if: ${{ github.ref_type == 'branch' }}
-        run: |
-          GRADLE_VERSION=$(./gradlew properties | grep "^version:" | cut -d ":" -f 2 | xargs)
-          echo "FINAL_VERSION=$GRADLE_VERSION.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
       - name: Bump version and push tag
