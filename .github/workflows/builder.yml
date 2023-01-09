@@ -29,8 +29,10 @@ jobs:
         run: |
           GRADLE_VERSION=$(./gradlew properties | grep "^version:" | cut -d ":" -f 2 | xargs)
           echo "FINAL_VERSION=$GRADLE_VERSION.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
-          echo $FINAL_VERSION
       - name: Extract artifact version from tag
         if: ${{ github.ref_type == 'tag' }}
         run: |
           echo "FINAL_VERSION=$GITHUB_REF_NAME" >> $GITHUB_ENV
+
+      - name: Build and publish artifact
+        run: ./gradlew clean build publish -Pversion=${{env.FINAL_VERSION}}
