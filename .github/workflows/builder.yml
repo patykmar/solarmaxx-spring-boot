@@ -28,7 +28,7 @@ jobs:
 
       - name: Create version tag
         if: ${{ github.ref_type == 'branch' }}
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
           github-token: ${{ github.token }}
           script: |
