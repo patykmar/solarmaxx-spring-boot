@@ -26,15 +26,15 @@ jobs:
           GRADLE_VERSION=$(./gradlew properties | grep "^version:" | cut -d ":" -f 2 | xargs)
           echo "FINAL_VERSION=$GRADLE_VERSION.$GITHUB_RUN_NUMBER" >> $GITHUB_ENV
 
-      - name: Create version tag
-        if: ${{ github.ref_type == 'branch' }}
-        uses: actions/github-script@v5
+      - uses: actions/checkout@v2
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
         with:
-          github-token: ${{ github.token }}
-          script: |
-            github.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `refs/tags/${{ env.FINAL_VERSION }}`,
-              sha: context.sha
-            })
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
