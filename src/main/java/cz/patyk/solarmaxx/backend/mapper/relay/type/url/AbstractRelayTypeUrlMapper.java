@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 @RequiredArgsConstructor
-public class AbstractRelayTypeUrlMapper implements RelayTypeUrlMapper {
+public abstract class AbstractRelayTypeUrlMapper implements RelayTypeUrlMapper {
     protected final RelayTypeUrlPatternDto relayTypeUrlPatternDto;
     protected Byte defaultOutputId = 0;
 

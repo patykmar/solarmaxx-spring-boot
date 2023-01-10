@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head-for-grid}"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header_schedule}"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5">Relay schedule list</h1>
+        <hr/>
+        <table class="table table-bordered table-striped table-hover" id="relayScheduleList">
+            <thead>
+            <tr>
+                <th>Relay</th>
+                <th>OnStart</th>
+                <th>OnEnd</th>
+                <th>Day</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="relaySchedule: ${relayScheduleDtoOuts}">
+                <td th:text="${relaySchedule.relayDtoOut.name}"/>
+                <td th:text="${relaySchedule.onStart}"/>
+                <td th:text="${relaySchedule.onEnd}"/>
+                <td th:text="${relaySchedule.dayNumber}"/>
+                <td>
+                    <a th:href="@{/relay/schedule/edit/{id}(id=${relaySchedule.getId()})}"
+                       class="btn btn-primary btn-sm">Edit</a>
+                    <a th:href="@{/relay/schedule/delete/{id}(id=${relaySchedule.getId()})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure to delete?')">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/relay/schedule/new}" class="btn btn-primary">New schedule</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: basicFooter}"/>
+
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523_JQuery361Min_DatatablesMin}"/>
+<script>
+    $(document).ready(function () {
+        $("#relayScheduleList").DataTable({
+            'aoColumnDefs': [{
+                'bSortable': false,
+                'aTargets': [-1] /* 1st one, start by the right */
+            }]
+        });
+    })
+</script>
+
+</body>
+</html>

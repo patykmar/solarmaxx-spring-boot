@@ -2,6 +2,7 @@ package cz.patyk.solarmaxx;
 
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
 import cz.patyk.solarmaxx.backend.entity.Relay;
+import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
@@ -52,5 +53,13 @@ public class EntityConstants {
             .outputCount(TestRelayConstants.RELAY_OUTPUT_COUNT)
             .user(USER_ADMIN)
             .relayType(RELAY_TYPE_SHELLY)
+            .build();
+
+    public static final RelaySchedule RELAY_SCHEDULE_TASMOTA = RelaySchedule.builder()
+            .id(NumberUtils.LONG_ONE)
+            .relay(RELAY_TASMOTA_ADMIN)
+            .onStart("12:00")
+            .onEnd("16:00")
+            .dayNumber((byte) 1)
             .build();
 }
