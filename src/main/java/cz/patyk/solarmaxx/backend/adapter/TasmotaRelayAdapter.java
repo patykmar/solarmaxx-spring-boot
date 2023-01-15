@@ -3,7 +3,7 @@ package cz.patyk.solarmaxx.backend.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
-import cz.patyk.solarmaxx.backend.dto.in.TasmotaOutputDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import lombok.NonNull;
