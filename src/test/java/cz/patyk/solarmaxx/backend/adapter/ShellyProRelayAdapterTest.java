@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
-class ShellyProRelayAdapterTest {
+public class ShellyProRelayAdapterTest {
     static String WAS_FALSE = "{\"was_on\":false}";
     static String WAS_TRUE = "{\"was_on\":true}";
     static String STATUS_DOWN = "{\"id\":0, \"source\":\"http\", \"output\":false, \"apower\":0.0, \"voltage\":226.9, \"current\":0.000, \"pf\":0.00, \"aenergy\":{\"total\":0.000,\"by_minute\":[0.000,0.000,0.000],\"minute_ts\":1673860473},\"temperature\":{\"tC\":29.1, \"tF\":84.4}}";
