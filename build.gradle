@@ -32,6 +32,7 @@ ext {
     h2Version = '2.1.214'
     apacheCommonsVersion = '3.12.0'
     assertjVersion = '3.23.1'
+    feignJacksonVersion = '12.1'
 }
 
 dependencies {
@@ -42,6 +43,8 @@ dependencies {
     implementation group: 'com.h2database', name: 'h2', version: "$h2Version"
     implementation group: 'org.apache.commons', name: 'commons-lang3', version: "$apacheCommonsVersion"
     implementation group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "$springBootVersion"
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: "$springCloudVersion"
+    implementation group: 'io.github.openfeign', name: 'feign-jackson', version: "$feignJacksonVersion"
 
 	compileOnly group: 'org.projectlombok', name: 'lombok', version: "$lombokVersion"
 
