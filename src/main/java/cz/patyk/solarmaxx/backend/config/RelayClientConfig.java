@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class TasmotaRelayClientConfig {
+public class RelayClientConfig {
     @Bean
     public Decoder feignDecoder() {
         return new JacksonDecoder();

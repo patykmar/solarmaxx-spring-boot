@@ -1,6 +1,6 @@
 package cz.patyk.solarmaxx.backend.client;
 
-import cz.patyk.solarmaxx.backend.config.TasmotaRelayClientConfig;
+import cz.patyk.solarmaxx.backend.config.RelayClientConfig;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.net.URI;
 
-@FeignClient(name = "tasmota-client", configuration = TasmotaRelayClientConfig.class, url = "www.example.com")
+@FeignClient(name = "tasmota-client", configuration = RelayClientConfig.class, url = "www.example.com")
 public interface TasmotaClient {
 
     @Headers("Content-Type: application/json")
