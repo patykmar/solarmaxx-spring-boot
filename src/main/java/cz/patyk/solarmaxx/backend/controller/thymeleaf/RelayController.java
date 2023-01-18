@@ -19,11 +19,13 @@ import java.util.Objects;
 @Controller
 @RequestMapping("/relay")
 public class RelayController extends ThymeleafAbstractController<RelayDtoIn, RelayDtoOut, Relay, Long> {
+    private final RelayService relayService;
     private final RelayTypeService relayTypeService;
     private final UserService userService;
 
     public RelayController(RelayService relayService, RelayTypeService relayTypeService, UserService userService) {
         super(relayService, "redirect:/relay/list");
+        this.relayService = relayService;
         this.relayTypeService = relayTypeService;
         this.userService = userService;
     }
@@ -41,7 +43,7 @@ public class RelayController extends ThymeleafAbstractController<RelayDtoIn, Rel
     @GetMapping("/detail/{id}")
     public ModelAndView showDetail(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("detail/relay");
-        RelayDtoOut relayDtoOut = service.getOne(id);
+        RelayDtoOut relayDtoOut = relayService.getOneOnLineMode(id);
 
         modelAndView.addObject("h1", relayDtoOut.getName());
         modelAndView.addObject("relayDtoOut", relayDtoOut);

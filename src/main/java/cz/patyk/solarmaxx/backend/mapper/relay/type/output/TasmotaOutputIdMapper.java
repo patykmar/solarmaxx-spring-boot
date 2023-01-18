@@ -1,5 +1,6 @@
 package cz.patyk.solarmaxx.backend.mapper.relay.type.output;
 
+import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.TasmotaUrlMapper;
@@ -14,16 +15,20 @@ import static cz.patyk.solarmaxx.backend.dto.relay.type.RelayTypeConstants.TASMO
 @Component
 public class TasmotaOutputIdMapper extends OutputIdMapper {
 
-    public TasmotaOutputIdMapper(UrlParameterMapper urlParameterMapper, TasmotaUrlMapper tasmotaUrlMapper) {
-        super(urlParameterMapper, tasmotaUrlMapper);
+    public TasmotaOutputIdMapper(
+            UrlParameterMapper urlParameterMapper,
+            TasmotaUrlMapper tasmotaUrlMapper,
+            TasmotaRelayAdapter tasmotaRelayAdapter
+    ) {
+        super(urlParameterMapper, tasmotaUrlMapper, tasmotaRelayAdapter);
     }
 
     @Override
-    public List<RelayOutputDto> getDeviceOutputs(Relay relay, boolean offlineMode) {
+    public List<RelayOutputDto> getDeviceOutputs(Relay relay, boolean onlineMode) {
         List<RelayOutputDto> relayOutputDtoList = new ArrayList<>();
 
         for (byte i = TASMOTA_DEFAULT_OUTPUT_ID; i <= relay.getOutputCount(); i++) {
-            relayOutputDtoList.add(toRelayOutputDto(relay, i));
+            relayOutputDtoList.add(toRelayOutputDto(relay, i, onlineMode));
         }
         return relayOutputDtoList;
     }

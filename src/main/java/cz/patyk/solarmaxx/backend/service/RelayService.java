@@ -9,9 +9,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RelayService extends AbstractCrudService<RelayDtoIn, RelayDtoOut, Relay, Long> {
+    private final RelayMapper relayMapper;
 
     public RelayService(RelayRepository repository, RelayMapper mapper, ErrorHandleService<Long> errorHandleService) {
         super(repository, mapper, errorHandleService, ServiceConstants.RELAY_NOT_FOUND_MESSAGE);
+        this.relayMapper = mapper;
+    }
+
+    public RelayDtoOut getOneOnLineMode(Long id) {
+        return relayMapper.toDtoOutOnLineMode(getOneEntity(id));
     }
 
 }
