@@ -3,6 +3,7 @@ package cz.patyk.solarmaxx.backend.adapter;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,12 +41,12 @@ public class TasmotaRelayAdapterFactoryTest {
 
     @ParameterizedTest
     @MethodSource("provideStatuses")
-    void updateStatusFromRelay(OutputStatus status, String jsonMock) {
+    void updateStatusFromRelay(OutputStatus status, TasmotaOutputDto tasmotaOutputDto) {
         Mockito
                 .when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
-                .thenReturn(jsonMock);
+                .thenReturn(tasmotaOutputDto);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.updateStatusFromRelay(relayOutputDto);
+        RelayOutputDto updatedDto = tasmotaRelayAdapter.updateStatusFromRelay(relayOutputDto, RelayAdapterConstants.FAKE_IP);
 
         assertThat(updatedDto)
                 .returns(status, RelayOutputDto::getOutputStatus);
@@ -53,10 +54,8 @@ public class TasmotaRelayAdapterFactoryTest {
 
     private static Stream<Arguments> provideStatuses() {
         return Stream.of(
-                Arguments.of(OutputStatus.ON, "{\"POWER\": \"ON\"}"),
-                Arguments.of(OutputStatus.ON, "{\"POWER1\": \"ON\"}"),
-                Arguments.of(OutputStatus.OFF, "{\"POWER\": \"OFF\"}"),
-                Arguments.of(OutputStatus.OFF, "{\"POWER1\": \"OFF\"}")
+                Arguments.of(OutputStatus.ON, RelayAdapterConstants.TASMOTA_POWER_ON),
+                Arguments.of(OutputStatus.OFF, RelayAdapterConstants.TASMOTA_POWER_OFF)
         );
     }
 
@@ -64,9 +63,9 @@ public class TasmotaRelayAdapterFactoryTest {
     void turnOnRelayOutput() {
         Mockito
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
-                .thenReturn("{\"POWER\": \"ON\"}");
+                .thenReturn(RelayAdapterConstants.TASMOTA_STRING_POWER_ON);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOnRelayOutput(relayOutputDto);
+        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
 
         assertThat(updatedDto)
                 .returns(OutputStatus.ON, RelayOutputDto::getOutputStatus);
@@ -76,9 +75,9 @@ public class TasmotaRelayAdapterFactoryTest {
     void turnOffRelayOutput() {
         Mockito
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
-                .thenReturn("{\"POWER\": \"OFF\"}");
+                .thenReturn(RelayAdapterConstants.TASMOTA_STRING_POWER_OFF);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(relayOutputDto);
+        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
 
         assertThat(updatedDto)
                 .returns(OutputStatus.OFF, RelayOutputDto::getOutputStatus);

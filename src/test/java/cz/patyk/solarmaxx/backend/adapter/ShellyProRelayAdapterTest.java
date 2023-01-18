@@ -29,11 +29,11 @@ public class ShellyProRelayAdapterTest {
     @Mock
     ShellyProClient shellyProClient;
     RelayOutputDto relayOutputDto;
-    ShellyRelayAdapter shellyRelayAdapter;
+    ShellyProRelayAdapter shellyProRelayAdapter;
 
     @BeforeEach
     void setUp() {
-        shellyRelayAdapter = new ShellyRelayAdapter(new OutputStatusMapper(), shellyProClient);
+        shellyProRelayAdapter = new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient);
         relayOutputDto = RelayOutputDto.builder()
                 .outputId((byte) 1)
                 .statusUrl("statusUrl")
@@ -50,7 +50,7 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
                 .thenReturn(jsonMock);
 
-        assertThat(shellyRelayAdapter.updateStatusFromRelay(relayOutputDto))
+        assertThat(shellyProRelayAdapter.updateStatusFromRelay(relayOutputDto, "1.2.3.4"))
                 .returns(status, RelayOutputDto::getOutputStatus);
     }
 
@@ -69,7 +69,7 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.setOutputState(any(URI.class), any(Byte.class)))
                 .thenReturn(jsonMock);
 
-        assertThat(shellyRelayAdapter.turnOnRelayOutput(relayOutputDto))
+        assertThat(shellyProRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP))
                 .returns(status, RelayOutputDto::getOutputStatus);
     }
 

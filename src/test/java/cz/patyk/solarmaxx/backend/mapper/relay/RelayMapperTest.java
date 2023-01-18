@@ -2,6 +2,10 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.backend.adapter.ShellyProRelayAdapter;
+import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
+import cz.patyk.solarmaxx.backend.client.ShellyProClient;
+import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.config.RelayTypeConfig;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
@@ -27,12 +31,19 @@ import cz.patyk.solarmaxx.backend.service.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+
+@ExtendWith(MockitoExtension.class)
 class RelayMapperTest {
     private final RelayMapper RELAY_MAPPER = Mappers.getMapper(RelayMapper.class);
+    @Mock
+    TasmotaClient tasmotaClient;
 
     @BeforeEach
     void setUp() {
@@ -46,8 +57,12 @@ class RelayMapperTest {
         ShellyProUrlMapper shellyProUrlMapper = new ShellyProUrlMapper(relayTypeConfig.relayTypeUrlPattern());
         TasmotaUrlMapper tasmotaUrlMapper = new TasmotaUrlMapper(relayTypeConfig.relayTypeUrlPattern());
 
-        ShellyProOutputIdMapper shellyProOutputIdMapper = new ShellyProOutputIdMapper(urlParameterMapper, shellyProUrlMapper);
-        TasmotaOutputIdMapper tasmotaOutputIdMapper = new TasmotaOutputIdMapper(urlParameterMapper, tasmotaUrlMapper);
+        TasmotaRelayAdapter tasmotaRelayAdapter = new TasmotaRelayAdapter(tasmotaClient);
+        ShellyProClient shellyProClient = Mockito.mock(ShellyProClient.class);
+        ShellyProRelayAdapter shellyProRelayAdapter = new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient);
+
+        ShellyProOutputIdMapper shellyProOutputIdMapper = new ShellyProOutputIdMapper(urlParameterMapper, shellyProUrlMapper, shellyProRelayAdapter);
+        TasmotaOutputIdMapper tasmotaOutputIdMapper = new TasmotaOutputIdMapper(urlParameterMapper, tasmotaUrlMapper, tasmotaRelayAdapter);
 
         RelayOutputIdFactory relayOutputIdFactory = new RelayOutputIdFactory(shellyProOutputIdMapper, tasmotaOutputIdMapper);
 
