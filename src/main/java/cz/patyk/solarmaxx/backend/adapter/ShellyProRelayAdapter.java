@@ -18,14 +18,14 @@ import java.net.URI;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ShellyRelayAdapter implements RelayAdapter {
+public class ShellyProRelayAdapter implements RelayAdapter {
 
     private static final String PARSE_ERROR_MESSAGE = "Cannot parse state from Shelly Pro output URL: {}";
     private final OutputStatusMapper outputStatusMapper;
     private final ShellyProClient shellyProClient;
 
     @Override
-    public RelayOutputDto updateStatusFromRelay(@NonNull RelayOutputDto relayOutputDto) {
+    public RelayOutputDto updateStatusFromRelay(@NonNull RelayOutputDto relayOutputDto, String ip) {
         String response = shellyProClient.getOutputStatusWithSpecificPortObject(
                 URI.create(relayOutputDto.getStatusUrl()),
                 relayOutputDto.getOutputId()
@@ -34,7 +34,7 @@ public class ShellyRelayAdapter implements RelayAdapter {
     }
 
     @Override
-    public RelayOutputDto turnOnRelayOutput(@NonNull RelayOutputDto relayOutputDto) {
+    public RelayOutputDto turnOnRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip) {
         String response = shellyProClient.setOutputState(
                 URI.create(relayOutputDto.getStatusUrl()),
                 relayOutputDto.getOutputId()
@@ -43,8 +43,8 @@ public class ShellyRelayAdapter implements RelayAdapter {
     }
 
     @Override
-    public RelayOutputDto turnOffRelayOutput(@NonNull RelayOutputDto relayOutputDto) {
-        return turnOnRelayOutput(relayOutputDto);
+    public RelayOutputDto turnOffRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip) {
+        return turnOnRelayOutput(relayOutputDto, ip);
     }
 
     private RelayOutputDto parseStatusResponseAndUpdateState(RelayOutputDto relayOutputDto, String response) {
