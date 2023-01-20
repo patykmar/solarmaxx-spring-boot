@@ -28,7 +28,7 @@ public class ShellyProOutputIdMapper extends OutputIdMapper {
         List<RelayOutputDto> relayOutputDtoList = new ArrayList<>();
 
         for (byte i = SHALLY_PRO_DEFAULT_OUTPUT_ID; i < relay.getOutputCount(); i++) {
-            relayOutputDtoList.add(toRelayOutputDto(relay, i));
+            relayOutputDtoList.add(toRelayOutputDto(relay, i, onlineMode));
         }
         return relayOutputDtoList;
     }
