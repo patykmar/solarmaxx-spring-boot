@@ -35,6 +35,16 @@
             </div>
 
             <div class="mb-3 row">
+                <label for="outputId" class="col-sm-2 col-form-label">Output ID:</label>
+                <div class="col-sm-10">
+                    <input type="number" th:field="*{outputId}"
+                           class="form-control col-4 mb-4"
+                           placeholder="Enter the ID of relay output"
+                           id="outputId" min="1" max="8"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
                 <label for="onStart" class="col-sm-2 col-form-label">Time start:</label>
                 <div class="col-sm-10">
                     <input type="time" th:field="*{onStart}"
