@@ -2,12 +2,14 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.ValueConstants;
 import cz.patyk.solarmaxx.backend.adapter.ShellyProRelayAdapter;
 import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
 import cz.patyk.solarmaxx.backend.client.ShellyProClient;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.config.RelayTypeConfig;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
+import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.UserDtoOut;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
@@ -19,6 +21,7 @@ import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.factory.mapper.RelayOutputIdFactory;
+import cz.patyk.solarmaxx.backend.mapper.RelayScheduleMapper;
 import cz.patyk.solarmaxx.backend.mapper.UserMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.output.ShellyProOutputIdMapper;
@@ -28,6 +31,7 @@ import cz.patyk.solarmaxx.backend.mapper.relay.type.url.TasmotaUrlMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.UrlParameterMapper;
 import cz.patyk.solarmaxx.backend.service.RelayTypeService;
 import cz.patyk.solarmaxx.backend.service.UserService;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +41,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +57,7 @@ class RelayMapperTest {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
         RelayTypeService relayTypeService = Mockito.mock(RelayTypeService.class);
         RelayTypeMapper relayTypeMapper = Mappers.getMapper(RelayTypeMapper.class);
+        RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
 
         RelayTypeConfig relayTypeConfig = new RelayTypeConfig();
         UrlParameterMapper urlParameterMapper = Mappers.getMapper(UrlParameterMapper.class);
@@ -71,10 +78,14 @@ class RelayMapperTest {
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeMapper", relayTypeMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeService", relayTypeService);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayOutputIdFactory", relayOutputIdFactory);
+        ReflectionTestUtils.setField(RELAY_MAPPER, "relayScheduleMapper", relayScheduleMapper);
     }
 
     @Test
     void toDtoOutTasmotaType() {
+        EntityConstants.RELAY_TASMOTA_ADMIN
+                .setRelaySchedules(List.of(EntityConstants.RELAY_SCHEDULE_TASMOTA));
+
         RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(EntityConstants.RELAY_TASMOTA_ADMIN);
 
         Assertions.assertThat(relayDtoOut.getUser())
@@ -109,6 +120,16 @@ class RelayMapperTest {
                 .returns("http://1.2.3.4:80/cm?cmnd=Power1%20STATUS", RelayOutputDto::getStatusUrl)
                 .returns("http://1.2.3.4:80/cm?cmnd=Power1%20ON", RelayOutputDto::getTurnOnUrl)
                 .returns("http://1.2.3.4:80/cm?cmnd=Power1%20OFF", RelayOutputDto::getTurnOffUrl);
+
+        Assertions.assertThat(relayDtoOut.getRelaySchedulesOuts())
+                .isNotEmpty()
+                .hasSize(1)
+                .first()
+                .returns(NumberUtils.LONG_ONE, RelayScheduleDtoOut::getId)
+                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getId(), RelayScheduleDtoOut::getRelayId)
+                .returns(ValueConstants.RELAY_SCHEDULE_ON_START, RelayScheduleDtoOut::getOnStart)
+                .returns(ValueConstants.RELAY_SCHEDULE_ON_END, RelayScheduleDtoOut::getOnEnd)
+                .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
     }
 
     @Test

@@ -5,6 +5,7 @@ import cz.patyk.solarmaxx.EntityConstants;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
 import cz.patyk.solarmaxx.backend.mapper.relay.RelayMapper;
+import cz.patyk.solarmaxx.backend.repository.RelayRepository;
 import cz.patyk.solarmaxx.backend.service.RelayService;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
@@ -14,6 +15,10 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+
 class RelayScheduleMapperTest {
     RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
     static final String ON_START = "12:00";
@@ -21,14 +26,12 @@ class RelayScheduleMapperTest {
 
     @BeforeEach
     void setUp() {
-        RelayService relayService = Mockito.mock(RelayService.class);
-        RelayMapper relayMapper = Mockito.mock(RelayMapper.class);
+        RelayRepository relayRepository = Mockito.mock(RelayRepository.class);
 
-        Mockito.when(relayService.getOneEntity(NumberUtils.LONG_ONE))
-                .thenReturn(EntityConstants.RELAY_TASMOTA_ADMIN);
+        Mockito.when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
 
-        ReflectionTestUtils.setField(relayScheduleMapper, "relayMapper", relayMapper);
-        ReflectionTestUtils.setField(relayScheduleMapper, "relayService", relayService);
+        ReflectionTestUtils.setField(relayScheduleMapper, "relayRepository", relayRepository);
     }
 
     @Test
