@@ -1,7 +1,5 @@
 package cz.patyk.solarmaxx.backend.adapter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
@@ -29,8 +27,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.getOutputStatusWithSpecificPortObject(
-                    URI.create(HTTP + ip),
-                    relayOutputDto.getOutputId()
+                    createBasicUrl(ip), relayOutputDto.getOutputId()
             );
         } catch (RetryableException e) {
             log.warn("Cannot connect to {}, due timeout.", ip);
@@ -50,32 +47,26 @@ public class TasmotaRelayAdapter implements RelayAdapter {
     }
 
     private RelayOutputDto toggleRelayOutput(RelayOutputDto relayOutputDto, String ip, String toggle) {
-        String response = tasmotaClient.setOutputState(
-                URI.create(HTTP + ip), relayOutputDto.getOutputId(), toggle
-        );
-
-        return parseResponseAndUpdateState(relayOutputDto, response);
-    }
-
-    private RelayOutputDto parseResponseAndUpdateState(RelayOutputDto relayOutputDto, String response) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        TasmotaOutputDto tasmotaOutputDto;
+        TasmotaOutputDto outputStatusWithSpecificPortObject;
         try {
-            tasmotaOutputDto = objectMapper.readValue(response, TasmotaOutputDto.class);
-        } catch (JsonProcessingException e) {
-            tasmotaOutputDto = TasmotaOutputDto.builder().state("N/A").build();
-            log.error("Cannot parse state from Tasmota output URL: {}", relayOutputDto.getStatusUrl());
+            outputStatusWithSpecificPortObject = tasmotaClient.setOutputState(
+                    createBasicUrl(ip), relayOutputDto.getOutputId(), toggle
+            );
+        } catch (RetryableException e) {
+            log.warn("Cannot connect to {}, due timeout.", ip);
+            outputStatusWithSpecificPortObject = TasmotaOutputDto.builder().state("NA").build();
         }
 
-        relayOutputDto.setOutputStatus(
-                OutputStatus.fromString(tasmotaOutputDto.getState())
-        );
-        return relayOutputDto;
+        return parseResponseAndUpdateState(relayOutputDto, outputStatusWithSpecificPortObject);
     }
 
     private RelayOutputDto parseResponseAndUpdateState(RelayOutputDto relayOutputDto, TasmotaOutputDto tasmotaOutputDto) {
         relayOutputDto.setOutputStatus(OutputStatus.fromString(tasmotaOutputDto.getState()));
         return relayOutputDto;
+    }
+
+    private URI createBasicUrl(String ip) {
+        return URI.create(HTTP + ip);
     }
 
 }
