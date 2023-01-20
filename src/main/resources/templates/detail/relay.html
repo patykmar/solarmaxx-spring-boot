@@ -9,7 +9,7 @@
 <main class="flex-shrink-0">
     <div class="container">
         <h1 class="mt-5" th:text="${h1}">Relay detail - </h1>
-        <hr />
+        <hr/>
 
         <table class="table">
             <tbody>
@@ -47,19 +47,31 @@
             </tr>
             </thead>
             <tbody>
-                <tr th:each="relayOutput: ${relayDtoOut.getRelayOutputDtos()}">
-                    <td th:text="${relayOutput.outputId}" />
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'NA'}">N/A</button>
-                        <button type="button" class="btn btn-success btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'ON'}">ON</button>
-                        <button type="button" class="btn btn-secondary btn-sm" th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}">OFF</button>
-                    </td>
-                    <td>
-                        <a href="#" class="btn btn-success btn-sm">Turn ON</a>
-                        <a href="#" class="btn btn-secondary btn-sm">Turn OFF</a>
-                        <button type="button" class="btn btn-danger btn-sm" disabled>N/A</button>
-                    </td>
-                </tr>
+            <tr th:each="relayOutput: ${relayDtoOut.getRelayOutputDtos()}">
+                <td th:text="${relayOutput.outputId}"/>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm"
+                            th:if="${relayOutput.getOutputStatus().toString() == 'NA'}" disabled>N/A
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm"
+                            th:if="${relayOutput.getOutputStatus().toString() == 'ON'}" disabled>ON
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm"
+                            th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}" disabled>OFF
+                    </button>
+                </td>
+                <td>
+                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()}, toggle=true)}"
+                       class="btn btn-success btn-sm"
+                       th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}">Turn ON</a>
+                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()}, toggle=false)}"
+                       class="btn btn-secondary btn-sm"
+                       th:if="${relayOutput.getOutputStatus().toString() == 'ON'}">Turn OFF</a>
+                    <button type="button" class="btn btn-danger btn-sm" disabled
+                            th:if="${relayOutput.getOutputStatus().toString() == 'NA'}">N/A
+                    </button>
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -69,9 +81,9 @@
     </div>
 </main>
 
-<footer th:replace="~{fragments/footer :: basicFooter}" />
+<footer th:replace="~{fragments/footer :: basicFooter}"/>
 
-<div th:replace="~{fragments/footer :: bootstrapBundleMin523}" />
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523}"/>
 
 </body>
 </html>

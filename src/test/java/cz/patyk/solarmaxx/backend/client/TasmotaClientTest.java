@@ -7,6 +7,7 @@ import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapterFactoryTest;
 import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
 import feign.Feign;
 import feign.form.spring.SpringFormEncoder;
+import feign.jackson.JacksonDecoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,8 @@ class TasmotaClientTest {
         tasmotaClient = Feign.builder()
                 .contract(new SpringMvcContract())
                 .encoder(new SpringFormEncoder())
+                .decoder(new JacksonDecoder())
+                .contract(new SpringMvcContract())
                 .target(TasmotaClient.class, URL);
         specificUrl = URI.create(URL);
     }
@@ -40,8 +43,7 @@ class TasmotaClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void getPortStatus() {
-        String response = tasmotaClient.getOutputStatusWithSpecificPortObject(specificUrl, (byte) 1);
-        TasmotaOutputDto tasmotaOutputDto = parseResponse(response);
+        TasmotaOutputDto tasmotaOutputDto = tasmotaClient.getOutputStatusWithSpecificPortObject(specificUrl, (byte) 1);
 
         assertEquals(TasmotaRelayAdapter.TOGGLE_ON, tasmotaOutputDto.getState());
     }
@@ -49,10 +51,8 @@ class TasmotaClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void toggleTurnOffPort() {
-        String response1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_OFF);
-        String response2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_OFF);
-        TasmotaOutputDto tasmotaOutputDto1 = parseResponse(response1);
-        TasmotaOutputDto tasmotaOutputDto2 = parseResponse(response2);
+        TasmotaOutputDto tasmotaOutputDto1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_OFF);
+        TasmotaOutputDto tasmotaOutputDto2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_OFF);
 
         assertEquals(TasmotaRelayAdapter.TOGGLE_OFF, tasmotaOutputDto1.getState());
         assertEquals(TasmotaRelayAdapter.TOGGLE_OFF, tasmotaOutputDto2.getState());
@@ -61,10 +61,8 @@ class TasmotaClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void toggleTurnOnPort() {
-        String response1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_ON);
-        String response2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_ON);
-        TasmotaOutputDto tasmotaOutputDto1 = parseResponse(response1);
-        TasmotaOutputDto tasmotaOutputDto2 = parseResponse(response2);
+        TasmotaOutputDto tasmotaOutputDto1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_ON);
+        TasmotaOutputDto tasmotaOutputDto2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_ON);
 
         assertEquals(TasmotaRelayAdapter.TOGGLE_ON, tasmotaOutputDto1.getState());
         assertEquals(TasmotaRelayAdapter.TOGGLE_ON, tasmotaOutputDto2.getState());

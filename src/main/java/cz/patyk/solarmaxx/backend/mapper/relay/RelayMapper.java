@@ -46,6 +46,10 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
     public abstract RelayDtoOut toDtoOut(Relay relay);
 
+    @Mapping(target = "relayOutputDtos", expression = "java(getDeviceOutputs(relay, true))")
+    @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
+    public abstract RelayDtoOut toDtoOutOnLineMode(Relay relay);
+
     @Mapping(target = "outputId", ignore = true)
     @Mapping(target = "urlTemplate", source = "relay.relayType.urlStatus")
     public abstract StatusUrlParameter toStatusUrlParameter(Relay relay);
@@ -67,10 +71,10 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
         return relayTypeMapper.toDtoOut(relayType);
     }
 
-    public List<RelayOutputDto> getDeviceOutputs(Relay relay, boolean offlineMode) {
+    public List<RelayOutputDto> getDeviceOutputs(Relay relay, boolean onlineMode) {
         SupportedRelayType supportedRelayType = SupportedRelayType.fromString(relay.getRelayType().getDeviceTypeString());
         OutputIdMapper outputIdMapper = relayOutputIdFactory.getOutputIdMapper(supportedRelayType);
-        return outputIdMapper.getDeviceOutputs(relay, offlineMode);
+        return outputIdMapper.getDeviceOutputs(relay, onlineMode);
     }
 
 }

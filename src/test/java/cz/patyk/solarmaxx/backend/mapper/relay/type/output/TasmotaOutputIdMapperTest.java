@@ -1,6 +1,7 @@
 package cz.patyk.solarmaxx.backend.mapper.relay.type.output;
 
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
 import cz.patyk.solarmaxx.backend.config.RelayTypeConfig;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
@@ -12,10 +13,9 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
+import org.mockito.Mockito;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TasmotaOutputIdMapperTest {
     private final UrlParameterMapper urlParameterMapper = Mappers.getMapper(UrlParameterMapper.class);
@@ -25,7 +25,8 @@ class TasmotaOutputIdMapperTest {
     void setUp() {
         RelayTypeConfig relayTypeConfig = new RelayTypeConfig();
         TasmotaUrlMapper tasmotaUrlMapper = new TasmotaUrlMapper(relayTypeConfig.relayTypeUrlPattern());
-        tasmotaOutputIdMapper = new TasmotaOutputIdMapper(urlParameterMapper, tasmotaUrlMapper);
+        TasmotaRelayAdapter tasmotaRelayAdapter = Mockito.mock(TasmotaRelayAdapter.class);
+        tasmotaOutputIdMapper = new TasmotaOutputIdMapper(urlParameterMapper, tasmotaUrlMapper, tasmotaRelayAdapter);
     }
 
     @Test

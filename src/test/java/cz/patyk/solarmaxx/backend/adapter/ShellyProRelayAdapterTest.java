@@ -3,6 +3,8 @@ package cz.patyk.solarmaxx.backend.adapter;
 import cz.patyk.solarmaxx.backend.client.ShellyProClient;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
 import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,19 +23,14 @@ import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 public class ShellyProRelayAdapterTest {
-    static String WAS_FALSE = "{\"was_on\":false}";
-    static String WAS_TRUE = "{\"was_on\":true}";
-    static String STATUS_DOWN = "{\"id\":0, \"source\":\"http\", \"output\":false, \"apower\":0.0, \"voltage\":226.9, \"current\":0.000, \"pf\":0.00, \"aenergy\":{\"total\":0.000,\"by_minute\":[0.000,0.000,0.000],\"minute_ts\":1673860473},\"temperature\":{\"tC\":29.1, \"tF\":84.4}}";
-    static String STATUS_UP = "{\"id\":0, \"source\":\"http\", \"output\":true, \"apower\":0.0, \"voltage\":226.9, \"current\":0.000, \"pf\":0.00, \"aenergy\":{\"total\":0.000,\"by_minute\":[0.000,0.000,0.000],\"minute_ts\":1673860473},\"temperature\":{\"tC\":29.1, \"tF\":84.4}}";
-
     @Mock
     ShellyProClient shellyProClient;
     RelayOutputDto relayOutputDto;
-    ShellyRelayAdapter shellyRelayAdapter;
+    ShellyProRelayAdapter shellyProRelayAdapter;
 
     @BeforeEach
     void setUp() {
-        shellyRelayAdapter = new ShellyRelayAdapter(new OutputStatusMapper(), shellyProClient);
+        shellyProRelayAdapter = new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient);
         relayOutputDto = RelayOutputDto.builder()
                 .outputId((byte) 1)
                 .statusUrl("statusUrl")
@@ -45,38 +42,38 @@ public class ShellyProRelayAdapterTest {
 
     @ParameterizedTest
     @MethodSource("provideStatuses")
-    void getOutputStatusWithSpecificPortObjectTest(OutputStatus status, String jsonMock) {
+    void getOutputStatusWithSpecificPortObjectTest(OutputStatus status, ShellyProStatusOutputDto shellyProStatusOutputDto) {
         Mockito
                 .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
-                .thenReturn(jsonMock);
+                .thenReturn(shellyProStatusOutputDto);
 
-        assertThat(shellyRelayAdapter.updateStatusFromRelay(relayOutputDto))
+        assertThat(shellyProRelayAdapter.updateStatusFromRelay(relayOutputDto, "1.2.3.4"))
                 .returns(status, RelayOutputDto::getOutputStatus);
     }
 
     static Stream<Arguments> provideStatuses() {
         return Stream.of(
-                Arguments.of(OutputStatus.ON, STATUS_UP),
-                Arguments.of(OutputStatus.OFF, STATUS_DOWN)
+                Arguments.of(OutputStatus.ON, RelayAdapterConstants.SHELLY_PRO_STATUS_ON),
+                Arguments.of(OutputStatus.OFF, RelayAdapterConstants.SHELLY_PRO_STATUS_OFF)
         );
     }
 
 
     @ParameterizedTest
     @MethodSource("provideToggle")
-    void updateStatusFromRelay(OutputStatus status, String jsonMock) {
+    void updateStatusFromRelay(OutputStatus status, ShellyProToggleOutputDto shellyProToggleOutputDto) {
         Mockito
                 .when(shellyProClient.setOutputState(any(URI.class), any(Byte.class)))
-                .thenReturn(jsonMock);
+                .thenReturn(shellyProToggleOutputDto);
 
-        assertThat(shellyRelayAdapter.turnOnRelayOutput(relayOutputDto))
+        assertThat(shellyProRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP))
                 .returns(status, RelayOutputDto::getOutputStatus);
     }
 
     static Stream<Arguments> provideToggle() {
         return Stream.of(
-                Arguments.of(OutputStatus.ON, WAS_FALSE),
-                Arguments.of(OutputStatus.OFF, WAS_TRUE)
+                Arguments.of(OutputStatus.ON, RelayAdapterConstants.SHELLY_PRO_WAS_OFF),
+                Arguments.of(OutputStatus.OFF, RelayAdapterConstants.SHELLY_PRO_WAS_ON)
         );
     }
 }
