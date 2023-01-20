@@ -20,7 +20,7 @@ public interface TasmotaClient {
 
     @Headers("Content-Type: application/json")
     @GetMapping("/cm?cmnd=Power{outputId}%20{toggle}")
-    String setOutputState(
+    TasmotaOutputDto setOutputState(
             URI baseUrl,
             @PathVariable("outputId") byte outputId,
             @PathVariable("toggle") String toggle

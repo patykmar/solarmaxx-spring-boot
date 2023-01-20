@@ -1,6 +1,8 @@
 package cz.patyk.solarmaxx.backend.client;
 
 import cz.patyk.solarmaxx.backend.config.RelayClientConfig;
+import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
 import feign.Headers;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,9 +14,9 @@ import java.net.URI;
 public interface ShellyProClient {
     @Headers("Content-Type: application/json")
     @GetMapping("/rpc/Switch.GetStatus?id={outputId}")
-    String getOutputStatusWithSpecificPortObject(URI baseUrl, @PathVariable("outputId") byte outputId);
+    ShellyProStatusOutputDto getOutputStatusWithSpecificPortObject(URI baseUrl, @PathVariable("outputId") byte outputId);
 
     @Headers("Content-Type: application/json")
     @GetMapping("/rpc/Switch.Toggle?id={outputId}")
-    String setOutputState(URI baseUrl, @PathVariable("outputId") byte outputId);
+    ShellyProToggleOutputDto setOutputState(URI baseUrl, @PathVariable("outputId") byte outputId);
 }
