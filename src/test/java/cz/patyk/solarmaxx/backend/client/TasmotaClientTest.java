@@ -51,10 +51,8 @@ class TasmotaClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void toggleTurnOffPort() {
-        String response1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_OFF);
-        String response2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_OFF);
-        TasmotaOutputDto tasmotaOutputDto1 = parseResponse(response1);
-        TasmotaOutputDto tasmotaOutputDto2 = parseResponse(response2);
+        TasmotaOutputDto tasmotaOutputDto1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_OFF);
+        TasmotaOutputDto tasmotaOutputDto2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_OFF);
 
         assertEquals(TasmotaRelayAdapter.TOGGLE_OFF, tasmotaOutputDto1.getState());
         assertEquals(TasmotaRelayAdapter.TOGGLE_OFF, tasmotaOutputDto2.getState());
@@ -63,10 +61,8 @@ class TasmotaClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void toggleTurnOnPort() {
-        String response1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_ON);
-        String response2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_ON);
-        TasmotaOutputDto tasmotaOutputDto1 = parseResponse(response1);
-        TasmotaOutputDto tasmotaOutputDto2 = parseResponse(response2);
+        TasmotaOutputDto tasmotaOutputDto1 = tasmotaClient.setOutputState(specificUrl, (byte) 1, TasmotaRelayAdapter.TOGGLE_ON);
+        TasmotaOutputDto tasmotaOutputDto2 = tasmotaClient.setOutputState(specificUrl, (byte) 2, TasmotaRelayAdapter.TOGGLE_ON);
 
         assertEquals(TasmotaRelayAdapter.TOGGLE_ON, tasmotaOutputDto1.getState());
         assertEquals(TasmotaRelayAdapter.TOGGLE_ON, tasmotaOutputDto2.getState());

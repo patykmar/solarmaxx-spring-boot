@@ -1,7 +1,5 @@
 package cz.patyk.solarmaxx.backend.client;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.patyk.solarmaxx.backend.adapter.ShellyProRelayAdapterTest;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
@@ -9,6 +7,7 @@ import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutp
 import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
 import feign.Feign;
 import feign.form.spring.SpringFormEncoder;
+import feign.jackson.JacksonDecoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -35,6 +34,7 @@ class ShellyProClientTest {
         shellyProClient = Feign.builder()
                 .contract(new SpringMvcContract())
                 .encoder(new SpringFormEncoder())
+                .decoder(new JacksonDecoder())
                 .target(ShellyProClient.class, URL);
         specificUrl = URI.create(URL);
     }
@@ -42,37 +42,22 @@ class ShellyProClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void getPortStatus() {
-        String response = shellyProClient.getOutputStatusWithSpecificPortObject(specificUrl, (byte) 1);
-        assertEquals(OutputStatus.OFF, parseStatusResponseAndUpdateState(response));
+        ShellyProStatusOutputDto shellyProStatusOutputDto = shellyProClient.getOutputStatusWithSpecificPortObject(specificUrl, (byte) 1);
+        assertEquals(OutputStatus.OFF, parseStatusResponseAndUpdateState(shellyProStatusOutputDto));
     }
 
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void setToggleStatus() {
-        String response = shellyProClient.setOutputState(specificUrl, (byte) 1);
-        assertEquals(OutputStatus.ON, parseToogleResponseAndUpdateState(response));
+        ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(specificUrl, (byte) 1);
+        assertEquals(OutputStatus.ON, parseToogleResponseAndUpdateState(shellyProToggleOutputDto));
     }
 
-    private OutputStatus parseStatusResponseAndUpdateState(String response) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ShellyProStatusOutputDto shellyProStatusOutputDto;
-        try {
-            shellyProStatusOutputDto = objectMapper.readValue(response, ShellyProStatusOutputDto.class);
-        } catch (JsonProcessingException e) {
-            shellyProStatusOutputDto = ShellyProStatusOutputDto.builder().state(null).build();
-        }
+    private OutputStatus parseStatusResponseAndUpdateState(ShellyProStatusOutputDto shellyProStatusOutputDto) {
         return outputStatusMapper.toOutputStatus(shellyProStatusOutputDto.getState());
     }
 
-    private OutputStatus parseToogleResponseAndUpdateState(String response) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ShellyProToggleOutputDto proToggleOutputDto;
-        try {
-            proToggleOutputDto = objectMapper.readValue(response, ShellyProToggleOutputDto.class);
-        } catch (JsonProcessingException e) {
-            proToggleOutputDto = ShellyProToggleOutputDto.builder().state(null).build();
-        }
-
+    private OutputStatus parseToogleResponseAndUpdateState(ShellyProToggleOutputDto proToggleOutputDto) {
         return outputStatusMapper.toOutputStatusReverse(proToggleOutputDto.getState());
     }
 }
