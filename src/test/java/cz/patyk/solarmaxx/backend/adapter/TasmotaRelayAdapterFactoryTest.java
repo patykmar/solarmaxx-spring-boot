@@ -63,7 +63,7 @@ public class TasmotaRelayAdapterFactoryTest {
     void turnOnRelayOutput() {
         Mockito
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
-                .thenReturn(RelayAdapterConstants.TASMOTA_STRING_POWER_ON);
+                .thenReturn(RelayAdapterConstants.TASMOTA_POWER_ON);
 
         RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
 
@@ -75,7 +75,7 @@ public class TasmotaRelayAdapterFactoryTest {
     void turnOffRelayOutput() {
         Mockito
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
-                .thenReturn(RelayAdapterConstants.TASMOTA_STRING_POWER_OFF);
+                .thenReturn(RelayAdapterConstants.TASMOTA_POWER_OFF);
 
         RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
 
