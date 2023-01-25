@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="d-flex flex-column h-100">
+
+<header th:replace="~{fragments/header :: header_relay}"></header>
+
+<!-- Begin page content -->
+<main class="flex-shrink-0">
+    <div class="container">
+        <h1 class="mt-5" th:text="${h1}">Relay schedule form</h1>
+
+        <hr/>
+
+        <form th:action="@{/relay/schedule/save}" th:object="${relaySchedule}" method="POST">
+            <input type="hidden" th:name="*{id}" th:field="*{id}"/>
+            <input type="hidden" th:name="*{relay}" th:field="*{relay}"/>
+            <input type="hidden" th:name="*{outputId}" th:field="*{outputId}"/>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label" for="relayName">Relay type:</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control col-4 mb-4"
+                           th:value="${relayEntity.getName()}"
+                           placeholder="Enter the ID of relay output"
+                           id="relayName" disabled/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="outputId" class="col-sm-2 col-form-label">Output ID:</label>
+                <div class="col-sm-10">
+                    <input type="text" th:value="${outputId}"
+                           class="form-control col-4 mb-4"
+                           placeholder="Enter the ID of relay output"
+                           id="outputId" disabled/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="onStart" class="col-sm-2 col-form-label">Time start:</label>
+                <div class="col-sm-10">
+                    <input type="time" th:field="*{onStart}"
+                           class="form-control col-4 mb-4"
+                           placeholder="Enter the time when relay will be turn on"
+                           id="onStart"/>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="onEnd" class="col-sm-2 col-form-label">Time end:</label>
+                <div class="col-sm-10">
+                    <input type="time" th:field="*{onEnd}"
+                           class="form-control col-4 mb-4"
+                           placeholder="Enter the time when relay will be turn off"
+                           id="onEnd"/>
+                </div>
+            </div>
+
+            <!--            <div class="mb-3 row">-->
+            <!--                <label for="dayNumber" class="col-sm-2 col-form-label">Day of week:</label>-->
+            <!--                <div class="col-sm-10">-->
+            <!--                    <input type="number" th:field="*{dayNumber}"-->
+            <!--                           min="1" max="7"-->
+            <!--                           class="form-control col-4 mb-4"-->
+            <!--                           placeholder="Select day of week"-->
+            <!--                           id="dayNumber"/>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <div class="mb-3 row">
+                <label for="dayNumber" class="col-sm-2 col-form-label">Day of week:</label>
+                <div class="col-sm-10">
+                    <select th:field="*{dayNumber}" id="dayNumber" class="form-select col-4 mb-4">
+                        <option th:each="weekDay : ${weekDays}"
+                                th:value="${weekDay.getPosition()}"
+                                th:text="${weekDay.getName()}"
+                                th:selected="${relaySchedule.getDayNumber() == weekDay.getPosition()}"
+                                th:if="${relaySchedule.getId() != null}">Options for edit
+                        </option>
+                        <option value="0" selected th:if="${relaySchedule.getId() == null}"> - - -</option>
+                        <option th:each="weekDay : ${weekDays}"
+                                th:value="${weekDay.getPosition()}"
+                                th:text="${weekDay.getName()}"
+                                th:if="${relaySchedule.getId() == null}">Options for new item
+                        </option>
+
+                    </select>
+                </div>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary col-2">Save</button>
+            <a th:href="@{/relay/schedule/list}"
+               class="btn btn-danger col-2"
+               th:if="${relayEntity.getId() == null}"
+               th:text="Cancel"/>
+            <a th:href="@{/relay/detail/{relayId}(relayId=${relayEntity.getId()})}"
+               class="btn btn-danger col-2"
+               th:if="${relayEntity.getId() != null}"
+               th:text="Cancel"/>
+
+            <input type="hidden" th:field="*{id}"/>
+
+        </form>
+
+    </div>
+</main>
+
+<footer th:replace="~{fragments/footer :: basicFooter}"/>
+
+<div th:replace="~{fragments/footer :: bootstrapBundleMin523}"/>
+
+</body>
+</html>
