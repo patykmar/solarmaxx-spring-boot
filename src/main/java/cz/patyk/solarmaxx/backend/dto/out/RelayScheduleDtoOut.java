@@ -1,5 +1,6 @@
 package cz.patyk.solarmaxx.backend.dto.out;
 
+import cz.patyk.solarmaxx.backend.dto.WeekDay;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,4 +13,5 @@ public class RelayScheduleDtoOut implements IDtoOut {
     private String onStart;
     private String onEnd;
     private Byte dayNumber;
+    private WeekDay weekDay;
 }
