@@ -2,11 +2,12 @@ package cz.patyk.solarmaxx.backend.mapper;
 
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.ValueConstants;
+import cz.patyk.solarmaxx.backend.dto.WeekDay;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
-import cz.patyk.solarmaxx.backend.mapper.relay.RelayMapper;
+import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
-import cz.patyk.solarmaxx.backend.service.RelayService;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,11 +28,13 @@ class RelayScheduleMapperTest {
     @BeforeEach
     void setUp() {
         RelayRepository relayRepository = Mockito.mock(RelayRepository.class);
+        WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
 
         Mockito.when(relayRepository.findById(any(Long.class)))
                 .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
 
         ReflectionTestUtils.setField(relayScheduleMapper, "relayRepository", relayRepository);
+        ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
     }
 
     @Test
@@ -52,7 +55,9 @@ class RelayScheduleMapperTest {
         Assertions.assertThat(relayScheduleDtoOut)
                 .returns(ON_START, RelayScheduleDtoOut::getOnStart)
                 .returns(ON_END, RelayScheduleDtoOut::getOnEnd)
-        ;
+                .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
+        Assertions.assertThat(relayScheduleDtoOut.getWeekDay())
+                .returns(ValueConstants.WEEK_DAY_SUNDAY, WeekDay::getName);
     }
 
 }

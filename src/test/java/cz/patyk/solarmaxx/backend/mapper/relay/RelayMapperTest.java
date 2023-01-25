@@ -8,6 +8,7 @@ import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
 import cz.patyk.solarmaxx.backend.client.ShellyProClient;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.config.RelayTypeConfig;
+import cz.patyk.solarmaxx.backend.dto.WeekDay;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
@@ -23,12 +24,14 @@ import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.factory.mapper.RelayOutputIdFactory;
 import cz.patyk.solarmaxx.backend.mapper.RelayScheduleMapper;
 import cz.patyk.solarmaxx.backend.mapper.UserMapper;
+import cz.patyk.solarmaxx.backend.mapper.WeekDayMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.output.ShellyProOutputIdMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.output.TasmotaOutputIdMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.ShellyProUrlMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.TasmotaUrlMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.url.UrlParameterMapper;
+import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayTypeService;
 import cz.patyk.solarmaxx.backend.service.UserService;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -57,6 +60,7 @@ class RelayMapperTest {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
         RelayTypeService relayTypeService = Mockito.mock(RelayTypeService.class);
         RelayTypeMapper relayTypeMapper = Mappers.getMapper(RelayTypeMapper.class);
+        WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
         RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
 
         RelayTypeConfig relayTypeConfig = new RelayTypeConfig();
@@ -72,6 +76,8 @@ class RelayMapperTest {
         TasmotaOutputIdMapper tasmotaOutputIdMapper = new TasmotaOutputIdMapper(urlParameterMapper, tasmotaUrlMapper, tasmotaRelayAdapter);
 
         RelayOutputIdFactory relayOutputIdFactory = new RelayOutputIdFactory(shellyProOutputIdMapper, tasmotaOutputIdMapper);
+
+        ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
 
         ReflectionTestUtils.setField(RELAY_MAPPER, "userService", userService);
         ReflectionTestUtils.setField(RELAY_MAPPER, "userMapper", userMapper);
@@ -130,6 +136,10 @@ class RelayMapperTest {
                 .returns(ValueConstants.RELAY_SCHEDULE_ON_START, RelayScheduleDtoOut::getOnStart)
                 .returns(ValueConstants.RELAY_SCHEDULE_ON_END, RelayScheduleDtoOut::getOnEnd)
                 .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
+
+        Assertions.assertThat(relayDtoOut.getRelaySchedulesOuts().get(0).getWeekDay())
+                .returns(NumberUtils.BYTE_ONE, WeekDay::getPosition)
+                .returns(ValueConstants.WEEK_DAY_SUNDAY, WeekDay::getName);
     }
 
     @Test
