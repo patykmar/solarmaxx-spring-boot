@@ -2,10 +2,12 @@ package cz.patyk.solarmaxx.backend.mapper;
 
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.ValueConstants;
+import cz.patyk.solarmaxx.backend.dto.WeekDay;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
-import cz.patyk.solarmaxx.backend.mapper.relay.RelayMapper;
-import cz.patyk.solarmaxx.backend.service.RelayService;
+import cz.patyk.solarmaxx.backend.model.WeekDayModel;
+import cz.patyk.solarmaxx.backend.repository.RelayRepository;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +16,10 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+
 class RelayScheduleMapperTest {
     RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
     static final String ON_START = "12:00";
@@ -21,14 +27,14 @@ class RelayScheduleMapperTest {
 
     @BeforeEach
     void setUp() {
-        RelayService relayService = Mockito.mock(RelayService.class);
-        RelayMapper relayMapper = Mockito.mock(RelayMapper.class);
+        RelayRepository relayRepository = Mockito.mock(RelayRepository.class);
+        WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
 
-        Mockito.when(relayService.getOneEntity(NumberUtils.LONG_ONE))
-                .thenReturn(EntityConstants.RELAY_TASMOTA_ADMIN);
+        Mockito.when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
 
-        ReflectionTestUtils.setField(relayScheduleMapper, "relayMapper", relayMapper);
-        ReflectionTestUtils.setField(relayScheduleMapper, "relayService", relayService);
+        ReflectionTestUtils.setField(relayScheduleMapper, "relayRepository", relayRepository);
+        ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
     }
 
     @Test
@@ -49,7 +55,9 @@ class RelayScheduleMapperTest {
         Assertions.assertThat(relayScheduleDtoOut)
                 .returns(ON_START, RelayScheduleDtoOut::getOnStart)
                 .returns(ON_END, RelayScheduleDtoOut::getOnEnd)
-        ;
+                .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
+        Assertions.assertThat(relayScheduleDtoOut.getWeekDay())
+                .returns(ValueConstants.WEEK_DAY_SUNDAY, WeekDay::getName);
     }
 
 }

@@ -32,7 +32,7 @@ public class RelayController extends ThymeleafAbstractController<RelayDtoIn, Rel
 
     @GetMapping({"", "/list"})
     public ModelAndView showGrid() {
-        ModelAndView modelAndView = new ModelAndView("list/relay");
+        ModelAndView modelAndView = new ModelAndView("list/relayList");
         PageRequest pageRequest = PageRequest.of(0, 10);
         List<RelayDtoOut> relayServiceAll = service.getAll(pageRequest);
 
@@ -42,7 +42,7 @@ public class RelayController extends ThymeleafAbstractController<RelayDtoIn, Rel
 
     @GetMapping("/detail/{id}")
     public ModelAndView showDetail(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("detail/relay");
+        ModelAndView modelAndView = new ModelAndView("detail/relayDetail");
         RelayDtoOut relayDtoOut = relayService.getOneOnLineMode(id);
 
         modelAndView.addObject("h1", relayDtoOut.getName());

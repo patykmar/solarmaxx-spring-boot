@@ -30,6 +30,7 @@ public class RelaySchedule implements Serializable, IEntity<Long> {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "relay_id", nullable = false)
     private Relay relay;
+    private Byte outputId;
     private String onStart;
     private String onEnd;
     private Byte dayNumber;

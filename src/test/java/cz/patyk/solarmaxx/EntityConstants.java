@@ -58,8 +58,9 @@ public class EntityConstants {
     public static final RelaySchedule RELAY_SCHEDULE_TASMOTA = RelaySchedule.builder()
             .id(NumberUtils.LONG_ONE)
             .relay(RELAY_TASMOTA_ADMIN)
-            .onStart("12:00")
-            .onEnd("16:00")
-            .dayNumber((byte) 1)
+            .outputId(NumberUtils.BYTE_ONE)
+            .onStart(ValueConstants.RELAY_SCHEDULE_ON_START)
+            .onEnd(ValueConstants.RELAY_SCHEDULE_ON_END)
+            .dayNumber(NumberUtils.BYTE_ONE)
             .build();
 }

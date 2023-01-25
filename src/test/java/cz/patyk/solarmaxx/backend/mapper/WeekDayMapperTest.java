@@ -1,5 +1,6 @@
 package cz.patyk.solarmaxx.backend.mapper;
 
+import cz.patyk.solarmaxx.ValueConstants;
 import cz.patyk.solarmaxx.backend.dto.WeekDay;
 import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import org.assertj.core.api.Assertions;
@@ -30,13 +31,13 @@ class WeekDayMapperTest {
 
     private static Stream<Arguments> provideEnumWeekDaysAndShortName() {
         return Stream.of(
-                Arguments.of((byte) 1, "Sun", WeekDayModel.WEEK_DAY.SUNDAY),
-                Arguments.of((byte) 2, "Mon", WeekDayModel.WEEK_DAY.MONDAY),
-                Arguments.of((byte) 3, "Tue", WeekDayModel.WEEK_DAY.TUESDAY),
-                Arguments.of((byte) 4, "Wed", WeekDayModel.WEEK_DAY.WEDNESDAY),
-                Arguments.of((byte) 5, "Thu", WeekDayModel.WEEK_DAY.THURSDAY),
-                Arguments.of((byte) 6, "Fri", WeekDayModel.WEEK_DAY.FRIDAY),
-                Arguments.of((byte) 7, "Sat", WeekDayModel.WEEK_DAY.SATURDAY)
+                Arguments.of((byte) 1, ValueConstants.WEEK_DAY_SUN, WeekDayModel.WEEK_DAY.SUNDAY),
+                Arguments.of((byte) 2, ValueConstants.WEEK_DAY_MON, WeekDayModel.WEEK_DAY.MONDAY),
+                Arguments.of((byte) 3, ValueConstants.WEEK_DAY_TUE, WeekDayModel.WEEK_DAY.TUESDAY),
+                Arguments.of((byte) 4, ValueConstants.WEEK_DAY_WED, WeekDayModel.WEEK_DAY.WEDNESDAY),
+                Arguments.of((byte) 5, ValueConstants.WEEK_DAY_THU, WeekDayModel.WEEK_DAY.THURSDAY),
+                Arguments.of((byte) 6, ValueConstants.WEEK_DAY_FRI, WeekDayModel.WEEK_DAY.FRIDAY),
+                Arguments.of((byte) 7, ValueConstants.WEEK_DAY_SAT, WeekDayModel.WEEK_DAY.SATURDAY)
         );
     }
 
@@ -50,13 +51,13 @@ class WeekDayMapperTest {
 
     private static Stream<Arguments> provideEnumWeekDaysAndFullName() {
         return Stream.of(
-                Arguments.of((byte) 1, "Sunday", WeekDayModel.WEEK_DAY.SUNDAY),
-                Arguments.of((byte) 2, "Monday", WeekDayModel.WEEK_DAY.MONDAY),
-                Arguments.of((byte) 3, "Tuesday", WeekDayModel.WEEK_DAY.TUESDAY),
-                Arguments.of((byte) 4, "Wednesday", WeekDayModel.WEEK_DAY.WEDNESDAY),
-                Arguments.of((byte) 5, "Thursday", WeekDayModel.WEEK_DAY.THURSDAY),
-                Arguments.of((byte) 6, "Friday", WeekDayModel.WEEK_DAY.FRIDAY),
-                Arguments.of((byte) 7, "Saturday", WeekDayModel.WEEK_DAY.SATURDAY)
+                Arguments.of((byte) 1, ValueConstants.WEEK_DAY_SUNDAY, WeekDayModel.WEEK_DAY.SUNDAY),
+                Arguments.of((byte) 2, ValueConstants.WEEK_DAY_MONDAY, WeekDayModel.WEEK_DAY.MONDAY),
+                Arguments.of((byte) 3, ValueConstants.WEEK_DAY_TUESDAY, WeekDayModel.WEEK_DAY.TUESDAY),
+                Arguments.of((byte) 4, ValueConstants.WEEK_DAY_WEDNESDAY, WeekDayModel.WEEK_DAY.WEDNESDAY),
+                Arguments.of((byte) 5, ValueConstants.WEEK_DAY_THURSDAY, WeekDayModel.WEEK_DAY.THURSDAY),
+                Arguments.of((byte) 6, ValueConstants.WEEK_DAY_FRIDAY, WeekDayModel.WEEK_DAY.FRIDAY),
+                Arguments.of((byte) 7, ValueConstants.WEEK_DAY_SATURDAY, WeekDayModel.WEEK_DAY.SATURDAY)
         );
     }
 
@@ -69,23 +70,20 @@ class WeekDayMapperTest {
 
     @Test
     void toEnumFromWeekDayWrongParameter() {
-        Assertions.assertThatThrownBy(() -> {
-                    WeekDay weekDay = new WeekDay((byte) 8, "Some unexpected name of day");
-                    weekDayMapper.toEnumFromWeekDay(weekDay);
-                })
+        Assertions.assertThatThrownBy(() -> weekDayMapper.toEnumFromWeekDay(new WeekDay((byte) 8, "Some unexpected name of day")))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Unexpected value: 8");
     }
 
     private static Stream<Arguments> provideWeekDayAndExpectedEnum() {
         return Stream.of(
-                Arguments.of(new WeekDay((byte) 1, "Sunday"), WeekDayModel.WEEK_DAY.SUNDAY),
-                Arguments.of(new WeekDay((byte) 2, "Monday"), WeekDayModel.WEEK_DAY.MONDAY),
-                Arguments.of(new WeekDay((byte) 3, "Tuesday"), WeekDayModel.WEEK_DAY.TUESDAY),
-                Arguments.of(new WeekDay((byte) 4, "Wednesday"), WeekDayModel.WEEK_DAY.WEDNESDAY),
-                Arguments.of(new WeekDay((byte) 5, "Thursday"), WeekDayModel.WEEK_DAY.THURSDAY),
-                Arguments.of(new WeekDay((byte) 6, "Friday"), WeekDayModel.WEEK_DAY.FRIDAY),
-                Arguments.of(new WeekDay((byte) 7, "Saturday"), WeekDayModel.WEEK_DAY.SATURDAY)
+                Arguments.of(new WeekDay((byte) 1, ValueConstants.WEEK_DAY_SUNDAY), WeekDayModel.WEEK_DAY.SUNDAY),
+                Arguments.of(new WeekDay((byte) 2, ValueConstants.WEEK_DAY_MONDAY), WeekDayModel.WEEK_DAY.MONDAY),
+                Arguments.of(new WeekDay((byte) 3, ValueConstants.WEEK_DAY_TUESDAY), WeekDayModel.WEEK_DAY.TUESDAY),
+                Arguments.of(new WeekDay((byte) 4, ValueConstants.WEEK_DAY_WEDNESDAY), WeekDayModel.WEEK_DAY.WEDNESDAY),
+                Arguments.of(new WeekDay((byte) 5, ValueConstants.WEEK_DAY_THURSDAY), WeekDayModel.WEEK_DAY.THURSDAY),
+                Arguments.of(new WeekDay((byte) 6, ValueConstants.WEEK_DAY_FRIDAY), WeekDayModel.WEEK_DAY.FRIDAY),
+                Arguments.of(new WeekDay((byte) 7, ValueConstants.WEEK_DAY_SATURDAY), WeekDayModel.WEEK_DAY.SATURDAY)
         );
     }
 
@@ -98,9 +96,7 @@ class WeekDayMapperTest {
 
     @Test
     void fromPositionToWeekDayEnumWronParameter() {
-        Assertions.assertThatThrownBy(() -> {
-                    weekDayMapper.fromPositionToWeekDayEnum(8);
-                })
+        Assertions.assertThatThrownBy(() -> weekDayMapper.fromPositionToWeekDayEnum(8))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Unexpected value: 8");
     }

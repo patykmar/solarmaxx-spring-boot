@@ -14,18 +14,18 @@
             <thead>
             <tr>
                 <th>Relay</th>
+                <th>Day</th>
                 <th>OnStart</th>
                 <th>OnEnd</th>
-                <th>Day</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="relaySchedule: ${relayScheduleDtoOuts}">
-                <td th:text="${relaySchedule.relayDtoOut.name}"/>
+                <td th:text="${relaySchedule.relayId}"/>
+                <td th:text="${relaySchedule.weekDay.getName()}"/>
                 <td th:text="${relaySchedule.onStart}"/>
                 <td th:text="${relaySchedule.onEnd}"/>
-                <td th:text="${relaySchedule.dayNumber}"/>
                 <td>
                     <a th:href="@{/relay/schedule/edit/{id}(id=${relaySchedule.getId()})}"
                        class="btn btn-primary btn-sm">Edit</a>

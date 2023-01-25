@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class RelayScheduleDtoIn implements IDtoIn {
     private Long id;
     private Long relayId;
+    private Byte outputId;
     private String onStart;
     private String onEnd;
     private Byte dayNumber;

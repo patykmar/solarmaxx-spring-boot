@@ -15,27 +15,28 @@
             <tbody>
             <tr>
                 <th>Name</th>
-                <td th:text="${relayDtoOut.getName()}">cell</td>
+                <td th:text="${relayDtoOut.getName()}"/>
             </tr>
             <tr>
                 <th>IP address</th>
-                <td th:text="${relayDtoOut.getIpAddress()}">cell</td>
+                <td th:text="${relayDtoOut.getIpAddress()}"/>
             </tr>
             <tr>
                 <th>Port</th>
-                <td th:text="${relayDtoOut.getPort()}">cell</td>
+                <td th:text="${relayDtoOut.getPort()}"/>
             </tr>
             <tr>
                 <th>Output count</th>
-                <td th:text="${relayDtoOut.getOutputCount()}">cell</td>
+                <td th:text="${relayDtoOut.getOutputCount()}"/>
             </tr>
             <tr>
                 <th>Relay type</th>
-                <td th:text="${relayDtoOut.getRelayTypeDtoOut().getName()}">cell</td>
+                <td th:text="${relayDtoOut.getRelayTypeDtoOut().getName()}"/>
             </tr>
             </tbody>
         </table>
 
+        <h2>List of available outputs</h2>
         <hr/>
 
         <table class="table table-bordered table-striped" id="relayOutputList">
@@ -53,12 +54,10 @@
                     <button type="button" class="btn btn-danger btn-sm"
                             th:if="${relayOutput.getOutputStatus().toString() == 'NA'}" disabled>N/A
                     </button>
-                    <button type="button" class="btn btn-success btn-sm"
-                            th:if="${relayOutput.getOutputStatus().toString() == 'ON'}" disabled>ON
-                    </button>
-                    <button type="button" class="btn btn-secondary btn-sm"
-                            th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}" disabled>OFF
-                    </button>
+                    <button type="button" class="btn btn-success btn-sm" th:text="ON"
+                            th:if="${relayOutput.getOutputStatus().toString() == 'ON'}" disabled/>
+                    <button type="button" class="btn btn-secondary btn-sm" th:text="OFF"
+                            th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}" disabled/>
                 </td>
                 <td>
                     <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()}, toggle=true)}"
@@ -70,6 +69,38 @@
                     <button type="button" class="btn btn-danger btn-sm" disabled
                             th:if="${relayOutput.getOutputStatus().toString() == 'NA'}">N/A
                     </button>
+                    <a th:href="@{/relay/schedule/new/{relayId}/{outputId}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()})}"
+                       class="btn btn-info btn-sm">Crete time schedule</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2>Time schedule for outputs</h2>
+        <hr/>
+
+        <table class="table table-bordered table-striped" id="relaySchedulesOuts">
+            <thead>
+            <tr>
+                <th>Day of week</th>
+                <th>Output ID</th>
+                <th>Time start</th>
+                <th>Time Stop</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="relaySchedulesOut: ${relayDtoOut.getRelaySchedulesOuts()}">
+                <td th:text="${relaySchedulesOut.getWeekDay().getName()}">
+                <td th:text="${relaySchedulesOut.getOutputId()}">
+                <td th:text="${relaySchedulesOut.getOnStart()}">
+                <td th:text="${relaySchedulesOut.getOnEnd()}">
+                <td>
+                    <a th:href="@{/relay/schedule/edit/{relayId}/{outputId}/{relayScheduleId}(relayId=${relayDtoOut.getId()},outputId=${relaySchedulesOut.getOutputId()},relayScheduleId=${relaySchedulesOut.getId()})}"
+                       class="btn btn-primary btn-sm" th:text="Edit"/>
+                    <a th:href="@{/relay/schedule/delete/{relayId}/{scheduleId}(relayId=${relayDtoOut.getId()}, scheduleId=${relaySchedulesOut.getId()})}"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Are you sure to delete?')">Delete</a>
                 </td>
             </tr>
             </tbody>
