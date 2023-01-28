@@ -14,6 +14,8 @@ import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 
+import java.time.LocalTime;
+
 @Mapper(componentModel = "spring")
 public abstract class RelayScheduleMapper implements BasicMapper<RelaySchedule, RelayScheduleDtoIn, RelayScheduleDtoOut> {
     @Autowired
@@ -29,6 +31,8 @@ public abstract class RelayScheduleMapper implements BasicMapper<RelaySchedule, 
     @Override
     @Mapping(target = "relayId", source = "entity.relay.id")
     @Mapping(target = "weekDay", expression = "java(toWeekDay(entity))")
+    @Mapping(target = "onStart", expression = "java(toLocalTime(entity.getOnStart()))")
+    @Mapping(target = "onEnd", expression = "java(toLocalTime(entity.getOnEnd()))")
     public abstract RelayScheduleDtoOut toDtoOut(RelaySchedule entity);
 
     protected Relay getRelay(Long id) {
@@ -39,5 +43,9 @@ public abstract class RelayScheduleMapper implements BasicMapper<RelaySchedule, 
     protected WeekDay toWeekDay(RelaySchedule entity) {
         WeekDayModel.WEEK_DAY weekDay = weekDayMapper.fromPositionToWeekDayEnum(entity.getDayNumber());
         return weekDayMapper.toWeekDayFullName(weekDay);
+    }
+
+    protected LocalTime toLocalTime(String time) {
+        return LocalTime.parse(time);
     }
 }
