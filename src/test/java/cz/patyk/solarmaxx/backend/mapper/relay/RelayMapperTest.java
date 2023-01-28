@@ -45,6 +45,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -133,8 +134,8 @@ class RelayMapperTest {
                 .first()
                 .returns(NumberUtils.LONG_ONE, RelayScheduleDtoOut::getId)
                 .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getId(), RelayScheduleDtoOut::getRelayId)
-                .returns(ValueConstants.RELAY_SCHEDULE_ON_START, RelayScheduleDtoOut::getOnStart)
-                .returns(ValueConstants.RELAY_SCHEDULE_ON_END, RelayScheduleDtoOut::getOnEnd)
+                .returns(LocalTime.parse(ValueConstants.RELAY_SCHEDULE_ON_START), RelayScheduleDtoOut::getOnStart)
+                .returns(LocalTime.parse(ValueConstants.RELAY_SCHEDULE_ON_END), RelayScheduleDtoOut::getOnEnd)
                 .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
 
         Assertions.assertThat(relayDtoOut.getRelaySchedulesOuts().get(0).getWeekDay())
