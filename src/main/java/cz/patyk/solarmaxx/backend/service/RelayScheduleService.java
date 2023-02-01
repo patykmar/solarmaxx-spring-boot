@@ -13,12 +13,11 @@ import java.util.List;
 @Service
 public class RelayScheduleService extends AbstractCrudService<RelayScheduleDtoIn, RelayScheduleDtoOut, RelaySchedule, Long> {
     private final RelayScheduleRepository relayScheduleRepository;
-    private final LocalTime actualTime;
+    private LocalTime actualTime;
 
     public RelayScheduleService(RelayScheduleRepository repository, RelayScheduleMapper mapper, ErrorHandleService<Long> errorHandleService) {
         super(repository, mapper, errorHandleService, ServiceConstants.RELAY_SCHEDULE_NOT_FOUND_MESSAGE);
         relayScheduleRepository = repository;
-        actualTime = LocalTime.now();
     }
 
     public List<RelaySchedule> getAllByDayNumberEntity(Byte dayNumber) {
@@ -32,12 +31,14 @@ public class RelayScheduleService extends AbstractCrudService<RelayScheduleDtoIn
     }
 
     public List<RelayScheduleDtoOut> getAllRelayScheduleByDayNumberWhichShouldBeEnable(Byte dayNumber) {
+        updateActualTime();
         return getAllByDayNumber(dayNumber).stream()
                 .filter(relaySchedule -> isTimeInRange(relaySchedule.getOnStart(), relaySchedule.getOnEnd()))
                 .toList();
     }
 
     public List<RelayScheduleDtoOut> getAllRelayScheduleByDayNumberWhichShouldBeDisable(Byte dayNumber) {
+        updateActualTime();
         return getAllByDayNumber(dayNumber).stream()
                 .filter(relaySchedule -> isTimeOutOfRange(relaySchedule.getOnStart(), relaySchedule.getOnEnd()))
                 .toList();
@@ -54,5 +55,10 @@ public class RelayScheduleService extends AbstractCrudService<RelayScheduleDtoIn
 
     private boolean isTimeOutOfRange(LocalTime timeStart, LocalTime timeEnd) {
         return !isTimeInRange(timeStart, timeEnd);
+    }
+
+    private void updateActualTime() {
+        LocalTime actualTimeLocal = LocalTime.now();
+        actualTime = LocalTime.of(actualTimeLocal.getHour(), actualTimeLocal.getMinute());
     }
 }
