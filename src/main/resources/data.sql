@@ -16,8 +16,7 @@ insert into `relay` (`id`, `name`, `ip_address`, `port`, `output_count`, `user_i
 (1001, 'Tasmota, 2 toggle', '192.168.22.229', 80, 2, 1000, 1001),
 (1002, 'Tasmota, Sonoff Basic', '192.168.22.232', 80, 1, 1000, 1001),
 (1003, 'bojler1tasmota, Shelly 1', '192.168.22.233', 80, 1, 1000, 1001),
-(1004, 'Shelly 4PM', '192.168.22.234', 80, 4, 1000, 1002),
-(1005, 'Fake', '1.2.3.4', 80, 4, 1000, 1002);
+(1004, 'Shelly 4PM', '192.168.22.234', 80, 4, 1000, 1002);
 
 insert into `relay_schedule` (`id`, `relay_id`, output_id, `on_start`, `on_end`, `day_number`) VALUES
 (1001, 1001, 1, '07:36', '18:36', 1),

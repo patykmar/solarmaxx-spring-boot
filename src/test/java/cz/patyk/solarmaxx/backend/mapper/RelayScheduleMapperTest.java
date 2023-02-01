@@ -16,6 +16,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -53,8 +54,8 @@ class RelayScheduleMapperTest {
         RelayScheduleDtoOut relayScheduleDtoOut = relayScheduleMapper.toDtoOut(EntityConstants.RELAY_SCHEDULE_TASMOTA);
 
         Assertions.assertThat(relayScheduleDtoOut)
-                .returns(ON_START, RelayScheduleDtoOut::getOnStart)
-                .returns(ON_END, RelayScheduleDtoOut::getOnEnd)
+                .returns(LocalTime.parse(ON_START), RelayScheduleDtoOut::getOnStart)
+                .returns(LocalTime.parse(ON_END), RelayScheduleDtoOut::getOnEnd)
                 .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
         Assertions.assertThat(relayScheduleDtoOut.getWeekDay())
                 .returns(ValueConstants.WEEK_DAY_SUNDAY, WeekDay::getName);

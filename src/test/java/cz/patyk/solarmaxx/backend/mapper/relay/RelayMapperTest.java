@@ -45,6 +45,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -121,6 +122,7 @@ class RelayMapperTest {
                 .isNotEmpty()
                 .hasSize(EntityConstants.RELAY_TASMOTA_ADMIN.getOutputCount())
                 .element(0)
+                .returns(EntityConstants.RELAY_TYPE_TASMOTA.getId(), RelayOutputDto::getRelayId)
                 .returns(RelayTypeConstants.TASMOTA_DEFAULT_OUTPUT_ID, RelayOutputDto::getOutputId)
                 .returns(OutputStatus.NA, RelayOutputDto::getOutputStatus)
                 .returns("http://1.2.3.4:80/cm?cmnd=Power1%20STATUS", RelayOutputDto::getStatusUrl)
@@ -133,8 +135,8 @@ class RelayMapperTest {
                 .first()
                 .returns(NumberUtils.LONG_ONE, RelayScheduleDtoOut::getId)
                 .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getId(), RelayScheduleDtoOut::getRelayId)
-                .returns(ValueConstants.RELAY_SCHEDULE_ON_START, RelayScheduleDtoOut::getOnStart)
-                .returns(ValueConstants.RELAY_SCHEDULE_ON_END, RelayScheduleDtoOut::getOnEnd)
+                .returns(LocalTime.parse(ValueConstants.RELAY_SCHEDULE_ON_START), RelayScheduleDtoOut::getOnStart)
+                .returns(LocalTime.parse(ValueConstants.RELAY_SCHEDULE_ON_END), RelayScheduleDtoOut::getOnEnd)
                 .returns(NumberUtils.BYTE_ONE, RelayScheduleDtoOut::getDayNumber);
 
         Assertions.assertThat(relayDtoOut.getRelaySchedulesOuts().get(0).getWeekDay())

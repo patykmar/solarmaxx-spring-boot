@@ -27,7 +27,7 @@ public class RelaySchedule implements Serializable, IEntity<Long> {
     private Long id;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "relay_id", nullable = false)
     private Relay relay;
     private Byte outputId;

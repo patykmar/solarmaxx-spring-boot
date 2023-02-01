@@ -22,6 +22,7 @@ public abstract class OutputIdMapper implements OutputIdMapperInterface {
         ToggleUrlParameter toggleUrlParameterOff = urlParameterMapper.toOffUrlParameters(relay, outputId);
 
         return RelayOutputDto.builder()
+                .relayId(relay.getId())
                 .outputId(outputId)
                 .outputStatus(OutputStatus.NA)
                 .statusUrl(relayTypeUrlMapper.toRealUrlStatus(statusUrlParameter))

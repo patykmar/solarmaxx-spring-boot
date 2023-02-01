@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RelayOutputDto {
+    private Long relayId;
     private Byte outputId;
     private OutputStatus outputStatus;
     private String statusUrl;
