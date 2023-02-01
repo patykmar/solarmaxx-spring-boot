@@ -34,17 +34,17 @@ public class Relay implements Serializable, IEntity<Long> {
     private Byte outputCount;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ToString.Exclude
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "device_type_id", nullable = false)
     private RelayType relayType;
 
     @ToString.Exclude
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "relay")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "relay")
     private List<RelaySchedule> relaySchedules = new ArrayList<>();
 }
