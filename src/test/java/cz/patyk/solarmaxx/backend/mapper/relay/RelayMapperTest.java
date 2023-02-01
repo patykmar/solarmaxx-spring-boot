@@ -122,6 +122,7 @@ class RelayMapperTest {
                 .isNotEmpty()
                 .hasSize(EntityConstants.RELAY_TASMOTA_ADMIN.getOutputCount())
                 .element(0)
+                .returns(EntityConstants.RELAY_TYPE_TASMOTA.getId(), RelayOutputDto::getRelayId)
                 .returns(RelayTypeConstants.TASMOTA_DEFAULT_OUTPUT_ID, RelayOutputDto::getOutputId)
                 .returns(OutputStatus.NA, RelayOutputDto::getOutputStatus)
                 .returns("http://1.2.3.4:80/cm?cmnd=Power1%20STATUS", RelayOutputDto::getStatusUrl)
