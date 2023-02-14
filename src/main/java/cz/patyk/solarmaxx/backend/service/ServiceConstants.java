@@ -9,4 +9,5 @@ public class ServiceConstants {
     public static final String RELAY_TYPE_NOT_FOUND_MESSAGE = "Relay type not found";
     public static final String RELAY_NOT_FOUND_MESSAGE = "Relay not found";
     public static final String RELAY_SCHEDULE_NOT_FOUND_MESSAGE = "Relay schedule not found";
+    public static final String RELAY_OUTPUT_NOT_FOUND_MESSAGE = "Relay output schedule not found";
 }

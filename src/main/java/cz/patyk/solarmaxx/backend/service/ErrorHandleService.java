@@ -10,11 +10,6 @@ import org.springframework.stereotype.Service;
 public class ErrorHandleService<D extends Number> {
     private static final String ERROR_MESSAGE_PATTERN = "ID: {} of {}";
 
-    public ApplicationException handleNotFoundError(Long id, String message) {
-        log.error(ERROR_MESSAGE_PATTERN, id, message);
-        return new ApplicationException(message, HttpStatus.NOT_FOUND);
-    }
-
     public ApplicationException handleNotFoundError(D id, String message) {
         log.error(ERROR_MESSAGE_PATTERN, id, message);
         return new ApplicationException(message, HttpStatus.NOT_FOUND);
