@@ -1,5 +1,7 @@
 package cz.patyk.solarmaxx;
 
+import cz.patyk.solarmaxx.backend.dto.RelayDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayScheduleDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayTypeDtoIn;
@@ -37,6 +39,15 @@ public class DtoInConstants {
             .port(TestRelayConstants.RELAY_PORT)
             .outputCount(TestRelayConstants.RELAY_OUTPUT_COUNT)
             .build();
+
+    public static final RelayDto RELAY_DTO = RelayDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .name("Relay dto name")
+            .ipAddress("1.2.3.4")
+            .port((short) 80)
+            .userId(NumberUtils.LONG_ONE)
+            .relayTypeId(NumberUtils.LONG_ONE)
+            .build();
     public static final UserDtoIn USER_DTO_IN_USER = UserDtoIn.builder()
             .id(NumberUtils.LONG_ONE)
             .email(ValueConstants.USER_FAKE_EMAIL)
@@ -49,5 +60,29 @@ public class DtoInConstants {
             .onStart("12:00")
             .onEnd("16:00")
             .dayNumber((byte) 1)
+            .build();
+
+    public static final RelayOutputDto RELAY_OUTPUT_DTO_ON = RelayOutputDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
+            .outputId(NumberUtils.BYTE_ONE)
+            .outputStatus("ON")
+            .relayId(NumberUtils.LONG_ONE)
+            .build();
+
+    public static final RelayOutputDto RELAY_OUTPUT_DTO_OFF = RelayOutputDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
+            .outputId(NumberUtils.BYTE_ONE)
+            .outputStatus("OFF")
+            .relayId(NumberUtils.LONG_ONE)
+            .build();
+
+    public static final RelayOutputDto RELAY_OUTPUT_DTO_NA = RelayOutputDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
+            .outputId(NumberUtils.BYTE_ONE)
+            .outputStatus("N/A")
+            .relayId(NumberUtils.LONG_ONE)
             .build();
 }
