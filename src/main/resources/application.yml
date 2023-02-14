@@ -17,12 +17,12 @@ spring:
     database: h2
     show-sql: true
     generate-ddl: true
-    properties:
-      hibernate.format_sql: true
+#    properties:
+#      hibernate.format_sql: true
     defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
 
 device:
   type:
