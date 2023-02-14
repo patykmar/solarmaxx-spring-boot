@@ -1,5 +1,6 @@
 package cz.patyk.solarmaxx.backend.mapper.relay;
 
+import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
@@ -44,6 +45,7 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "user", expression = "java(getUserEntity(dtoIn.getUserId()))")
     @Mapping(target = "relayType", expression = "java(getRelayType(dtoIn.getRelayTypeDtoId()))")
     @Mapping(target = "relaySchedules", ignore = true)
+    @Mapping(target = "relayOutputs", ignore = true)
     public abstract Relay toEntity(RelayDtoIn dtoIn);
 
     @Override
@@ -65,6 +67,10 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "outputId", ignore = true)
     @Mapping(target = "urlTemplate", source = "relay.relayType.urlToggle")
     public abstract ToggleUrlParameter toToggleUrlParameter(Relay relay);
+
+    @Mapping(target = "userId", source = "relay.user.id")
+    @Mapping(target = "relayTypeId", source = "relay.relayType.id")
+    public abstract RelayDto entityToDto(Relay relay);
 
     public User getUserEntity(Long id) {
         return userService.getOneEntity(id);
