@@ -26,7 +26,11 @@ public class RelayService extends AbstractCrudService<RelayDtoIn, RelayDtoOut, R
     }
 
     public RelayDto getOneDto(Long id) {
-        return relayMapper.entityToDto(getOneEntity(id));
+        return getOneDto(getOneEntity(id));
+    }
+
+    public RelayDto getOneDto(Relay entity) {
+        return relayMapper.entityToDto(entity);
     }
 
 }
