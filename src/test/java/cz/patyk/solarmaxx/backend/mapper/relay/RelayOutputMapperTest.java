@@ -51,8 +51,23 @@ class RelayOutputMapperTest {
 
     @Test
     void dtoDataToEntity() {
-        //TODO: continue
-//        relayOutputMapper.dtoDataToEntity()
+        Mockito
+                .when(relayService.getOneEntity(any(Long.class)))
+                .thenReturn(EntityConstants.RELAY_TASMOTA_ADMIN);
+
+        RelayOutput relayOutput = relayOutputMapper.dtoDataToEntity(DtoInConstants.RELAY_OUTPUT_DATA_DTO);
+
+
+        Assertions.assertThat(relayOutput)
+                .returns(DtoInConstants.RELAY_OUTPUT_DATA_DTO.getId(), RelayOutput::getId)
+                .returns(DtoInConstants.RELAY_OUTPUT_DATA_DTO.getDescription(), RelayOutput::getDescription)
+                .returns(DtoInConstants.RELAY_OUTPUT_DATA_DTO.getOutputId(), RelayOutput::getOutputId)
+                .returns(DtoInConstants.RELAY_OUTPUT_DATA_DTO.getOutputStatus(), RelayOutput::getOutputStatus)
+                .hasNoNullFieldsOrProperties();
+
+        Assertions.assertThat(relayOutput.getRelay())
+                .hasNoNullFieldsOrProperties();
+
     }
 
     @Test
