@@ -48,6 +48,14 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "relayOutputs", ignore = true)
     public abstract Relay toEntity(RelayDtoIn dtoIn);
 
+    @Mapping(target = "user", expression = "java(getUserEntity(relayDto.getUserId()))")
+    @Mapping(target = "relayType", expression = "java(getRelayType(relayDto.getRelayTypeId()))")
+    @Mapping(target = "relaySchedules", ignore = true)
+    @Mapping(target = "relayOutputs", ignore = true)
+    @Mapping(target = "outputCount", ignore = true)
+    public abstract Relay toEntity(RelayDto relayDto);
+    //TODO: removed ignoring mapping for field outputCount
+
     @Override
     @Mapping(target = "relayOutputDtos", expression = "java(getDeviceOutputs(relay, false))")
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
