@@ -2,11 +2,13 @@ package cz.patyk.solarmaxx;
 
 import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayScheduleDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayTypeDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.UserDtoIn;
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
+import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -84,5 +86,13 @@ public class DtoInConstants {
             .outputId(NumberUtils.BYTE_ONE)
             .outputStatus("N/A")
             .relayId(NumberUtils.LONG_ONE)
+            .build();
+
+    public static final RelayOutputDataDto RELAY_OUTPUT_DATA_DTO = RelayOutputDataDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .description("Relay output data dto description")
+            .outputId(NumberUtils.BYTE_ONE)
+            .outputStatus(OutputStatus.ON)
+            .relayDto(RELAY_DTO)
             .build();
 }
