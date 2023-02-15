@@ -2,6 +2,7 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
@@ -26,6 +27,9 @@ class RelayOutputMapperTest {
 
     @BeforeEach
     void setUp() {
+        RelayMapper relayMapper = Mappers.getMapper(RelayMapper.class);
+
+        ReflectionTestUtils.setField(relayService, "relayMapper", relayMapper);
         ReflectionTestUtils.setField(relayOutputMapper, "relayService", relayService);
     }
 
@@ -72,6 +76,16 @@ class RelayOutputMapperTest {
 
     @Test
     void entityToDataDto() {
+        RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT);
+
+        Assertions.assertThat(relayOutputDataDto)
+                .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDataDto::getId)
+                .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDataDto::getDescription)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDataDto::getOutputId)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus(), RelayOutputDataDto::getOutputStatus);
+
+        Assertions.assertThat(relayOutputDataDto.getRelayDto())
+                .hasNoNullFieldsOrProperties();
     }
 
     @Test
