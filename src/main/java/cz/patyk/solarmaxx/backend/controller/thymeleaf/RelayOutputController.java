@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RelayOutputController {
     private final RelayOutputService relayOutputService;
 
-    @GetMapping("/toggle/{relayId}/{outputId}/{toggle}")
+    @GetMapping("/toggle/{relayId}/{relayOutputId}/{toggle}")
     public String toggleOutput(
             @PathVariable Long relayId,
-            @PathVariable Byte outputId,
+            @PathVariable Long relayOutputId,
             @PathVariable Boolean toggle
     ) {
         try {
-            relayOutputService.toggleOutput(relayId, outputId, toggle);
+            relayOutputService.toggleOutput(relayOutputId, toggle);
         } catch (ApplicationException e) {
             return "redirect:/relay/list";
         }
