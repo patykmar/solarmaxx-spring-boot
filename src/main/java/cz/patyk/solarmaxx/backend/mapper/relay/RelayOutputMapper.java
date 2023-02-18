@@ -28,7 +28,7 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     public abstract RelayOutput dtoDataToEntity(RelayOutputDataDto dataDto);
 
     @Override
-    @Mapping(target = "relayDto", expression = "java(getRelayDtoById(entity.getRelay()))")
+    @Mapping(target = "relayDto", expression = "java(getRelayDtoByRelay(entity.getRelay()))")
     public abstract RelayOutputDataDto entityToDataDto(RelayOutput entity);
 
     @Override
@@ -39,7 +39,7 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
         return relayService.getOneEntity(id);
     }
 
-    protected RelayDto getRelayDtoById(Relay relay) {
+    protected RelayDto getRelayDtoByRelay(Relay relay) {
         return relayService.getOneDto(relay);
     }
 
