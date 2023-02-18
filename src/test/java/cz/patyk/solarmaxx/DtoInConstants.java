@@ -88,11 +88,5 @@ public class DtoInConstants {
             .relayId(NumberUtils.LONG_ONE)
             .build();
 
-    public static final RelayOutputDataDto RELAY_OUTPUT_DATA_DTO = RelayOutputDataDto.builder()
-            .id(NumberUtils.LONG_ONE)
-            .description("Relay output data dto description")
-            .outputId(NumberUtils.BYTE_ONE)
-            .outputStatus(OutputStatus.ON)
-            .relayDto(RELAY_DTO)
-            .build();
+
 }

@@ -1,8 +1,9 @@
 package cz.patyk.solarmaxx.backend.adapter;
 
+import cz.patyk.solarmaxx.DtoDataConstants;
 import cz.patyk.solarmaxx.backend.client.TasmotaClient;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,19 +25,11 @@ import static org.mockito.ArgumentMatchers.any;
 public class TasmotaRelayAdapterFactoryTest {
     @Mock
     TasmotaClient tasmotaClient;
-    RelayOutputDto relayOutputDto;
     TasmotaRelayAdapter tasmotaRelayAdapter;
 
     @BeforeEach
     void setUp() {
         tasmotaRelayAdapter = new TasmotaRelayAdapter(tasmotaClient);
-        relayOutputDto = RelayOutputDto.builder()
-                .outputId((byte) 1)
-                .statusUrl("statusUrl")
-                .turnOnUrl("turnOnUrl")
-                .turnOffUrl("turnOffUrl")
-                .outputStatus(OutputStatus.NA)
-                .build();
     }
 
     @ParameterizedTest
@@ -46,10 +39,10 @@ public class TasmotaRelayAdapterFactoryTest {
                 .when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
                 .thenReturn(tasmotaOutputDto);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.updateStatusFromRelay(relayOutputDto, RelayAdapterConstants.FAKE_IP);
+        RelayOutputDataDto relayOutputDataDto = tasmotaRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO);
 
-        assertThat(updatedDto)
-                .returns(status, RelayOutputDto::getOutputStatus);
+        assertThat(relayOutputDataDto)
+                .returns(status, RelayOutputDataDto::getOutputStatus);
     }
 
     private static Stream<Arguments> provideStatuses() {
@@ -65,10 +58,12 @@ public class TasmotaRelayAdapterFactoryTest {
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_ON);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
+        RelayOutputDataDto updatedDataDto = tasmotaRelayAdapter.turnOnRelayOutput(
+                DtoDataConstants.RELAY_OUTPUT_DATA_DTO
+        );
 
-        assertThat(updatedDto)
-                .returns(OutputStatus.ON, RelayOutputDto::getOutputStatus);
+        assertThat(updatedDataDto)
+                .returns(OutputStatus.ON, RelayOutputDataDto::getOutputStatus);
     }
 
     @Test
@@ -77,9 +72,11 @@ public class TasmotaRelayAdapterFactoryTest {
                 .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_OFF);
 
-        RelayOutputDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP);
+        RelayOutputDataDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(
+                DtoDataConstants.RELAY_OUTPUT_DATA_DTO
+        );
 
         assertThat(updatedDto)
-                .returns(OutputStatus.OFF, RelayOutputDto::getOutputStatus);
+                .returns(OutputStatus.OFF, RelayOutputDataDto::getOutputStatus);
     }
 }

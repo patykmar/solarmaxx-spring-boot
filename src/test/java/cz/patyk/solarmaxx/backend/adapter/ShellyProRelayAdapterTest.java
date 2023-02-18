@@ -1,8 +1,9 @@
 package cz.patyk.solarmaxx.backend.adapter;
 
+import cz.patyk.solarmaxx.DtoDataConstants;
 import cz.patyk.solarmaxx.backend.client.ShellyProClient;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
 import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
@@ -25,19 +26,11 @@ import static org.mockito.ArgumentMatchers.any;
 public class ShellyProRelayAdapterTest {
     @Mock
     ShellyProClient shellyProClient;
-    RelayOutputDto relayOutputDto;
     ShellyProRelayAdapter shellyProRelayAdapter;
 
     @BeforeEach
     void setUp() {
         shellyProRelayAdapter = new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient);
-        relayOutputDto = RelayOutputDto.builder()
-                .outputId((byte) 1)
-                .statusUrl("statusUrl")
-                .turnOnUrl("turnOnUrl")
-                .turnOffUrl("turnOffUrl")
-                .outputStatus(OutputStatus.NA)
-                .build();
     }
 
     @ParameterizedTest
@@ -47,8 +40,8 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
                 .thenReturn(shellyProStatusOutputDto);
 
-        assertThat(shellyProRelayAdapter.updateStatusFromRelay(relayOutputDto, "1.2.3.4"))
-                .returns(status, RelayOutputDto::getOutputStatus);
+        assertThat(shellyProRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO))
+                .returns(status, RelayOutputDataDto::getOutputStatus);
     }
 
     static Stream<Arguments> provideStatuses() {
@@ -66,8 +59,8 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.setOutputState(any(URI.class), any(Byte.class)))
                 .thenReturn(shellyProToggleOutputDto);
 
-        assertThat(shellyProRelayAdapter.turnOnRelayOutput(relayOutputDto, RelayAdapterConstants.FAKE_IP))
-                .returns(status, RelayOutputDto::getOutputStatus);
+        assertThat(shellyProRelayAdapter.turnOnRelayOutput(DtoDataConstants.RELAY_OUTPUT_DATA_DTO))
+                .returns(status, RelayOutputDataDto::getOutputStatus);
     }
 
     static Stream<Arguments> provideToggle() {
