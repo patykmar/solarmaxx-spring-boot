@@ -3,13 +3,14 @@ package cz.patyk.solarmaxx.backend.service.scheduled;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.mapper.relay.RelayMapper;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import cz.patyk.solarmaxx.backend.service.RelayScheduleService;
 import cz.patyk.solarmaxx.backend.service.RelayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -66,24 +67,18 @@ public class RelayScheduleScheduledService {
     }
 
     private void turnOnRelayOutput(RelayOutputDto relayOutputDto) {
-        relayOutputService.toggleOutput(
-                relayOutputDto.getRelayId(),
-                relayOutputDto.getOutputId(),
-                true);
+        relayOutputService.toggleOutput(relayOutputDto.getId(), true);
     }
 
     private void turnOffRelayOutput(RelayOutputDto relayOutputDto) {
-        relayOutputService.toggleOutput(
-                relayOutputDto.getRelayId(),
-                relayOutputDto.getOutputId(),
-                false);
+        relayOutputService.toggleOutput(relayOutputDto.getId(), false);
     }
 
     public List<RelayOutputDto> filterOutRelayOutputDtoByOutputStatus(List<RelayDtoOut> relayDtoOuts, OutputStatus outputStatus) {
         return relayDtoOuts.stream()
                 .map(RelayDtoOut::getRelayOutputDtos)
                 .flatMap(Collection::stream)
-                .filter(relayOutputDto -> relayOutputDto.getOutputStatus() != outputStatus)
+                .filter(relayOutputDto -> !StringUtils.equals(relayOutputDto.getOutputStatus(), outputStatus.getState()))
                 .toList();
     }
 
