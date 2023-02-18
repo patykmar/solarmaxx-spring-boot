@@ -57,6 +57,7 @@ class RelayMapperTest {
         RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(EntityConstants.RELAY_TASMOTA_ADMIN);
 
         Assertions.assertThat(relayDtoOut)
+                .hasNoNullFieldsOrPropertiesExcept("relayOutputDtos", "relaySchedulesOuts")
                 .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getId(), RelayDtoOut::getId)
                 .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getName(), RelayDtoOut::getName)
                 .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getIpAddress(), RelayDtoOut::getIpAddress)
