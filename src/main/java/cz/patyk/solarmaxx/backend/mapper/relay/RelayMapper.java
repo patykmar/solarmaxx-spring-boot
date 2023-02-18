@@ -1,11 +1,13 @@
 package cz.patyk.solarmaxx.backend.mapper.relay;
 
 import cz.patyk.solarmaxx.backend.dto.RelayDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
 import cz.patyk.solarmaxx.backend.entity.Relay;
+import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
@@ -32,6 +34,8 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     protected RelayTypeMapper relayTypeMapper;
     @Autowired
     protected RelayScheduleMapper relayScheduleMapper;
+    @Autowired
+    protected RelayOutputMapper relayOutputMapper;
 
     @Override
     @Mapping(target = "user", expression = "java(getUserEntity(dtoIn.getUserId()))")
@@ -46,15 +50,14 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "relayOutputs", ignore = true)
     @Mapping(target = "outputCount", ignore = true)
     public abstract Relay toEntity(RelayDto relayDto);
-    //TODO: removed ignoring mapping for field outputCount
 
     @Override
-    @Mapping(target = "relayOutputDtos", ignore = true)
+    @Mapping(target = "relayOutputDtos", expression = "java(getListRelayOutputDto(relay.getRelayOutputs()))")
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
     @Mapping(target = "relaySchedulesOuts", expression = "java(getRelaySchedulesOuts(relay.getRelaySchedules()))")
     public abstract RelayDtoOut toDtoOut(Relay relay);
 
-    @Mapping(target = "relayOutputDtos", ignore = true)
+    @Mapping(target = "relayOutputDtos", expression = "java(getListRelayOutputDto(relay.getRelayOutputs()))")
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
     @Mapping(target = "relaySchedulesOuts", expression = "java(getRelaySchedulesOuts(relay.getRelaySchedules()))")
     public abstract RelayDtoOut toDtoOutOnLineMode(Relay relay);
@@ -78,6 +81,12 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     protected List<RelayScheduleDtoOut> getRelaySchedulesOuts(List<RelaySchedule> relaySchedules) {
         return relaySchedules.stream()
                 .map(relayScheduleMapper::toDtoOut)
+                .toList();
+    }
+
+    protected List<RelayOutputDto> getListRelayOutputDto(List<RelayOutput> relayOutputs) {
+        return relayOutputs.stream()
+                .map(relayOutputMapper::entityToDto)
                 .toList();
     }
 
