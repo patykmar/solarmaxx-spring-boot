@@ -1,12 +1,12 @@
 package cz.patyk.solarmaxx.backend.adapter;
 
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import lombok.NonNull;
 
 public interface RelayAdapter {
-    RelayOutputDto updateStatusFromRelay(@NonNull RelayOutputDto relayOutputDto, String ip);
+    RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDto);
 
-    RelayOutputDto turnOnRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip);
+    RelayOutputDataDto turnOnRelayOutput(@NonNull RelayOutputDataDto relayOutputDto);
 
-    RelayOutputDto turnOffRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip);
+    RelayOutputDataDto turnOffRelayOutput(@NonNull RelayOutputDataDto relayOutputDto);
 }
