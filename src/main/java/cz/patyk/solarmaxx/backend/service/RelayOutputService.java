@@ -2,49 +2,37 @@ package cz.patyk.solarmaxx.backend.service;
 
 import cz.patyk.solarmaxx.backend.adapter.RelayAdapter;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
-import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.relay.SupportedRelayType;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
-import cz.patyk.solarmaxx.backend.exceptions.ApplicationException;
 import cz.patyk.solarmaxx.backend.factory.adapter.RelayAdapterFactory;
 import cz.patyk.solarmaxx.backend.mapper.relay.RelayOutputMapper;
 import cz.patyk.solarmaxx.backend.repository.RelayOutputRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
 public class RelayOutputService implements CrudService<cz.patyk.solarmaxx.backend.dto.RelayOutputDto, RelayOutputDataDto, RelayOutput> {
 
-    private final RelayService relayService;
     private final RelayAdapterFactory relayAdapterFactory;
     private final RelayOutputRepository relayOutputRepository;
     private final RelayOutputMapper relayOutputMapper;
     private final ErrorHandleService<Long> errorHandleService;
 
-    @Deprecated
-    public RelayOutputDto toggleOutput(Long relayId, Byte outputId, boolean toggle) {
-        RelayDtoOut serviceOne = relayService.getOne(relayId);
-        SupportedRelayType relayType = SupportedRelayType.fromString(serviceOne.getRelayTypeDtoOut().getDeviceTypeString());
-        RelayAdapter relayAdapter = relayAdapterFactory.getRelayAdapter(relayType);
-
-        RelayOutputDto relayOutputDto = serviceOne.getRelayOutputDtos().stream()
-                .filter(output -> Objects.equals(output.getOutputId(), outputId))
-                .findFirst()
-                .orElseThrow(() -> new ApplicationException("Relay output with ID " + outputId + " not found", HttpStatus.NOT_FOUND));
+    public RelayOutputDataDto toggleOutput(Long relayOutputId, boolean toggle) {
+        RelayOutput relayOutput = getOneEntity(relayOutputId);
+        RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(relayOutput);
+        String relayTypeAsString = relayOutput.getRelay().getRelayType().getDeviceTypeString();
+        RelayAdapter relayAdapter = relayAdapterFactory.getRelayAdapter(SupportedRelayType.fromString(relayTypeAsString));
 
         if (toggle) {
-            return relayAdapter.turnOnRelayOutput(relayOutputDto, serviceOne.getIpAddress());
+            return relayAdapter.turnOnRelayOutput(relayOutputDataDto);
         } else {
-            return relayAdapter.turnOffRelayOutput(relayOutputDto, serviceOne.getIpAddress());
+            return relayAdapter.turnOffRelayOutput(relayOutputDataDto);
         }
-
     }
 
     @Override
