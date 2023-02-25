@@ -1,14 +1,13 @@
 package cz.patyk.solarmaxx;
 
+import cz.patyk.solarmaxx.backend.adapter.RelayAdapterConstants;
 import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
-import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayScheduleDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayTypeDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.UserDtoIn;
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
-import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -45,7 +44,7 @@ public class DtoInConstants {
     public static final RelayDto RELAY_DTO = RelayDto.builder()
             .id(NumberUtils.LONG_ONE)
             .name("Relay dto name")
-            .ipAddress("1.2.3.4")
+            .ipAddress(RelayAdapterConstants.FAKE_IP)
             .port((short) 80)
             .userId(NumberUtils.LONG_ONE)
             .relayTypeId(NumberUtils.LONG_ONE)
@@ -68,7 +67,7 @@ public class DtoInConstants {
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
             .outputId(NumberUtils.BYTE_ONE)
-            .outputStatus("ON")
+            .outputStatus(RelayAdapterConstants.TASMOTA_ON)
             .relayId(NumberUtils.LONG_ONE)
             .build();
 
@@ -76,7 +75,7 @@ public class DtoInConstants {
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
             .outputId(NumberUtils.BYTE_ONE)
-            .outputStatus("OFF")
+            .outputStatus(RelayAdapterConstants.TASMOTA_OFF)
             .relayId(NumberUtils.LONG_ONE)
             .build();
 
@@ -84,9 +83,7 @@ public class DtoInConstants {
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
             .outputId(NumberUtils.BYTE_ONE)
-            .outputStatus("N/A")
+            .outputStatus(RelayAdapterConstants.TASMOTA_NA)
             .relayId(NumberUtils.LONG_ONE)
             .build();
-
-
 }

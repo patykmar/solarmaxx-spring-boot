@@ -3,13 +3,12 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 import cz.patyk.solarmaxx.DtoDataConstants;
 import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
-import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
-import cz.patyk.solarmaxx.backend.service.RelayService;
+import cz.patyk.solarmaxx.backend.repository.RelayRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,24 +19,26 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
 class RelayOutputMapperTest {
     @Mock
-    RelayService relayService;
+    RelayRepository relayRepository;
     RelayOutputMapper relayOutputMapper = Mappers.getMapper(RelayOutputMapper.class);
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(relayOutputMapper, "relayService", relayService);
+        ReflectionTestUtils.setField(relayOutputMapper, "relayRepository", relayRepository);
     }
 
     @Test
     void dtoToEntity() {
         Mockito
-                .when(relayService.getOneEntity(any(Long.class)))
-                .thenReturn(EntityConstants.RELAY_TASMOTA_ADMIN);
+                .when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
 
         RelayOutput relayOutput = relayOutputMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_DTO_ON);
 
@@ -56,8 +57,8 @@ class RelayOutputMapperTest {
     @Test
     void dtoDataToEntity() {
         Mockito
-                .when(relayService.getOneEntity(any(Long.class)))
-                .thenReturn(EntityConstants.RELAY_TASMOTA_ADMIN);
+                .when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
 
         RelayOutput relayOutput = relayOutputMapper.dtoDataToEntity(DtoDataConstants.RELAY_OUTPUT_DATA_DTO);
 
@@ -76,21 +77,14 @@ class RelayOutputMapperTest {
 
     @Test
     void entityToDataDto() {
-        Mockito
-                .when(relayService.getOneDto(any(Relay.class)))
-                .thenReturn(DtoInConstants.RELAY_DTO);
-
         RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT);
 
         Assertions.assertThat(relayOutputDataDto)
+                .hasNoNullFieldsOrProperties()
                 .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDataDto::getId)
                 .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDataDto::getDescription)
                 .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDataDto::getOutputId)
                 .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus(), RelayOutputDataDto::getOutputStatus);
-
-        Assertions.assertThat(relayOutputDataDto.getRelayDto())
-                .isInstanceOf(RelayDto.class)
-                .hasNoNullFieldsOrProperties();
     }
 
     @Test
@@ -102,7 +96,6 @@ class RelayOutputMapperTest {
                 .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDto::getDescription)
                 .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDto::getOutputId)
                 .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus().toString(), RelayOutputDto::getOutputStatus)
-                .returns(EntityConstants.RELAY_OUTPUT.getRelay().getId(), RelayOutputDto::getRelayId)
-        ;
+                .returns(EntityConstants.RELAY_OUTPUT.getRelay().getId(), RelayOutputDto::getRelayId);
     }
 }

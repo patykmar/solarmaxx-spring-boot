@@ -38,6 +38,7 @@ class RelayMapperTest {
         RelayTypeService relayTypeService = Mockito.mock(RelayTypeService.class);
         RelayTypeMapper relayTypeMapper = Mappers.getMapper(RelayTypeMapper.class);
         WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
+        RelayOutputMapper relayOutputMapper = Mappers.getMapper(RelayOutputMapper.class);
         RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
 
         ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
@@ -47,6 +48,7 @@ class RelayMapperTest {
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeMapper", relayTypeMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeService", relayTypeService);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayScheduleMapper", relayScheduleMapper);
+        ReflectionTestUtils.setField(RELAY_MAPPER, "relayOutputMapper", relayOutputMapper);
     }
 
     @Test
