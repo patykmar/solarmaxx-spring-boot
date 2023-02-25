@@ -23,7 +23,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
     @Override
     public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
-        String relayIpAddress = relayOutputDataDto.getRelayDto().getIpAddress();
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.getOutputStatusWithSpecificPortObject(
                     AdapterUtils.createInsecureBasicUrl(relayIpAddress),
@@ -48,7 +48,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
 
     private RelayOutputDataDto toggleRelayOutput(RelayOutputDataDto relayOutputDataDto, String toggle) {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
-        String relayIpAddress = relayOutputDataDto.getRelayDto().getIpAddress();
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.setOutputState(
                     AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId(), toggle

@@ -21,7 +21,7 @@ public class ShellyProRelayAdapter implements RelayAdapter {
 
     @Override
     public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
-        String relayIpAddress = relayOutputDataDto.getRelayDto().getIpAddress();
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
 
         ShellyProStatusOutputDto shellyProStatusOutputDto = shellyProClient.getOutputStatusWithSpecificPortObject(
                 AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
@@ -31,7 +31,7 @@ public class ShellyProRelayAdapter implements RelayAdapter {
 
     @Override
     public RelayOutputDataDto turnOnRelayOutput(@NonNull RelayOutputDataDto relayOutputDataDto) {
-        String relayIpAddress = relayOutputDataDto.getRelayDto().getIpAddress();
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
 
         ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(
                 AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
