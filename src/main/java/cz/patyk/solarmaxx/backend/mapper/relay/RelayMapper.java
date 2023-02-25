@@ -66,6 +66,10 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Mapping(target = "relayTypeId", source = "relay.relayType.id")
     public abstract RelayDto entityToDto(Relay relay);
 
+    @Mapping(target = "userId", source = "relay.user.id")
+    @Mapping(target = "relayTypeId", source = "relay.relayType.id")
+    public abstract RelayDto toDto(Relay relay);
+
     public User getUserEntity(Long id) {
         return userService.getOneEntity(id);
     }
