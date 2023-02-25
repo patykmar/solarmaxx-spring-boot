@@ -42,34 +42,36 @@
         <table class="table table-bordered table-striped" id="relayOutputList">
             <thead>
             <tr>
-                <th>OutputId</th>
+                <th>Output Id</th>
+                <th>Output name</th>
                 <th>Output status</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="relayOutput: ${relayDtoOut.getRelayOutputDtos()}">
-                <td th:text="${relayOutput.outputId}"/>
+                <td th:text="${relayOutput.getId()}"/>
+                <td th:text="${relayDtoOut.getName()}"/>
                 <td>
                     <button type="button" class="btn btn-danger btn-sm"
-                            th:if="${relayOutput.getOutputStatus().toString() == 'NA'}" disabled>N/A
+                            th:if="${relayOutput.getOutputStatus() == 'NA'}" disabled>N/A
                     </button>
                     <button type="button" class="btn btn-success btn-sm" th:text="ON"
-                            th:if="${relayOutput.getOutputStatus().toString() == 'ON'}" disabled/>
+                            th:if="${relayOutput.getOutputStatus() == 'ON'}" disabled/>
                     <button type="button" class="btn btn-secondary btn-sm" th:text="OFF"
-                            th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}" disabled/>
+                            th:if="${relayOutput.getOutputStatus() == 'OFF'}" disabled/>
                 </td>
                 <td>
-                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()}, toggle=true)}"
+                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getId()}, toggle=true)}"
                        class="btn btn-success btn-sm"
-                       th:if="${relayOutput.getOutputStatus().toString() == 'OFF'}">Turn ON</a>
-                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()}, toggle=false)}"
+                       th:if="${relayOutput.getOutputStatus() == 'OFF'}">Turn ON</a>
+                    <a th:href="@{/relay-output/toggle/{relayId}/{outputId}/{toggle}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getId()}, toggle=false)}"
                        class="btn btn-secondary btn-sm"
-                       th:if="${relayOutput.getOutputStatus().toString() == 'ON'}">Turn OFF</a>
+                       th:if="${relayOutput.getOutputStatus() == 'ON'}">Turn OFF</a>
                     <button type="button" class="btn btn-danger btn-sm" disabled
-                            th:if="${relayOutput.getOutputStatus().toString() == 'NA'}">N/A
+                            th:if="${relayOutput.getOutputStatus() == 'NA'}">N/A
                     </button>
-                    <a th:href="@{/relay/schedule/new/{relayId}/{outputId}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getOutputId()})}"
+                    <a th:href="@{/relay/schedule/new/{relayId}/{outputId}(relayId=${relayDtoOut.getId()}, outputId=${relayOutput.getId()})}"
                        class="btn btn-info btn-sm">Crete time schedule</a>
                 </td>
             </tr>
