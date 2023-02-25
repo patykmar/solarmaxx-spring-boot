@@ -1,6 +1,6 @@
 package cz.patyk.solarmaxx.backend.dto.out;
 
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import lombok.Builder;
 import lombok.Data;
 

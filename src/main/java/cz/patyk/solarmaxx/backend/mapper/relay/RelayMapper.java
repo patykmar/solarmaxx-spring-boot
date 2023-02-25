@@ -1,23 +1,20 @@
 package cz.patyk.solarmaxx.backend.mapper.relay;
 
+import cz.patyk.solarmaxx.backend.dto.RelayDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayScheduleDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
-import cz.patyk.solarmaxx.backend.dto.relay.SupportedRelayType;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
-import cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter.StatusUrlParameter;
-import cz.patyk.solarmaxx.backend.dto.relay.type.url.parameter.ToggleUrlParameter;
 import cz.patyk.solarmaxx.backend.entity.Relay;
+import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
-import cz.patyk.solarmaxx.backend.factory.mapper.RelayOutputIdFactory;
 import cz.patyk.solarmaxx.backend.mapper.BasicMapper;
 import cz.patyk.solarmaxx.backend.mapper.RelayScheduleMapper;
 import cz.patyk.solarmaxx.backend.mapper.UserMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
-import cz.patyk.solarmaxx.backend.mapper.relay.type.output.OutputIdMapper;
 import cz.patyk.solarmaxx.backend.service.RelayTypeService;
 import cz.patyk.solarmaxx.backend.service.UserService;
 import org.mapstruct.Mapper;
@@ -36,35 +33,42 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
     @Autowired
     protected RelayTypeMapper relayTypeMapper;
     @Autowired
-    protected RelayOutputIdFactory relayOutputIdFactory;
-    @Autowired
     protected RelayScheduleMapper relayScheduleMapper;
+    @Autowired
+    protected RelayOutputMapper relayOutputMapper;
 
     @Override
     @Mapping(target = "user", expression = "java(getUserEntity(dtoIn.getUserId()))")
     @Mapping(target = "relayType", expression = "java(getRelayType(dtoIn.getRelayTypeDtoId()))")
     @Mapping(target = "relaySchedules", ignore = true)
+    @Mapping(target = "relayOutputs", ignore = true)
     public abstract Relay toEntity(RelayDtoIn dtoIn);
 
+    @Mapping(target = "user", expression = "java(getUserEntity(relayDto.getUserId()))")
+    @Mapping(target = "relayType", expression = "java(getRelayType(relayDto.getRelayTypeId()))")
+    @Mapping(target = "relaySchedules", ignore = true)
+    @Mapping(target = "relayOutputs", ignore = true)
+    @Mapping(target = "outputCount", ignore = true)
+    public abstract Relay toEntity(RelayDto relayDto);
+
     @Override
-    @Mapping(target = "relayOutputDtos", expression = "java(getDeviceOutputs(relay, false))")
+    @Mapping(target = "relayOutputDtos", expression = "java(getListRelayOutputDto(relay.getRelayOutputs()))")
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
     @Mapping(target = "relaySchedulesOuts", expression = "java(getRelaySchedulesOuts(relay.getRelaySchedules()))")
     public abstract RelayDtoOut toDtoOut(Relay relay);
 
-    @Mapping(target = "relayOutputDtos", expression = "java(getDeviceOutputs(relay, true))")
+    @Mapping(target = "relayOutputDtos", expression = "java(getListRelayOutputDto(relay.getRelayOutputs()))")
     @Mapping(target = "relayTypeDtoOut", expression = "java(toRelayTypeDtoOut(relay.getRelayType()))")
     @Mapping(target = "relaySchedulesOuts", expression = "java(getRelaySchedulesOuts(relay.getRelaySchedules()))")
     public abstract RelayDtoOut toDtoOutOnLineMode(Relay relay);
 
-    @Mapping(target = "outputId", ignore = true)
-    @Mapping(target = "urlTemplate", source = "relay.relayType.urlStatus")
-    public abstract StatusUrlParameter toStatusUrlParameter(Relay relay);
+    @Mapping(target = "userId", source = "relay.user.id")
+    @Mapping(target = "relayTypeId", source = "relay.relayType.id")
+    public abstract RelayDto entityToDto(Relay relay);
 
-    @Mapping(target = "toggle", ignore = true)
-    @Mapping(target = "outputId", ignore = true)
-    @Mapping(target = "urlTemplate", source = "relay.relayType.urlToggle")
-    public abstract ToggleUrlParameter toToggleUrlParameter(Relay relay);
+    @Mapping(target = "userId", source = "relay.user.id")
+    @Mapping(target = "relayTypeId", source = "relay.relayType.id")
+    public abstract RelayDto toDto(Relay relay);
 
     public User getUserEntity(Long id) {
         return userService.getOneEntity(id);
@@ -78,15 +82,15 @@ public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, Rela
         return relayTypeMapper.toDtoOut(relayType);
     }
 
-    public List<RelayOutputDto> getDeviceOutputs(Relay relay, boolean onlineMode) {
-        SupportedRelayType supportedRelayType = SupportedRelayType.fromString(relay.getRelayType().getDeviceTypeString());
-        OutputIdMapper outputIdMapper = relayOutputIdFactory.getOutputIdMapper(supportedRelayType);
-        return outputIdMapper.getDeviceOutputs(relay, onlineMode);
-    }
-
     protected List<RelayScheduleDtoOut> getRelaySchedulesOuts(List<RelaySchedule> relaySchedules) {
         return relaySchedules.stream()
                 .map(relayScheduleMapper::toDtoOut)
+                .toList();
+    }
+
+    protected List<RelayOutputDto> getListRelayOutputDto(List<RelayOutput> relayOutputs) {
+        return relayOutputs.stream()
+                .map(relayOutputMapper::entityToDto)
                 .toList();
     }
 

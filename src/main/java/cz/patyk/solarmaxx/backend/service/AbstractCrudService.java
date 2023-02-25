@@ -49,7 +49,7 @@ public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E
 
     public O newItem(I dtoIn) {
         E entity = mapper.toEntity(dtoIn);
-        return newItemByEntity(repository.save(entity));
+        return newItemByEntity(entity);
     }
 
     @Override

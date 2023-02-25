@@ -1,8 +1,8 @@
 package cz.patyk.solarmaxx.backend.adapter;
 
 import cz.patyk.solarmaxx.backend.client.ShellyProClient;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
-import cz.patyk.solarmaxx.backend.dto.relay.output.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
 import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
@@ -11,50 +11,49 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.net.URI;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ShellyProRelayAdapter implements RelayAdapter {
-    private static final String HTTP = "http://";
     private final OutputStatusMapper outputStatusMapper;
     private final ShellyProClient shellyProClient;
 
     @Override
-    public RelayOutputDto updateStatusFromRelay(@NonNull RelayOutputDto relayOutputDto, String ip) {
+    public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
+
         ShellyProStatusOutputDto shellyProStatusOutputDto = shellyProClient.getOutputStatusWithSpecificPortObject(
-                createBasicUrl(ip), relayOutputDto.getOutputId()
+                AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
         );
-        return parseStatusResponseAndUpdateState(relayOutputDto, shellyProStatusOutputDto);
+        return parseStatusResponseAndUpdateState(relayOutputDataDto, shellyProStatusOutputDto);
     }
 
     @Override
-    public RelayOutputDto turnOnRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip) {
+    public RelayOutputDataDto turnOnRelayOutput(@NonNull RelayOutputDataDto relayOutputDataDto) {
+        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
+
         ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(
-                createBasicUrl(ip), relayOutputDto.getOutputId()
+                AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
         );
-        return parseToogleResponseAndUpdateState(relayOutputDto, shellyProToggleOutputDto);
+        return parseToogleResponseAndUpdateState(relayOutputDataDto, shellyProToggleOutputDto);
     }
 
     @Override
-    public RelayOutputDto turnOffRelayOutput(@NonNull RelayOutputDto relayOutputDto, String ip) {
-        return turnOnRelayOutput(relayOutputDto, ip);
+    public RelayOutputDataDto turnOffRelayOutput(@NonNull RelayOutputDataDto relayOutputDataDto) {
+        return turnOnRelayOutput(relayOutputDataDto);
     }
 
-    private RelayOutputDto parseStatusResponseAndUpdateState(RelayOutputDto relayOutputDto, ShellyProStatusOutputDto shellyProStatusOutputDto) {
+    private RelayOutputDataDto parseStatusResponseAndUpdateState(RelayOutputDataDto relayOutputDataDto, ShellyProStatusOutputDto shellyProStatusOutputDto) {
         OutputStatus outputStatus = outputStatusMapper.toOutputStatus(shellyProStatusOutputDto.getState());
-        relayOutputDto.setOutputStatus(outputStatus);
-        return relayOutputDto;
+        relayOutputDataDto.setOutputStatus(outputStatus);
+        return relayOutputDataDto;
     }
 
-    private RelayOutputDto parseToogleResponseAndUpdateState(RelayOutputDto relayOutputDto, ShellyProToggleOutputDto shellyProToggleOutputDto) {
+    private RelayOutputDataDto parseToogleResponseAndUpdateState(RelayOutputDataDto relayOutpuDatatDto, ShellyProToggleOutputDto shellyProToggleOutputDto) {
         OutputStatus outputStatus = outputStatusMapper.toOutputStatusReverse(shellyProToggleOutputDto.getState());
-        relayOutputDto.setOutputStatus(outputStatus);
-        return relayOutputDto;
+        relayOutpuDatatDto.setOutputStatus(outputStatus);
+        return relayOutpuDatatDto;
     }
 
-    private URI createBasicUrl(String ip) {
-        return URI.create(HTTP + ip);
-    }
 }

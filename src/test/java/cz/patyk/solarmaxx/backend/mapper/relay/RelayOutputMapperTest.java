@@ -1,0 +1,101 @@
+package cz.patyk.solarmaxx.backend.mapper.relay;
+
+import cz.patyk.solarmaxx.DtoDataConstants;
+import cz.patyk.solarmaxx.DtoInConstants;
+import cz.patyk.solarmaxx.EntityConstants;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
+import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
+import cz.patyk.solarmaxx.backend.entity.Relay;
+import cz.patyk.solarmaxx.backend.entity.RelayOutput;
+import cz.patyk.solarmaxx.backend.repository.RelayRepository;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mapstruct.factory.Mappers;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.util.Optional;
+
+import static org.mockito.ArgumentMatchers.any;
+
+@ExtendWith(MockitoExtension.class)
+class RelayOutputMapperTest {
+    @Mock
+    RelayRepository relayRepository;
+    RelayOutputMapper relayOutputMapper = Mappers.getMapper(RelayOutputMapper.class);
+
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(relayOutputMapper, "relayRepository", relayRepository);
+    }
+
+    @Test
+    void dtoToEntity() {
+        Mockito
+                .when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+
+        RelayOutput relayOutput = relayOutputMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_DTO_ON);
+
+        Assertions.assertThat(relayOutput)
+                .isInstanceOf(RelayOutput.class)
+                .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getId(), RelayOutput::getId)
+                .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getDescription(), RelayOutput::getDescription)
+                .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getOutputId(), RelayOutput::getOutputId)
+                .returns(OutputStatus.ON, RelayOutput::getOutputStatus);
+
+        Assertions.assertThat(relayOutput.getRelay())
+                .isInstanceOf(Relay.class)
+                .hasNoNullFieldsOrProperties();
+    }
+
+    @Test
+    void dtoDataToEntity() {
+        Mockito
+                .when(relayRepository.findById(any(Long.class)))
+                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+
+        RelayOutput relayOutput = relayOutputMapper.dtoDataToEntity(DtoDataConstants.RELAY_OUTPUT_DATA_DTO);
+
+
+        Assertions.assertThat(relayOutput)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getId(), RelayOutput::getId)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getDescription(), RelayOutput::getDescription)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getOutputId(), RelayOutput::getOutputId)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getOutputStatus(), RelayOutput::getOutputStatus)
+                .hasNoNullFieldsOrProperties();
+
+        Assertions.assertThat(relayOutput.getRelay())
+                .hasNoNullFieldsOrProperties();
+
+    }
+
+    @Test
+    void entityToDataDto() {
+        RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT);
+
+        Assertions.assertThat(relayOutputDataDto)
+                .hasNoNullFieldsOrProperties()
+                .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDataDto::getId)
+                .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDataDto::getDescription)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDataDto::getOutputId)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus(), RelayOutputDataDto::getOutputStatus);
+    }
+
+    @Test
+    void entityToDto() {
+        RelayOutputDto relayOutputDto = relayOutputMapper.entityToDto(EntityConstants.RELAY_OUTPUT);
+
+        Assertions.assertThat(relayOutputDto)
+                .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDto::getId)
+                .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDto::getDescription)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDto::getOutputId)
+                .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus().toString(), RelayOutputDto::getOutputStatus)
+                .returns(EntityConstants.RELAY_OUTPUT.getRelay().getId(), RelayOutputDto::getRelayId);
+    }
+}

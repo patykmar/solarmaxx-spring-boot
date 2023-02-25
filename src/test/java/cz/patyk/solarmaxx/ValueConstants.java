@@ -26,4 +26,7 @@ public class ValueConstants {
     public static final String WEEK_DAY_THURSDAY = "Thursday";
     public static final String WEEK_DAY_FRIDAY = "Friday";
     public static final String WEEK_DAY_SATURDAY = "Saturday";
+
+    public static final String RELAY_OUTPUT_DTO_DESCRIPTION = "Relay Output DTO Description";
+    public static final String RELAY_OUTPUT_DATA_DTO_DESCRIPTION = "Relay Output Data DTO Description";
 }
