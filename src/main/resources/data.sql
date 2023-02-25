@@ -26,11 +26,11 @@ insert into `relay_schedule` (`id`, `relay_id`, output_id, `on_start`, `on_end`,
 (1005, 1003, 1, '07:36', '18:36', 3);
 
 insert into `relay_output` (`id`, `description`, `output_id`,`output_status`, `relay_id`) values
-(1001, 'Relay port 1001', 1, 'on',   1001 ),
-(1002, 'Relay port 1002', 2, 'off',  1001 ),
-(1003, 'Relay port 1003', 1, 'off',  1002 ),
-(1004, 'Relay port 1004', 1, 'on',   1003 ),
-(1005, 'Relay port 1005', 1, 'on',   1004 ),
-(1006, 'Relay port 1006', 2, 'na',   1004 ),
-(1007, 'Relay port 1007', 3, 'na',   1004 ),
-(1008, 'Relay port 1008', 4, 'na',   1004 );
+(1001, 'Relay port 1001', 1, 'ON',   1001 ),
+(1002, 'Relay port 1002', 2, 'OFF',  1001 ),
+(1003, 'Relay port 1003', 1, 'OFF',  1002 ),
+(1004, 'Relay port 1004', 1, 'ON',   1003 ),
+(1005, 'Relay port 1005', 1, 'ON',   1004 ),
+(1006, 'Relay port 1006', 2, 'NA',   1004 ),
+(1007, 'Relay port 1007', 3, 'NA',   1004 ),
+(1008, 'Relay port 1008', 4, 'NA',   1004 );
