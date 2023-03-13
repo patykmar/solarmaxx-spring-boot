@@ -17,11 +17,13 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     protected RelayRepository relayRepository;
 
     @Override
+    @Mapping(target = "relayOutputSchedules", ignore = true)
     @Mapping(target = "outputStatus", expression = "java(getOutputStatus(dto.getOutputStatus()))")
     @Mapping(target = "relay", expression = "java(getRelayById(dto.getRelayId()))")
     public abstract RelayOutput dtoToEntity(RelayOutputDto dto);
 
     @Override
+    @Mapping(target = "relayOutputSchedules", ignore = true)
     @Mapping(target = "relay", expression = "java(getRelayById(dataDto.getRelayId()))")
     public abstract RelayOutput dtoDataToEntity(RelayOutputDataDto dataDto);
 
