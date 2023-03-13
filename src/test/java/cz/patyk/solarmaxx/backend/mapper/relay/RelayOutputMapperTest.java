@@ -44,6 +44,7 @@ class RelayOutputMapperTest {
 
         Assertions.assertThat(relayOutput)
                 .isInstanceOf(RelayOutput.class)
+                .hasNoNullFieldsOrProperties()
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getId(), RelayOutput::getId)
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getDescription(), RelayOutput::getDescription)
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getOutputId(), RelayOutput::getOutputId)

@@ -76,13 +76,13 @@ class RelayScheduleServiceTest {
 
     private List<RelaySchedule> provideListOfRelaySchedule() {
         return List.of(
-                RelaySchedule.builder().id(1L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("00:00").onEnd("04:59").dayNumber((byte) 1).build(),
-                RelaySchedule.builder().id(2L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("08:00").onEnd("09:14").dayNumber((byte) 3).build(),
-                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("12:00").onEnd("15:10").dayNumber((byte) 5).build(),
-                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("20:00").onEnd("23:59").dayNumber((byte) 7).build(),
-                RelaySchedule.builder().id(4L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("05:00").onEnd("07:59").dayNumber((byte) 2).build(),
-                RelaySchedule.builder().id(5L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("09:15").onEnd("11:59").dayNumber((byte) 4).build(),
-                RelaySchedule.builder().id(6L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("15:11").onEnd("19:59").dayNumber((byte) 6).build()
+                RelaySchedule.builder().id(1L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("00:00").onEnd("04:59").dayNumber((byte) Calendar.SUNDAY).build(),
+                RelaySchedule.builder().id(2L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("08:00").onEnd("09:14").dayNumber((byte) Calendar.TUESDAY).build(),
+                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("12:00").onEnd("15:10").dayNumber((byte) Calendar.THURSDAY).build(),
+                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("20:00").onEnd("23:59").dayNumber((byte) Calendar.SATURDAY).build(),
+                RelaySchedule.builder().id(4L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("05:00").onEnd("07:59").dayNumber((byte) Calendar.MONDAY).build(),
+                RelaySchedule.builder().id(5L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("09:15").onEnd("11:59").dayNumber((byte) Calendar.WEDNESDAY).build(),
+                RelaySchedule.builder().id(6L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("15:11").onEnd("19:59").dayNumber((byte) Calendar.FRIDAY).build()
         );
     }
 
@@ -92,7 +92,9 @@ class RelayScheduleServiceTest {
                 .when(relayScheduleRepository.findAllByDayNumber(any(Byte.class)))
                 .thenReturn(provideListOfRelayScheduleForFriday());
 
-        Assertions.assertThat(relayScheduleService.getAllRelayScheduleByDayNumberWhichShouldBeEnable(weekDayFriday))
+        List<RelayScheduleDtoOut> allRelayScheduleByDayNumberWhichShouldBeEnable = relayScheduleService.getAllRelayScheduleByDayNumberWhichShouldBeEnable(weekDayFriday);
+
+        Assertions.assertThat(allRelayScheduleByDayNumberWhichShouldBeEnable)
                 .isNotEmpty()
                 .hasSize(1);
     }
@@ -112,13 +114,13 @@ class RelayScheduleServiceTest {
 
     private List<RelaySchedule> provideListOfRelayScheduleForFriday() {
         return List.of(
-                RelaySchedule.builder().id(1L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("00:00").onEnd("04:59").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(2L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("08:00").onEnd("09:14").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("12:00").onEnd("15:10").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("20:00").onEnd("23:59").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(4L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("05:00").onEnd("07:59").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(5L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("09:15").onEnd("11:59").dayNumber((byte) 6).build(),
-                RelaySchedule.builder().id(6L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("15:11").onEnd("19:59").dayNumber((byte) 6).build()
+                RelaySchedule.builder().id(1L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("00:00").onEnd("04:59").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(2L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("08:00").onEnd("09:14").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("12:00").onEnd("15:10").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(3L).relay(EntityConstants.RELAY_SHELLY_PRO_ADMIN).outputId((byte) 1).onStart("20:00").onEnd("23:59").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(4L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("05:00").onEnd("07:59").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(5L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("09:15").onEnd("11:59").dayNumber((byte) Calendar.FRIDAY).build(),
+                RelaySchedule.builder().id(6L).relay(EntityConstants.RELAY_TASMOTA_ADMIN).outputId((byte) 2).onStart("15:11").onEnd("19:59").dayNumber((byte) Calendar.FRIDAY).build()
         );
     }
 }

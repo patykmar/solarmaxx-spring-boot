@@ -3,6 +3,7 @@ package cz.patyk.solarmaxx;
 import cz.patyk.solarmaxx.backend.adapter.RelayAdapterConstants;
 import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputScheduleDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayScheduleDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayTypeDtoIn;
@@ -10,6 +11,8 @@ import cz.patyk.solarmaxx.backend.dto.in.UserDtoIn;
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
 import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.Calendar;
 
 public class DtoInConstants {
     private DtoInConstants() {
@@ -85,5 +88,13 @@ public class DtoInConstants {
             .outputId(NumberUtils.BYTE_ONE)
             .outputStatus(RelayAdapterConstants.TASMOTA_NA)
             .relayId(NumberUtils.LONG_ONE)
+            .build();
+
+    public static final RelayOutputScheduleDto RELAY_OUTPUT_SCHEDULE_DTO = RelayOutputScheduleDto.builder()
+            .id(NumberUtils.LONG_ONE)
+            .relayOutputId(NumberUtils.LONG_ONE)
+            .onStart("12:00")
+            .onEnd("14:00")
+            .dayNumber((byte) Calendar.FRIDAY)
             .build();
 }
