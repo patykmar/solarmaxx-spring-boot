@@ -4,12 +4,14 @@ import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
+import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
 import cz.patyk.solarmaxx.backend.entity.RelaySchedule;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Calendar;
 import java.util.List;
 
 public class EntityConstants {
@@ -97,5 +99,13 @@ public class EntityConstants {
             .outputId(NumberUtils.BYTE_ONE)
             .outputStatus(OutputStatus.ON)
             .relay(RELAY_TASMOTA_ADMIN)
+            .build();
+
+    public static final RelayOutputSchedule RELAY_OUTPUT_SCHEDULE = RelayOutputSchedule.builder()
+            .id(NumberUtils.LONG_ONE)
+            .relayOutput(RELAY_OUTPUT)
+            .onStart("12:12")
+            .onEnd("13:13")
+            .dayNumber((byte) Calendar.FRIDAY)
             .build();
 }
