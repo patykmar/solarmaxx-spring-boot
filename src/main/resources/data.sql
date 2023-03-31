@@ -30,10 +30,10 @@ insert into `relay_output` (`id`, `description`, `output_id`,`output_status`, `r
 (1002, 'Relay port 1002', 2, 'OFF',  1001 ),
 (1003, 'Relay port 1003', 1, 'OFF',  1002 ),
 (1004, 'Relay port 1004', 1, 'ON',   1003 ),
-(1005, 'Relay port 1005', 1, 'ON',   1004 ),
-(1006, 'Relay port 1006', 2, 'NA',   1004 ),
-(1007, 'Relay port 1007', 3, 'NA',   1004 ),
-(1008, 'Relay port 1008', 4, 'NA',   1004 );
+(1005, 'Relay port 1005', 0, 'ON',   1004 ),
+(1006, 'Relay port 1006', 1, 'NA',   1004 ),
+(1007, 'Relay port 1007', 2, 'NA',   1004 ),
+(1008, 'Relay port 1008', 3, 'NA',   1004 );
 
 insert into `relay_output_schedule` (`id`, `relay_output_id`, `on_start`, `on_end`, `day_number`) values
 (1001, 1001, '07:36', '18:36', 1),
