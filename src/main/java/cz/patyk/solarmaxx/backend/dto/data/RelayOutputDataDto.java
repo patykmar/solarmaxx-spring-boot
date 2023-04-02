@@ -1,5 +1,6 @@
 package cz.patyk.solarmaxx.backend.dto.data;
 
+import cz.patyk.solarmaxx.backend.dto.relay.SupportedRelayType;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import lombok.Builder;
 import lombok.Data;
@@ -17,4 +18,6 @@ public class RelayOutputDataDto implements DtoDataInterface {
     private Short relayPort;
     private Long relayTypeId;
     private String relayTypeName;
+    private String relayTypeString;
+    private SupportedRelayType relayTypeEnum;
 }
