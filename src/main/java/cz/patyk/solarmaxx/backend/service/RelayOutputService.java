@@ -1,6 +1,7 @@
 package cz.patyk.solarmaxx.backend.service;
 
 import cz.patyk.solarmaxx.backend.adapter.RelayAdapter;
+import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.SupportedRelayType;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
@@ -15,23 +16,23 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RelayOutputService implements CrudService<cz.patyk.solarmaxx.backend.dto.RelayOutputDto, RelayOutputDataDto, RelayOutput> {
+public class RelayOutputService implements CrudService<RelayOutputDto, RelayOutputDataDto, RelayOutput> {
 
     private final RelayAdapterFactory relayAdapterFactory;
     private final RelayOutputRepository relayOutputRepository;
     private final RelayOutputMapper relayOutputMapper;
     private final ErrorHandleService<Long> errorHandleService;
 
-    public RelayOutputDataDto toggleOutput(Long relayOutputId, boolean toggle) {
+    public void toggleOutput(Long relayOutputId, boolean toggle) {
         RelayOutput relayOutput = getOneEntity(relayOutputId);
         RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(relayOutput);
         String relayTypeAsString = relayOutput.getRelay().getRelayType().getDeviceTypeString();
         RelayAdapter relayAdapter = relayAdapterFactory.getRelayAdapter(SupportedRelayType.fromString(relayTypeAsString));
 
         if (toggle) {
-            return relayAdapter.turnOnRelayOutput(relayOutputDataDto);
+            relayAdapter.turnOnRelayOutput(relayOutputDataDto);
         } else {
-            return relayAdapter.turnOffRelayOutput(relayOutputDataDto);
+            relayAdapter.turnOffRelayOutput(relayOutputDataDto);
         }
     }
 
@@ -55,6 +56,10 @@ public class RelayOutputService implements CrudService<cz.patyk.solarmaxx.backen
                 .toList();
     }
 
+    public RelayOutput toEntity(RelayOutputDataDto relayOutputDataDto) {
+        return relayOutputMapper.dtoDataToEntity(relayOutputDataDto);
+    }
+
     @Override
     public RelayOutputDataDto getOne(Long id) {
         return relayOutputMapper.entityToDataDto(getOneEntity(id));
@@ -67,7 +72,7 @@ public class RelayOutputService implements CrudService<cz.patyk.solarmaxx.backen
     }
 
     @Override
-    public RelayOutputDataDto newItem(cz.patyk.solarmaxx.backend.dto.RelayOutputDto dtoIn) {
+    public RelayOutputDataDto newItem(RelayOutputDto dtoIn) {
         RelayOutput relayOutput = relayOutputMapper.dtoToEntity(dtoIn);
         return newItemByEntity(relayOutput);
     }
@@ -78,7 +83,7 @@ public class RelayOutputService implements CrudService<cz.patyk.solarmaxx.backen
     }
 
     @Override
-    public RelayOutputDataDto editItem(cz.patyk.solarmaxx.backend.dto.RelayOutputDto dtoIn, Long id) {
+    public RelayOutputDataDto editItem(RelayOutputDto dtoIn, Long id) {
         RelayOutput relayOutput = relayOutputMapper.dtoToEntity(dtoIn);
         relayOutput.setId(id);
         return editItemByEntity(relayOutput);
