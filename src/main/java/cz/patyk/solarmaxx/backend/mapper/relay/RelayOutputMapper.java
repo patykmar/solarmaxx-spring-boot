@@ -2,6 +2,7 @@ package cz.patyk.solarmaxx.backend.mapper.relay;
 
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
+import cz.patyk.solarmaxx.backend.dto.relay.SupportedRelayType;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
@@ -34,6 +35,8 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     @Mapping(target = "relayPort", source = "entity.relay.port")
     @Mapping(target = "relayTypeId", source = "entity.relay.relayType.id")
     @Mapping(target = "relayTypeName", source = "entity.relay.relayType.name")
+    @Mapping(target = "relayTypeString", source = "entity.relay.relayType.deviceTypeString")
+    @Mapping(target = "relayTypeEnum", expression = "java(toSupportedRelayType(entity))")
     public abstract RelayOutputDataDto entityToDataDto(RelayOutput entity);
 
     @Override
@@ -47,5 +50,10 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
 
     protected OutputStatus getOutputStatus(String status) {
         return OutputStatus.fromString(status);
+    }
+
+    protected SupportedRelayType toSupportedRelayType(RelayOutput relayOutput) {
+        return SupportedRelayType.fromString(
+                relayOutput.getRelay().getRelayType().getDeviceTypeString());
     }
 }
