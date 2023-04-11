@@ -17,5 +17,4 @@ public class RelayDtoOut implements IDtoOut {
     private Short port;
     private Byte outputCount;
     private List<RelayOutputDto> relayOutputDtos;
-    private List<RelayScheduleDtoOut> relaySchedulesOuts;
 }
