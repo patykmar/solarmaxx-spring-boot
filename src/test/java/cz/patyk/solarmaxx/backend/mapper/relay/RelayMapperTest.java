@@ -8,11 +8,8 @@ import cz.patyk.solarmaxx.backend.dto.out.UserDtoOut;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
-import cz.patyk.solarmaxx.backend.mapper.RelayScheduleMapper;
 import cz.patyk.solarmaxx.backend.mapper.UserMapper;
-import cz.patyk.solarmaxx.backend.mapper.WeekDayMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
-import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayTypeService;
 import cz.patyk.solarmaxx.backend.service.UserService;
 import org.assertj.core.api.Assertions;
@@ -37,25 +34,18 @@ class RelayMapperTest {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
         RelayTypeService relayTypeService = Mockito.mock(RelayTypeService.class);
         RelayTypeMapper relayTypeMapper = Mappers.getMapper(RelayTypeMapper.class);
-        WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
         RelayOutputMapper relayOutputMapper = Mappers.getMapper(RelayOutputMapper.class);
-        RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
 
-        ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
 
         ReflectionTestUtils.setField(RELAY_MAPPER, "userService", userService);
         ReflectionTestUtils.setField(RELAY_MAPPER, "userMapper", userMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeMapper", relayTypeMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeService", relayTypeService);
-        ReflectionTestUtils.setField(RELAY_MAPPER, "relayScheduleMapper", relayScheduleMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayOutputMapper", relayOutputMapper);
     }
 
     @Test
     void toDtoOutTasmotaType() {
-        EntityConstants.RELAY_TASMOTA_ADMIN
-                .setRelaySchedules(List.of(EntityConstants.RELAY_SCHEDULE_TASMOTA));
-
         RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(EntityConstants.RELAY_TASMOTA_ADMIN);
 
         Assertions.assertThat(relayDtoOut)

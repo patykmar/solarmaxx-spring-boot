@@ -46,10 +46,5 @@ public class Relay implements Serializable, IEntity<Long> {
     @ToString.Exclude
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "relay")
-    private List<RelaySchedule> relaySchedules = new ArrayList<>();
-
-    @ToString.Exclude
-    @Builder.Default
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "relay")
     private List<RelayOutput> relayOutputs = new ArrayList<>();
 }

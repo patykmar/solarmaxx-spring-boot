@@ -5,7 +5,6 @@ import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputDto;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputScheduleDto;
 import cz.patyk.solarmaxx.backend.dto.in.RelayDtoIn;
-import cz.patyk.solarmaxx.backend.dto.in.RelayScheduleDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.RelayTypeDtoIn;
 import cz.patyk.solarmaxx.backend.dto.in.UserDtoIn;
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
@@ -57,13 +56,6 @@ public class DtoInConstants {
             .email(ValueConstants.USER_FAKE_EMAIL)
             .roles(ValueConstants.USER_ROLE_USER)
             .password(ValueConstants.USER_PASSWORD)
-            .build();
-
-    public static final RelayScheduleDtoIn RELAY_SCHEDULE_DTO_IN = RelayScheduleDtoIn.builder()
-            .relayId(NumberUtils.LONG_ONE)
-            .onStart("12:00")
-            .onEnd("16:00")
-            .dayNumber((byte) 1)
             .build();
 
     public static final RelayOutputDto RELAY_OUTPUT_DTO_ON = RelayOutputDto.builder()
