@@ -40,8 +40,10 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
                 .thenReturn(shellyProStatusOutputDto);
 
-        assertThat(shellyProRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO))
-                .returns(status, RelayOutputDataDto::getOutputStatus);
+        RelayOutputDataDto relayOutputDataDto = shellyProRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01);
+
+        assertThat(relayOutputDataDto)
+                .returns(status, RelayOutputDataDto::getDeviceOutputStatus);
     }
 
     static Stream<Arguments> provideStatuses() {
@@ -51,7 +53,6 @@ public class ShellyProRelayAdapterTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("provideToggle")
     void updateStatusFromRelay(OutputStatus status, ShellyProToggleOutputDto shellyProToggleOutputDto) {
@@ -59,8 +60,8 @@ public class ShellyProRelayAdapterTest {
                 .when(shellyProClient.setOutputState(any(URI.class), any(Byte.class)))
                 .thenReturn(shellyProToggleOutputDto);
 
-        assertThat(shellyProRelayAdapter.turnOnRelayOutput(DtoDataConstants.RELAY_OUTPUT_DATA_DTO))
-                .returns(status, RelayOutputDataDto::getOutputStatus);
+        assertThat(shellyProRelayAdapter.turnOnRelayOutput(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01))
+                .returns(status, RelayOutputDataDto::getDeviceOutputStatus);
     }
 
     static Stream<Arguments> provideToggle() {

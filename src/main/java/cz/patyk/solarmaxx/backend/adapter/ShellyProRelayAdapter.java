@@ -46,13 +46,13 @@ public class ShellyProRelayAdapter implements RelayAdapter {
 
     private RelayOutputDataDto parseStatusResponseAndUpdateState(RelayOutputDataDto relayOutputDataDto, ShellyProStatusOutputDto shellyProStatusOutputDto) {
         OutputStatus outputStatus = outputStatusMapper.toOutputStatus(shellyProStatusOutputDto.getState());
-        relayOutputDataDto.setOutputStatus(outputStatus);
+        relayOutputDataDto.setDeviceOutputStatus(outputStatus);
         return relayOutputDataDto;
     }
 
     private RelayOutputDataDto parseToogleResponseAndUpdateState(RelayOutputDataDto relayOutpuDatatDto, ShellyProToggleOutputDto shellyProToggleOutputDto) {
         OutputStatus outputStatus = outputStatusMapper.toOutputStatusReverse(shellyProToggleOutputDto.getState());
-        relayOutpuDatatDto.setOutputStatus(outputStatus);
+        relayOutpuDatatDto.setDeviceOutputStatus(outputStatus);
         return relayOutpuDatatDto;
     }
 
