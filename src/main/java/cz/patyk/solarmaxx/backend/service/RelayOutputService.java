@@ -60,6 +60,10 @@ public class RelayOutputService implements CrudService<RelayOutputDto, RelayOutp
         return relayOutputMapper.dtoDataToEntity(relayOutputDataDto);
     }
 
+    public RelayOutput toEntityFromDevice(RelayOutputDataDto relayOutputDataDto) {
+        return relayOutputMapper.fromDeviceRelayOutputDataDtoToEntity(relayOutputDataDto);
+    }
+
     @Override
     public RelayOutputDataDto getOne(Long id) {
         return relayOutputMapper.entityToDataDto(getOneEntity(id));
