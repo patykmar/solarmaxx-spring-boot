@@ -28,7 +28,13 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     @Mapping(target = "relay", expression = "java(getRelayById(dataDto.getRelayId()))")
     public abstract RelayOutput dtoDataToEntity(RelayOutputDataDto dataDto);
 
+    @Mapping(target = "relayOutputSchedules", ignore = true)
+    @Mapping(target = "relay", expression = "java(getRelayById(dataDto.getRelayId()))")
+    @Mapping(target = "outputStatus", source = "deviceOutputStatus")
+    public abstract RelayOutput fromDeviceRelayOutputDataDtoToEntity(RelayOutputDataDto dataDto);
+
     @Override
+    @Mapping(target = "deviceOutputStatus", ignore = true)
     @Mapping(target = "relayId", source = "entity.relay.id")
     @Mapping(target = "relayName", source = "entity.relay.name")
     @Mapping(target = "relayIpAddress", source = "entity.relay.ipAddress")
@@ -53,7 +59,6 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     }
 
     protected SupportedRelayType toSupportedRelayType(RelayOutput relayOutput) {
-        return SupportedRelayType.fromString(
-                relayOutput.getRelay().getRelayType().getDeviceTypeString());
+        return SupportedRelayType.fromString(relayOutput.getRelay().getRelayType().getDeviceTypeString());
     }
 }
