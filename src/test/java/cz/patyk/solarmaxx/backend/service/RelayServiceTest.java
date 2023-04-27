@@ -1,6 +1,5 @@
 package cz.patyk.solarmaxx.backend.service;
 
-import cz.patyk.solarmaxx.EntityConstants;
 import cz.patyk.solarmaxx.backend.dto.RelayDto;
 import cz.patyk.solarmaxx.backend.dto.out.RelayDtoOut;
 import cz.patyk.solarmaxx.backend.dto.out.RelayTypeDtoOut;
@@ -10,6 +9,7 @@ import cz.patyk.solarmaxx.backend.mapper.relay.RelayOutputMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
 import cz.patyk.solarmaxx.backend.repository.UserRepository;
+import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +55,7 @@ class RelayServiceTest {
     void getOneOnLineModeTest() {
         Mockito
                 .when(relayRepository.findById(any(Long.class)))
-                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+                .thenReturn(Optional.of(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON));
 
         RelayDtoOut oneOnLineMode = relayService.getOneOnLineMode(NumberUtils.LONG_ONE);
 
@@ -69,14 +69,14 @@ class RelayServiceTest {
 
         Assertions.assertThat(oneOnLineMode.getRelayOutputDtos())
                 .isNotNull()
-                .hasSize(EntityConstants.RELAY_TASMOTA_ADMIN.getRelayOutputs().size());
+                .hasSize(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getRelayOutputs().size());
     }
 
     @Test
     void getOneDtoTest() {
         Mockito
                 .when(relayRepository.findById(any(Long.class)))
-                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+                .thenReturn(Optional.of(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON));
 
         RelayDto oneDto = relayService.getOneDto(NumberUtils.LONG_ONE);
 

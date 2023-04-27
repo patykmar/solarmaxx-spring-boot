@@ -7,6 +7,7 @@ import cz.patyk.solarmaxx.backend.dto.data.RelayOutputScheduleDataDto;
 import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
 import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
+import cz.patyk.solarmaxx.constants.RelayOutputEntityConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class RelayOutputScheduleMapperTest {
     @Test
     void dtoToEntityTest() {
         Mockito.when(relayOutputService.getOneEntity(any(Long.class)))
-                .thenReturn(EntityConstants.RELAY_OUTPUT_01);
+                .thenReturn(RelayOutputEntityConstants.RELAY_OUTPUT_TASMOTA_ON_010);
 
         RelayOutputSchedule relayOutputSchedule = relayOutputScheduleMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_SCHEDULE_DTO);
 
@@ -48,7 +49,8 @@ class RelayOutputScheduleMapperTest {
 
     @Test
     void entityToDataDtoTest() {
-        RelayOutputScheduleDataDto relayOutputScheduleDataDto = relayOutputScheduleMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT_SCHEDULE);
+        RelayOutputScheduleDataDto relayOutputScheduleDataDto =
+                relayOutputScheduleMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT_SCHEDULE);
 
 
         Assertions.assertThat(relayOutputScheduleDataDto)

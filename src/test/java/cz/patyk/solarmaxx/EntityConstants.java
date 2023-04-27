@@ -2,16 +2,15 @@ package cz.patyk.solarmaxx;
 
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
-import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
+import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Calendar;
-import java.util.List;
 
 public class EntityConstants {
     private EntityConstants() {
@@ -41,54 +40,12 @@ public class EntityConstants {
             .roles(ValueConstants.USER_ROLE_ADMIN)
             .password(ValueConstants.USER_PASSWORD)
             .build();
-
-    public static final RelayOutput RELAY_OUTPUT_01 = RelayOutput.builder()
-            .id(NumberUtils.LONG_ONE)
-            .description("Relay output description 01")
-            .outputId(NumberUtils.BYTE_ZERO)
-            .outputStatus(OutputStatus.NA)
-            .build();
-    public static final RelayOutput RELAY_OUTPUT_02 = RelayOutput.builder()
-            .id(NumberUtils.LONG_ONE)
-            .description("Relay output description 02")
-            .outputId(NumberUtils.BYTE_ONE)
-            .outputStatus(OutputStatus.OFF)
-            .build();
-    public static final RelayOutput RELAY_OUTPUT_03 = RelayOutput.builder()
-            .id(NumberUtils.LONG_ONE)
-            .description("Relay output description 03")
-            .outputId((byte) 2)
-            .outputStatus(OutputStatus.ON)
-            .build();
-    private static final List<RelayOutput> RELAY_OUTPUT_LIST = List.of(RELAY_OUTPUT_01, RELAY_OUTPUT_02, RELAY_OUTPUT_03);
-
-    public static final Relay RELAY_TASMOTA_ADMIN = Relay.builder()
-            .id(NumberUtils.LONG_ONE)
-            .name("Relay TASMOTA with user type ADMIN")
-            .ipAddress(TestRelayConstants.RELAY_IP)
-            .port(TestRelayConstants.RELAY_PORT)
-            .outputCount(TestRelayConstants.RELAY_OUTPUT_COUNT)
-            .user(USER_ADMIN)
-            .relayType(RELAY_TYPE_TASMOTA)
-            .relayOutputs(RELAY_OUTPUT_LIST)
-            .build();
-    public static final Relay RELAY_SHELLY_PRO_ADMIN = Relay.builder()
-            .id(NumberUtils.LONG_ONE)
-            .name("Relay Shelly Pro with user type ADMIN")
-            .ipAddress(TestRelayConstants.RELAY_IP)
-            .port(TestRelayConstants.RELAY_PORT)
-            .outputCount(TestRelayConstants.RELAY_OUTPUT_COUNT)
-            .user(USER_ADMIN)
-            .relayType(RELAY_TYPE_SHELLY)
-            .relayOutputs(RELAY_OUTPUT_LIST)
-            .build();
-
     public static final RelayOutput RELAY_OUTPUT = RelayOutput.builder()
             .id(NumberUtils.LONG_ONE)
             .description("Relay output description")
             .outputId(NumberUtils.BYTE_ONE)
             .outputStatus(OutputStatus.ON)
-            .relay(RELAY_TASMOTA_ADMIN)
+            .relay(RelayEntityConstants.createTasmotaOwnedByAdminOutputOn())
             .build();
 
     public static final RelayOutputSchedule RELAY_OUTPUT_SCHEDULE = RelayOutputSchedule.builder()
