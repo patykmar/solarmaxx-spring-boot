@@ -8,13 +8,11 @@ import cz.patyk.solarmaxx.backend.dto.out.UserDtoOut;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
-import cz.patyk.solarmaxx.backend.mapper.RelayScheduleMapper;
 import cz.patyk.solarmaxx.backend.mapper.UserMapper;
-import cz.patyk.solarmaxx.backend.mapper.WeekDayMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.type.RelayTypeMapper;
-import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayTypeService;
 import cz.patyk.solarmaxx.backend.service.UserService;
+import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +21,6 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.List;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -37,34 +33,27 @@ class RelayMapperTest {
         UserMapper userMapper = Mappers.getMapper(UserMapper.class);
         RelayTypeService relayTypeService = Mockito.mock(RelayTypeService.class);
         RelayTypeMapper relayTypeMapper = Mappers.getMapper(RelayTypeMapper.class);
-        WeekDayMapper weekDayMapper = new WeekDayMapper(new WeekDayModel());
         RelayOutputMapper relayOutputMapper = Mappers.getMapper(RelayOutputMapper.class);
-        RelayScheduleMapper relayScheduleMapper = Mappers.getMapper(RelayScheduleMapper.class);
 
-        ReflectionTestUtils.setField(relayScheduleMapper, "weekDayMapper", weekDayMapper);
 
         ReflectionTestUtils.setField(RELAY_MAPPER, "userService", userService);
         ReflectionTestUtils.setField(RELAY_MAPPER, "userMapper", userMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeMapper", relayTypeMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayTypeService", relayTypeService);
-        ReflectionTestUtils.setField(RELAY_MAPPER, "relayScheduleMapper", relayScheduleMapper);
         ReflectionTestUtils.setField(RELAY_MAPPER, "relayOutputMapper", relayOutputMapper);
     }
 
     @Test
     void toDtoOutTasmotaType() {
-        EntityConstants.RELAY_TASMOTA_ADMIN
-                .setRelaySchedules(List.of(EntityConstants.RELAY_SCHEDULE_TASMOTA));
-
-        RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(EntityConstants.RELAY_TASMOTA_ADMIN);
+        RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON);
 
         Assertions.assertThat(relayDtoOut)
                 .hasNoNullFieldsOrPropertiesExcept("relayOutputDtos", "relaySchedulesOuts")
-                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getId(), RelayDtoOut::getId)
-                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getName(), RelayDtoOut::getName)
-                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getIpAddress(), RelayDtoOut::getIpAddress)
-                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getPort(), RelayDtoOut::getPort)
-                .returns(EntityConstants.RELAY_TASMOTA_ADMIN.getOutputCount(), RelayDtoOut::getOutputCount);
+                .returns(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getId(), RelayDtoOut::getId)
+                .returns(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getName(), RelayDtoOut::getName)
+                .returns(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getIpAddress(), RelayDtoOut::getIpAddress)
+                .returns(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getPort(), RelayDtoOut::getPort)
+                .returns(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON.getOutputCount(), RelayDtoOut::getOutputCount);
 
         Assertions.assertThat(relayDtoOut.getUser())
                 .hasNoNullFieldsOrProperties()
@@ -77,14 +66,14 @@ class RelayMapperTest {
 
     @Test
     void toDtoOutShellyProType() {
-        RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(EntityConstants.RELAY_SHELLY_PRO_ADMIN);
+        RelayDtoOut relayDtoOut = RELAY_MAPPER.toDtoOut(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON);
 
         Assertions.assertThat(relayDtoOut)
-                .returns(EntityConstants.RELAY_SHELLY_PRO_ADMIN.getId(), RelayDtoOut::getId)
-                .returns(EntityConstants.RELAY_SHELLY_PRO_ADMIN.getName(), RelayDtoOut::getName)
-                .returns(EntityConstants.RELAY_SHELLY_PRO_ADMIN.getIpAddress(), RelayDtoOut::getIpAddress)
-                .returns(EntityConstants.RELAY_SHELLY_PRO_ADMIN.getPort(), RelayDtoOut::getPort)
-                .returns(EntityConstants.RELAY_SHELLY_PRO_ADMIN.getOutputCount(), RelayDtoOut::getOutputCount);
+                .returns(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON.getId(), RelayDtoOut::getId)
+                .returns(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON.getName(), RelayDtoOut::getName)
+                .returns(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON.getIpAddress(), RelayDtoOut::getIpAddress)
+                .returns(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON.getPort(), RelayDtoOut::getPort)
+                .returns(RelayEntityConstants.RELAY_SHELLY_PRO_ADMIN_ON.getOutputCount(), RelayDtoOut::getOutputCount);
 
         Assertions.assertThat(relayDtoOut.getUser())
                 .hasNoNullFieldsOrProperties()

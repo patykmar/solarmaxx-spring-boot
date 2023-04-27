@@ -39,10 +39,10 @@ public class TasmotaRelayAdapterFactoryTest {
                 .when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
                 .thenReturn(tasmotaOutputDto);
 
-        RelayOutputDataDto relayOutputDataDto = tasmotaRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO);
+        RelayOutputDataDto relayOutputDataDto = tasmotaRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01);
 
         assertThat(relayOutputDataDto)
-                .returns(status, RelayOutputDataDto::getOutputStatus);
+                .returns(status, RelayOutputDataDto::getDeviceOutputStatus);
     }
 
     private static Stream<Arguments> provideStatuses() {
@@ -59,11 +59,11 @@ public class TasmotaRelayAdapterFactoryTest {
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_ON);
 
         RelayOutputDataDto updatedDataDto = tasmotaRelayAdapter.turnOnRelayOutput(
-                DtoDataConstants.RELAY_OUTPUT_DATA_DTO
+                DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01
         );
 
         assertThat(updatedDataDto)
-                .returns(OutputStatus.ON, RelayOutputDataDto::getOutputStatus);
+                .returns(OutputStatus.ON, RelayOutputDataDto::getDeviceOutputStatus);
     }
 
     @Test
@@ -73,10 +73,10 @@ public class TasmotaRelayAdapterFactoryTest {
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_OFF);
 
         RelayOutputDataDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(
-                DtoDataConstants.RELAY_OUTPUT_DATA_DTO
+                DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01
         );
 
         assertThat(updatedDto)
-                .returns(OutputStatus.OFF, RelayOutputDataDto::getOutputStatus);
+                .returns(OutputStatus.OFF, RelayOutputDataDto::getDeviceOutputStatus);
     }
 }

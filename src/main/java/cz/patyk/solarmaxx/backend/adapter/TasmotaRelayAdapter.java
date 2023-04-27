@@ -62,7 +62,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
     }
 
     private RelayOutputDataDto parseResponseAndUpdateState(RelayOutputDataDto relayOutputDto, TasmotaOutputDto tasmotaOutputDto) {
-        relayOutputDto.setOutputStatus(OutputStatus.fromString(tasmotaOutputDto.getState()));
+        relayOutputDto.setDeviceOutputStatus(OutputStatus.fromString(tasmotaOutputDto.getState()));
         return relayOutputDto;
     }
 }

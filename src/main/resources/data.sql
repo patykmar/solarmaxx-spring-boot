@@ -18,19 +18,26 @@ insert into `relay` (`id`, `name`, `ip_address`, `port`, `output_count`, `user_i
 (1003, 'bojler1tasmota, Shelly 1', '192.168.22.233', 80, 1, 1000, 1001),
 (1004, 'Shelly 4PM', '192.168.22.234', 80, 4, 1000, 1002);
 
-insert into `relay_schedule` (`id`, `relay_id`, output_id, `on_start`, `on_end`, `day_number`) values
-(1001, 1001, 1, '07:36', '18:36', 1),
-(1002, 1001, 1, '07:36', '18:36', 3),
-(1003, 1002, 1, '07:36', '18:36', 3),
-(1004, 1002, 1, '07:36', '18:36', 4),
-(1005, 1003, 1, '07:36', '18:36', 3);
+--insert into `relay_schedule` (`id`, `relay_id`, output_id, `on_start`, `on_end`, `day_number`) values
+--(1001, 1001, 1, '07:36', '18:36', 1),
+--(1002, 1001, 1, '07:36', '18:36', 3),
+--(1003, 1002, 1, '07:36', '18:36', 3),
+--(1004, 1002, 1, '07:36', '18:36', 4),
+--(1005, 1003, 1, '07:36', '18:36', 3);
 
 insert into `relay_output` (`id`, `description`, `output_id`,`output_status`, `relay_id`) values
 (1001, 'Relay port 1001', 1, 'ON',   1001 ),
 (1002, 'Relay port 1002', 2, 'OFF',  1001 ),
 (1003, 'Relay port 1003', 1, 'OFF',  1002 ),
 (1004, 'Relay port 1004', 1, 'ON',   1003 ),
-(1005, 'Relay port 1005', 1, 'ON',   1004 ),
-(1006, 'Relay port 1006', 2, 'NA',   1004 ),
-(1007, 'Relay port 1007', 3, 'NA',   1004 ),
-(1008, 'Relay port 1008', 4, 'NA',   1004 );
+(1005, 'Relay port 1005', 0, 'ON',   1004 ),
+(1006, 'Relay port 1006', 1, 'NA',   1004 ),
+(1007, 'Relay port 1007', 2, 'NA',   1004 ),
+(1008, 'Relay port 1008', 3, 'NA',   1004 );
+
+insert into `relay_output_schedule` (`id`, `relay_output_id`, `on_start`, `on_end`, `day_number`) values
+(1001, 1001, '07:36', '18:36', 1),
+(1002, 1001, '07:36', '18:36', 3),
+(1003, 1002, '07:36', '18:36', 3),
+(1004, 1002, '07:36', '18:36', 4),
+(1005, 1003, '07:36', '18:36', 3);

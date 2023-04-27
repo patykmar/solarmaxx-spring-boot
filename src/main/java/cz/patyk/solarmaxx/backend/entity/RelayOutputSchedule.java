@@ -1,6 +1,5 @@
 package cz.patyk.solarmaxx.backend.entity;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -21,16 +20,14 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RelaySchedule implements Serializable, IEntity<Long> {
+public class RelayOutputSchedule implements Serializable, IEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "relay_id", nullable = false)
-    private Relay relay;
-    private Byte outputId;
+    @JoinColumn(name = "relay_output_id", nullable = false)
+    private RelayOutput relayOutput;
     private String onStart;
     private String onEnd;
     private Byte dayNumber;

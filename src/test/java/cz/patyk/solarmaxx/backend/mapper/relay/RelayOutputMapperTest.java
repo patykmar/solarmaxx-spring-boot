@@ -9,6 +9,7 @@ import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.Relay;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
+import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +39,13 @@ class RelayOutputMapperTest {
     void dtoToEntity() {
         Mockito
                 .when(relayRepository.findById(any(Long.class)))
-                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+                .thenReturn(Optional.of(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON));
 
         RelayOutput relayOutput = relayOutputMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_DTO_ON);
 
         Assertions.assertThat(relayOutput)
                 .isInstanceOf(RelayOutput.class)
+                .hasNoNullFieldsOrProperties()
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getId(), RelayOutput::getId)
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getDescription(), RelayOutput::getDescription)
                 .returns(DtoInConstants.RELAY_OUTPUT_DTO_ON.getOutputId(), RelayOutput::getOutputId)
@@ -58,21 +60,19 @@ class RelayOutputMapperTest {
     void dtoDataToEntity() {
         Mockito
                 .when(relayRepository.findById(any(Long.class)))
-                .thenReturn(Optional.of(EntityConstants.RELAY_TASMOTA_ADMIN));
+                .thenReturn(Optional.of(RelayEntityConstants.RELAY_TASMOTA_ADMIN_ON));
 
-        RelayOutput relayOutput = relayOutputMapper.dtoDataToEntity(DtoDataConstants.RELAY_OUTPUT_DATA_DTO);
-
+        RelayOutput relayOutput = relayOutputMapper.dtoDataToEntity(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01);
 
         Assertions.assertThat(relayOutput)
-                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getId(), RelayOutput::getId)
-                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getDescription(), RelayOutput::getDescription)
-                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getOutputId(), RelayOutput::getOutputId)
-                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO.getOutputStatus(), RelayOutput::getOutputStatus)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01.getId(), RelayOutput::getId)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01.getDescription(), RelayOutput::getDescription)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01.getOutputId(), RelayOutput::getOutputId)
+                .returns(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01.getOutputStatus(), RelayOutput::getOutputStatus)
                 .hasNoNullFieldsOrProperties();
 
         Assertions.assertThat(relayOutput.getRelay())
                 .hasNoNullFieldsOrProperties();
-
     }
 
     @Test
@@ -80,7 +80,7 @@ class RelayOutputMapperTest {
         RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT);
 
         Assertions.assertThat(relayOutputDataDto)
-                .hasNoNullFieldsOrProperties()
+                .hasNoNullFieldsOrPropertiesExcept("deviceOutputStatus")
                 .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDataDto::getId)
                 .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDataDto::getDescription)
                 .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDataDto::getOutputId)
