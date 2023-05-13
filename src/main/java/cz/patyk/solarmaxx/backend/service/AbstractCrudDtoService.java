@@ -1,9 +1,9 @@
 package cz.patyk.solarmaxx.backend.service;
 
-import cz.patyk.solarmaxx.backend.dto.in.IDtoIn;
-import cz.patyk.solarmaxx.backend.dto.out.IDtoOut;
+import cz.patyk.solarmaxx.backend.dto.DtoInterface;
+import cz.patyk.solarmaxx.backend.dto.data.DtoDataInterface;
 import cz.patyk.solarmaxx.backend.entity.IEntity;
-import cz.patyk.solarmaxx.backend.mapper.BasicMapper;
+import cz.patyk.solarmaxx.backend.mapper.BasicDataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * DTO-IN and DTO-OUT concept is deprecate, use DTO vs. DATA DTO, use {@link AbstractCrudDtoService} instead.
  * Specify methods for basic CRUD operations
  *
  * @param <I> input DTO object
@@ -19,29 +18,28 @@ import java.util.List;
  * @param <E> entity object
  * @param <D> Datatype of entity ID
  */
-@Deprecated
 @RequiredArgsConstructor
-public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E extends IEntity<D>, D extends Number> implements CrudService<I, O, E> {
+public abstract class AbstractCrudDtoService<I extends DtoInterface, O extends DtoDataInterface, E extends IEntity<D>, D extends Number> implements CrudService<I, O, E> {
     protected final JpaRepository<E, D> repository;
-    protected final BasicMapper<E, I, O> mapper;
+    protected final BasicDataMapper<E, I, O> mapper;
     protected final ErrorHandleService<D> errorHandleService;
     protected final String notFoundErrorMessage;
 
     public List<O> getAll(Pageable pageable) {
         return repository.findAll(pageable)
-                .map(mapper::toDtoOut)
+                .map(mapper::entityToDataDto)
                 .toList();
     }
 
     @Override
     public List<O> getAll() {
         return repository.findAll().stream()
-                .map(mapper::toDtoOut)
+                .map(mapper::entityToDataDto)
                 .toList();
     }
 
     public O getOne(D id) {
-        return mapper.toDtoOut(getOneEntity(id));
+        return mapper.entityToDataDto(getOneEntity(id));
     }
 
     public E getOneEntity(D id) {
@@ -50,17 +48,17 @@ public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E
     }
 
     public O newItem(I dtoIn) {
-        E entity = mapper.toEntity(dtoIn);
+        E entity = mapper.dtoToEntity(dtoIn);
         return newItemByEntity(entity);
     }
 
     @Override
     public O newItemByEntity(E newEntity) {
-        return mapper.toDtoOut(repository.save(newEntity));
+        return mapper.entityToDataDto(repository.save(newEntity));
     }
 
     public O editItem(I dtoIn, D id) {
-        E entity = mapper.toEntity(dtoIn);
+        E entity = mapper.dtoToEntity(dtoIn);
         entity.setId(id);
         return editItemByEntity(entity);
     }
@@ -68,7 +66,7 @@ public abstract class AbstractCrudService<I extends IDtoIn, O extends IDtoOut, E
     @Override
     public O editItemByEntity(E entity) {
         checkIfExistEntity(entity.getId());
-        return mapper.toDtoOut(repository.save(entity));
+        return mapper.entityToDataDto(repository.save(entity));
     }
 
     public void deleteItem(D id) {

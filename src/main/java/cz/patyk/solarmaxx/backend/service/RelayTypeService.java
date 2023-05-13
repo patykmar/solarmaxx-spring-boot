@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class RelayTypeService extends AbstractCrudService<RelayTypeDtoIn, RelayTypeDtoOut, RelayType, Long> {
 
-    public RelayTypeService(RelayTypeRepository repository, RelayTypeMapper mapper, ErrorHandleService<Long> errorHandleService) {
+    public RelayTypeService(RelayTypeRepository repository,
+                            RelayTypeMapper mapper,
+                            ErrorHandleService<Long> errorHandleService) {
         super(repository, mapper, errorHandleService, ServiceConstants.RELAY_TYPE_NOT_FOUND_MESSAGE);
     }
 

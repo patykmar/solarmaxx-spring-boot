@@ -2,9 +2,11 @@ package cz.patyk.solarmaxx.backend.service.scheduled;
 
 import cz.patyk.solarmaxx.backend.adapter.RelayAdapter;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputScheduleDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.factory.adapter.RelayAdapterFactory;
+import cz.patyk.solarmaxx.backend.service.RelayOutputScheduleService;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,8 @@ import java.util.List;
 public class RelayOutputScheduledService {
     private final RelayOutputService relayOutputService;
     private final RelayAdapterFactory relayAdapterFactory;
+    private final RelayOutputScheduleService relayOutputScheduleService;
+
     private final Calendar calendar = Calendar.getInstance();
     private final Byte weekDay = (byte) calendar.get(Calendar.DAY_OF_WEEK);
 
@@ -41,6 +45,30 @@ public class RelayOutputScheduledService {
     }
 
 
+    // Method collected all outputs which should be up
+    // for concrete day of week
+    // filtered out their which are already up and
+    // rest of ports try turn on
+    void collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek() {
+        log.info("Starting method collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek");
+
+        // load output port based on their schedule for concrete week day
+        List<RelayOutputScheduleDataDto> relayOutputSchedulesDataDto = relayOutputScheduleService.getAllByWeekDayNumber(weekDay);
+
+        log.info("Size of List<relayOutputSchedulesDataDto> is: {}", relayOutputSchedulesDataDto.size());
+
+
+        log.info("Finished method collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek");
+    }
+
+//    private List<RelayOutput> getRelayOutputByWeekDayWhichShouldBeUp() {
+//        relayOutputService.get
+//    }
+
+
+    // method collect all port and filtered out their which
+    // should be down by schedule
+
     /**
      * Select all relay outputs
      */
@@ -49,10 +77,10 @@ public class RelayOutputScheduledService {
     }
 
     /**
-     *  Method connect to devices via their adapter and check status of their outputs.
-     *  Real state of outputs are saved to field {@code deviceOutputStatus} of {@link RelayOutputDataDto}.
-     *  Based on compare field {@code outputStatus} and {@code deviceOutputStatus} there are filtered out
-     *  these items which are the same state.
+     * Method connect to devices via their adapter and check status of their outputs.
+     * Real state of outputs are saved to field {@code deviceOutputStatus} of {@link RelayOutputDataDto}.
+     * Based on compare field {@code outputStatus} and {@code deviceOutputStatus} there are filtered out
+     * these items which are the same state.
      */
     private List<RelayOutput> getRealStateOfRelayOutputs(List<RelayOutputDataDto> relayOutputDataDtos) {
         long startTime = System.nanoTime();
@@ -89,4 +117,6 @@ public class RelayOutputScheduledService {
                     relayOutput.getOutputStatus().getState());
         }
     }
+
+//    boolean shouldBeOutputOn
 }

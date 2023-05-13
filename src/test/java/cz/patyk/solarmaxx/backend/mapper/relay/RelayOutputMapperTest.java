@@ -77,25 +77,25 @@ class RelayOutputMapperTest {
 
     @Test
     void entityToDataDto() {
-        RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT);
+        RelayOutputDataDto relayOutputDataDto = relayOutputMapper.entityToDataDto(EntityConstants.RELAY_OUTPUT_STATUS_ON);
 
         Assertions.assertThat(relayOutputDataDto)
                 .hasNoNullFieldsOrPropertiesExcept("deviceOutputStatus")
-                .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDataDto::getId)
-                .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDataDto::getDescription)
-                .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDataDto::getOutputId)
-                .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus(), RelayOutputDataDto::getOutputStatus);
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getId(), RelayOutputDataDto::getId)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getDescription(), RelayOutputDataDto::getDescription)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getOutputId(), RelayOutputDataDto::getOutputId)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getOutputStatus(), RelayOutputDataDto::getOutputStatus);
     }
 
     @Test
     void entityToDto() {
-        RelayOutputDto relayOutputDto = relayOutputMapper.entityToDto(EntityConstants.RELAY_OUTPUT);
+        RelayOutputDto relayOutputDto = relayOutputMapper.entityToDto(EntityConstants.RELAY_OUTPUT_STATUS_ON);
 
         Assertions.assertThat(relayOutputDto)
-                .returns(EntityConstants.RELAY_OUTPUT.getId(), RelayOutputDto::getId)
-                .returns(EntityConstants.RELAY_OUTPUT.getDescription(), RelayOutputDto::getDescription)
-                .returns(EntityConstants.RELAY_OUTPUT.getOutputId(), RelayOutputDto::getOutputId)
-                .returns(EntityConstants.RELAY_OUTPUT.getOutputStatus().toString(), RelayOutputDto::getOutputStatus)
-                .returns(EntityConstants.RELAY_OUTPUT.getRelay().getId(), RelayOutputDto::getRelayId);
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getId(), RelayOutputDto::getId)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getDescription(), RelayOutputDto::getDescription)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getOutputId(), RelayOutputDto::getOutputId)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getOutputStatus().toString(), RelayOutputDto::getOutputStatus)
+                .returns(EntityConstants.RELAY_OUTPUT_STATUS_ON.getRelay().getId(), RelayOutputDto::getRelayId);
     }
 }

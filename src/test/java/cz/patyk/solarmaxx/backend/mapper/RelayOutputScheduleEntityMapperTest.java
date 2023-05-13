@@ -4,7 +4,7 @@ import cz.patyk.solarmaxx.DtoInConstants;
 import cz.patyk.solarmaxx.EntityConstants;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputScheduleDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputScheduleDataDto;
-import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
+import cz.patyk.solarmaxx.backend.entity.RelayOutputScheduleEntity;
 import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import cz.patyk.solarmaxx.constants.RelayOutputEntityConstants;
@@ -22,7 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 
 
 @ExtendWith(MockitoExtension.class)
-class RelayOutputScheduleMapperTest {
+class RelayOutputScheduleEntityMapperTest {
     @Mock
     RelayOutputService relayOutputService;
     RelayOutputScheduleMapper relayOutputScheduleMapper = Mappers.getMapper(RelayOutputScheduleMapper.class);
@@ -38,12 +38,12 @@ class RelayOutputScheduleMapperTest {
         Mockito.when(relayOutputService.getOneEntity(any(Long.class)))
                 .thenReturn(RelayOutputEntityConstants.RELAY_OUTPUT_TASMOTA_ON_010);
 
-        RelayOutputSchedule relayOutputSchedule = relayOutputScheduleMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_SCHEDULE_DTO);
+        RelayOutputScheduleEntity relayOutputScheduleEntity = relayOutputScheduleMapper.dtoToEntity(DtoInConstants.RELAY_OUTPUT_SCHEDULE_DTO);
 
-        Assertions.assertThat(relayOutputSchedule)
+        Assertions.assertThat(relayOutputScheduleEntity)
                 .hasNoNullFieldsOrProperties();
 
-        Assertions.assertThat(relayOutputSchedule.getRelayOutput())
+        Assertions.assertThat(relayOutputScheduleEntity.getRelayOutput())
                 .hasNoNullFieldsOrPropertiesExcept("relay");
     }
 

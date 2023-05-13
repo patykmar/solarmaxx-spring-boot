@@ -3,7 +3,7 @@ package cz.patyk.solarmaxx;
 import cz.patyk.solarmaxx.backend.dto.relay.RelayConstants;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
-import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
+import cz.patyk.solarmaxx.backend.entity.RelayOutputScheduleEntity;
 import cz.patyk.solarmaxx.backend.entity.RelayType;
 import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
@@ -11,6 +11,7 @@ import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Calendar;
+import java.util.List;
 
 public class EntityConstants {
     private EntityConstants() {
@@ -40,19 +41,44 @@ public class EntityConstants {
             .roles(ValueConstants.USER_ROLE_ADMIN)
             .password(ValueConstants.USER_PASSWORD)
             .build();
-    public static final RelayOutput RELAY_OUTPUT = RelayOutput.builder()
+    public static final RelayOutput RELAY_OUTPUT_STATUS_ON = RelayOutput.builder()
             .id(NumberUtils.LONG_ONE)
             .description("Relay output description")
             .outputId(NumberUtils.BYTE_ONE)
             .outputStatus(OutputStatus.ON)
             .relay(RelayEntityConstants.createTasmotaOwnedByAdminOutputOn())
             .build();
-
-    public static final RelayOutputSchedule RELAY_OUTPUT_SCHEDULE = RelayOutputSchedule.builder()
+    public static final RelayOutput RELAY_OUTPUT_STATUS_OFF = RelayOutput.builder()
             .id(NumberUtils.LONG_ONE)
-            .relayOutput(RELAY_OUTPUT)
+            .description("Relay output description")
+            .outputId(NumberUtils.BYTE_ONE)
+            .outputStatus(OutputStatus.OFF)
+            .relay(RelayEntityConstants.createTasmotaOwnedByAdminOutputOn())
+            .build();
+
+    public static final RelayOutputScheduleEntity RELAY_OUTPUT_SCHEDULE = RelayOutputScheduleEntity.builder()
+            .id(NumberUtils.LONG_ONE)
+            .relayOutput(RELAY_OUTPUT_STATUS_ON)
             .onStart("12:12")
             .onEnd("13:13")
             .dayNumber((byte) Calendar.FRIDAY)
             .build();
+
+    public static RelayOutputScheduleEntity makeRelayOutputScheduleStatusOffEntity(Long id, String onStart, String onEnd) {
+        return RelayOutputScheduleEntity.builder()
+                .id(id)
+                .relayOutput(RELAY_OUTPUT_STATUS_OFF)
+                .onStart(onStart)
+                .onEnd(onEnd)
+                .dayNumber((byte) Calendar.FRIDAY)
+                .build();
+    }
+
+    public static final List<RelayOutputScheduleEntity> RELAY_OUTPUT_SCHEDULE_ENTITIES = List.of(
+            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "08:00", "10:00"),
+            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "12:00", "13:00"),
+            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "16:00", "16:30"),
+            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "20:00", "22:00")
+    );
+
 }
