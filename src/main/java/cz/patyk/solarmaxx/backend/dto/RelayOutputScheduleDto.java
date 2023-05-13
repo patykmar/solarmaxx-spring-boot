@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class RelayOutputScheduleDto {
+public class RelayOutputScheduleDto implements DtoInterface {
     private Long id;
     private Long relayOutputId;
     private String onStart;

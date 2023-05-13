@@ -3,7 +3,7 @@ package cz.patyk.solarmaxx.backend.mapper;
 import cz.patyk.solarmaxx.backend.dto.RelayOutputScheduleDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputScheduleDataDto;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
-import cz.patyk.solarmaxx.backend.entity.RelayOutputSchedule;
+import cz.patyk.solarmaxx.backend.entity.RelayOutputScheduleEntity;
 import cz.patyk.solarmaxx.backend.model.WeekDayModel;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import org.mapstruct.Mapper;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalTime;
 
 @Mapper(componentModel = "spring")
-public abstract class RelayOutputScheduleMapper implements BasicDataMapper<RelayOutputSchedule, RelayOutputScheduleDto, RelayOutputScheduleDataDto> {
+public abstract class RelayOutputScheduleMapper implements BasicDataMapper<RelayOutputScheduleEntity, RelayOutputScheduleDto, RelayOutputScheduleDataDto> {
     @Autowired
     protected RelayOutputService relayOutputService;
     @Autowired
@@ -21,12 +21,12 @@ public abstract class RelayOutputScheduleMapper implements BasicDataMapper<Relay
 
     @Override
     @Mapping(target = "relayOutput", expression = "java(getRelayOutputById(dto.getRelayOutputId()))")
-    public abstract RelayOutputSchedule dtoToEntity(RelayOutputScheduleDto dto);
+    public abstract RelayOutputScheduleEntity dtoToEntity(RelayOutputScheduleDto dto);
 
     @Override
     @Mapping(target = "relayOutput", expression = "java(getRelayOutputById(dataDto.getRelayOutputId()))")
     @Mapping(target = "dayNumber", expression = "java(getPositionFromWeekDay(dataDto.getWeekDay()))")
-    public abstract RelayOutputSchedule dtoDataToEntity(RelayOutputScheduleDataDto dataDto);
+    public abstract RelayOutputScheduleEntity dtoDataToEntity(RelayOutputScheduleDataDto dataDto);
 
     @Override
     @Mapping(target = "onStart", expression = "java(toLocalTime(entity.getOnStart()))")
@@ -36,11 +36,11 @@ public abstract class RelayOutputScheduleMapper implements BasicDataMapper<Relay
     @Mapping(target = "relayOutputDescription", source = "entity.relayOutput.description")
     @Mapping(target = "relayOutputStatus", source = "entity.relayOutput.outputStatus")
     @Mapping(target = "relayId", source = "entity.relayOutput.relay.id")
-    public abstract RelayOutputScheduleDataDto entityToDataDto(RelayOutputSchedule entity);
+    public abstract RelayOutputScheduleDataDto entityToDataDto(RelayOutputScheduleEntity entity);
 
     @Override
     @Mapping(target = "relayOutputId", source = "relayOutput.id")
-    public abstract RelayOutputScheduleDto entityToDto(RelayOutputSchedule entity);
+    public abstract RelayOutputScheduleDto entityToDto(RelayOutputScheduleEntity entity);
 
     protected RelayOutput getRelayOutputById(Long id) {
         return relayOutputService.getOneEntity(id);

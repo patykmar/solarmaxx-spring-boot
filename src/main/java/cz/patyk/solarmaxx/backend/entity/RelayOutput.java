@@ -33,14 +33,17 @@ public class RelayOutput implements Serializable, IEntity<Long> {
     private Long id;
     private String description;
     private Byte outputId;
+
     @Enumerated(EnumType.STRING)
     private OutputStatus outputStatus;
+
     @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "relay_id", nullable = false)
     private Relay relay;
+
     @ToString.Exclude
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "relayOutput")
-    private List<RelayOutputSchedule> relayOutputSchedules = new ArrayList<>();
+    private List<RelayOutputScheduleEntity> relayOutputScheduleEntities = new ArrayList<>();
 }
