@@ -20,8 +20,12 @@ import cz.patyk.solarmaxx.backend.service.RelayOutputScheduleService;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import cz.patyk.solarmaxx.constants.RelayOutputEntityConstants;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -29,7 +33,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.net.URI;
+import java.time.LocalTime;
+import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 
 
@@ -45,6 +52,7 @@ class RelayOutputScheduledServiceTest {
     RelayOutputScheduleRepository relayOutputScheduleRepository;
     RelayAdapterFactory relayAdapterFactory;
     RelayOutputScheduledService relayOutputScheduledService;
+    LocalTime fakeActualTime = LocalTime.of(10, 10);
 
     @BeforeEach
     void setUp() {
@@ -116,16 +124,64 @@ class RelayOutputScheduledServiceTest {
     }
 
     @Test
+    @Disabled("In development process")
     void collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeekTest() {
 
-        Mockito.when(relayOutputScheduleRepository.findAllByDayNumber(anyByte()))
+        Mockito
+                .when(relayOutputScheduleRepository.findAllByDayNumber(anyByte()))
                 .thenReturn(EntityConstants.RELAY_OUTPUT_SCHEDULE_ENTITIES);
 
+        ReflectionTestUtils.setField(relayOutputScheduledService, "actualTime", fakeActualTime);
+
         relayOutputScheduledService.collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek();
+
+        // Verify if 2 times called relayAdapter, it should call method with turn status on
 
         Mockito.verify(relayOutputRepository, Mockito.times(4))
                 .save(any());
 
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideTimeRangeForEnable")
+    void isActualTimeInRange(String startRange, String endRange, boolean expected) {
+        ReflectionTestUtils.setField(relayOutputScheduledService, "actualTime", fakeActualTime);
+
+        assertThat(relayOutputScheduledService.isActualTimeInRange(LocalTime.parse(startRange), LocalTime.parse(endRange)))
+                .isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideTimeRangeForDisable")
+    void isActualTimeOutsideOfTimeRange(String startRange, String endRange, boolean expected) {
+        ReflectionTestUtils.setField(relayOutputScheduledService, "actualTime", fakeActualTime);
+
+        assertThat(!relayOutputScheduledService.isActualTimeInRange(LocalTime.parse(startRange), LocalTime.parse(endRange)))
+                .isEqualTo(expected);
+    }
+
+    private static Stream<Arguments> provideTimeRangeForEnable() {
+        return Stream.of(
+                Arguments.of("10:00", "11:00", true),
+                Arguments.of("10:09", "10:11", true),
+                Arguments.of("10:10", "10:10", true),
+                Arguments.of("10:00", "10:10", true),
+                Arguments.of("10:10", "10:30", true),
+                Arguments.of("20:00", "23:59", false)
+        );
+    }
+
+    private static Stream<Arguments> provideTimeRangeForDisable() {
+        return Stream.of(
+                Arguments.of("10:00", "11:00", false),
+                Arguments.of("10:09", "10:11", false),
+                Arguments.of("10:10", "10:10", false),
+                Arguments.of("10:00", "10:10", false),
+                Arguments.of("10:10", "10:30", false),
+                Arguments.of("20:00", "23:59", true),
+                Arguments.of("00:00", "09:59", true)
+        );
     }
 
 

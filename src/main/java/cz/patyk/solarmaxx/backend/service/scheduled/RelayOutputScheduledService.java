@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class RelayOutputScheduledService {
 
     private final Calendar calendar = Calendar.getInstance();
     private final Byte weekDay = (byte) calendar.get(Calendar.DAY_OF_WEEK);
+    private final LocalTime actualTime = LocalTime.now();
 
     @Scheduled(fixedDelay = 30000)
     void updateOutputStateFromDevices() {
@@ -53,9 +55,15 @@ public class RelayOutputScheduledService {
         log.info("Starting method collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek");
 
         // load output port based on their schedule for concrete week day
-        List<RelayOutputScheduleDataDto> relayOutputSchedulesDataDto = relayOutputScheduleService.getAllByWeekDayNumber(weekDay);
+        relayOutputScheduleService.getAllByWeekDayNumber(weekDay).stream()
+                .filter(relayOutputScheduleDataDto -> isActualTimeInRange(relayOutputScheduleDataDto.getOnStart(), relayOutputScheduleDataDto.getOnEnd()))
+                .filter(this::isNotRelayOutputStatusOn)
+                .map(relayOutputScheduleDataDto -> relayOutputService.getOne(relayOutputScheduleDataDto.getRelayOutputId()))
+                .map(this::setStatusOn)
+                .map(relayOutputService::toEntityFromDevice)
+                .forEach(this::raiseLogBasedOnOutputState);
 
-        log.info("Size of List<relayOutputSchedulesDataDto> is: {}", relayOutputSchedulesDataDto.size());
+//        log.info("Size of List<relayOutputSchedulesDataDto> is: {}", relayOutputSchedulesDataDto.size());
 
 
         log.info("Finished method collectAllRelayOutputsWhichShouldBeUpBySchedulerForConcreteDayOfWeek");
@@ -100,23 +108,49 @@ public class RelayOutputScheduledService {
         return relayAdapter.updateStatusFromRelay(relayOutputDataDto);
     }
 
+    private RelayOutputDataDto setStatusOn(RelayOutputDataDto relayOutputDataDto){
+        RelayAdapter relayAdapter = relayAdapterFactory.getRelayAdapter(relayOutputDataDto.getRelayTypeEnum());
+        return relayAdapter.turnOnRelayOutput(relayOutputDataDto);
+    }
+
+    private RelayOutputDataDto setStatusOff(RelayOutputDataDto relayOutputDataDto){
+        RelayAdapter relayAdapter = relayAdapterFactory.getRelayAdapter(relayOutputDataDto.getRelayTypeEnum());
+        return relayAdapter.turnOffRelayOutput(relayOutputDataDto);
+    }
+
     private boolean isDeviceStatusDifferentThanRealState(RelayOutputDataDto relayOutputDataDto) {
         return !relayOutputDataDto.getOutputStatus().equals(relayOutputDataDto.getDeviceOutputStatus());
     }
 
     void raiseLogBasedOnOutputState(RelayOutput relayOutput) {
         if (OutputStatus.NA.equals(relayOutput.getOutputStatus())) {
-            log.error("Update device id: {}, description: {}, state: {}",
+            log.error("\nUpdate device id: {}, description: {}, state: {}\n",
                     relayOutput.getId(),
                     relayOutput.getDescription(),
                     relayOutput.getOutputStatus().getState());
         } else {
-            log.info("Update device id: {}, description: {}, state: {}",
+            log.info("\nUpdate device id: {}, description: {}, state: {}\n",
                     relayOutput.getId(),
                     relayOutput.getDescription(),
                     relayOutput.getOutputStatus().getState());
         }
     }
 
-//    boolean shouldBeOutputOn
+    public boolean isRelayOutputStatusOn(RelayOutputScheduleDataDto relayOutputScheduleDataDto) {
+        return OutputStatus.ON.equals(relayOutputScheduleDataDto.getRelayOutputStatus());
+    }
+
+    public boolean isNotRelayOutputStatusOn(RelayOutputScheduleDataDto relayOutputScheduleDataDto) {
+        return !isRelayOutputStatusOn(relayOutputScheduleDataDto);
+    }
+
+    public boolean isActualTimeInRange(LocalTime timeStart, LocalTime timeEnd) {
+        boolean isAfter = actualTime.isAfter(timeStart);
+        boolean isBefore = actualTime.isBefore(timeEnd);
+        boolean isOneMinuteRange = timeStart.equals(timeEnd);
+        boolean isInRange = isAfter && isBefore || isOneMinuteRange;
+        boolean isActualTimeOnEdgeOfRange = actualTime.equals(timeStart) || actualTime.equals(timeEnd);
+
+        return isInRange || isActualTimeOnEdgeOfRange;
+    }
 }

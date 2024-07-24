@@ -1,6 +1,7 @@
 package cz.patyk.solarmaxx.backend.mapper;
 
 import cz.patyk.solarmaxx.backend.dto.RelayOutputScheduleDto;
+import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputScheduleDataDto;
 import cz.patyk.solarmaxx.backend.entity.RelayOutput;
 import cz.patyk.solarmaxx.backend.entity.RelayOutputScheduleEntity;

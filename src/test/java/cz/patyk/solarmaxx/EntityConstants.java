@@ -9,9 +9,15 @@ import cz.patyk.solarmaxx.backend.entity.User;
 import cz.patyk.solarmaxx.backend.mapper.relay.TestRelayConstants;
 import cz.patyk.solarmaxx.constants.RelayEntityConstants;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.stream.Stream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class EntityConstants {
     private EntityConstants() {
@@ -56,13 +62,8 @@ public class EntityConstants {
             .relay(RelayEntityConstants.createTasmotaOwnedByAdminOutputOn())
             .build();
 
-    public static final RelayOutputScheduleEntity RELAY_OUTPUT_SCHEDULE = RelayOutputScheduleEntity.builder()
-            .id(NumberUtils.LONG_ONE)
-            .relayOutput(RELAY_OUTPUT_STATUS_ON)
-            .onStart("12:12")
-            .onEnd("13:13")
-            .dayNumber((byte) Calendar.FRIDAY)
-            .build();
+    public static final RelayOutputScheduleEntity RELAY_OUTPUT_SCHEDULE =
+            makeRelayOutputScheduleStatusOnEntity(NumberUtils.LONG_ONE, "12:12", "13:13");
 
     public static RelayOutputScheduleEntity makeRelayOutputScheduleStatusOffEntity(Long id, String onStart, String onEnd) {
         return RelayOutputScheduleEntity.builder()
@@ -74,11 +75,22 @@ public class EntityConstants {
                 .build();
     }
 
+    public static RelayOutputScheduleEntity makeRelayOutputScheduleStatusOnEntity(Long id, String onStart, String onEnd) {
+        return RelayOutputScheduleEntity.builder()
+                .id(id)
+                .relayOutput(RELAY_OUTPUT_STATUS_ON)
+                .onStart(onStart)
+                .onEnd(onEnd)
+                .dayNumber((byte) Calendar.FRIDAY)
+                .build();
+    }
+
     public static final List<RelayOutputScheduleEntity> RELAY_OUTPUT_SCHEDULE_ENTITIES = List.of(
-            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "08:00", "10:00"),
-            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "12:00", "13:00"),
-            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "16:00", "16:30"),
-            makeRelayOutputScheduleStatusOffEntity(NumberUtils.LONG_ONE, "20:00", "22:00")
+            makeRelayOutputScheduleStatusOnEntity(NumberUtils.LONG_ONE, "00:00", "10:10"),
+            makeRelayOutputScheduleStatusOnEntity(2L, "10:10", "13:59"),
+            makeRelayOutputScheduleStatusOffEntity(3L, "10:10", "10:10"),
+            makeRelayOutputScheduleStatusOffEntity(4L, "10:00", "11:59"),
+            makeRelayOutputScheduleStatusOffEntity(5L, "20:00", "23:59")
     );
 
 }
