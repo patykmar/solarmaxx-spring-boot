@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalTime;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public abstract class RelayOutputScheduleMapper implements BasicDataMapper<RelayOutputSchedule, RelayOutputScheduleDto, RelayOutputScheduleDataDto> {
     @Autowired
     protected RelayOutputService relayOutputService;

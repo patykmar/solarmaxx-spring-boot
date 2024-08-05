@@ -16,7 +16,7 @@ public class RelayOutputDataDto implements DtoDataInterface {
     private Long relayId;
     private String relayName;
     private String relayIpAddress;
-    private Short relayPort;
+    private int relayPort;
     private Long relayTypeId;
     private String relayTypeName;
     private String relayTypeString;
