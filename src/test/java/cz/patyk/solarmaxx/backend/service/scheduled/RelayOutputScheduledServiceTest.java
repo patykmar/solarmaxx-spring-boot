@@ -25,6 +25,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.net.URI;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 
 
@@ -68,7 +69,7 @@ class RelayOutputScheduledServiceTest {
         Mockito.when(relayOutputRepository.findAll())
                 .thenReturn(RelayOutputEntityConstants.RELAY_OUTPUT_TASMOTA_LIST_ON);
 
-        Mockito.when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+        Mockito.when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(OutputDtoConstants.TASMOTA_OUTPUT_DTO_ON);
 
         relayOutputScheduledService.updateOutputStateFromDevices();
@@ -94,7 +95,7 @@ class RelayOutputScheduledServiceTest {
                 .thenReturn(true);
 
         // from device adapter you receive, that's outputs are ON
-        Mockito.when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+        Mockito.when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(OutputDtoConstants.SHELLY_PRO_STATUS_TRUE);
 
         // method should update state of output in database

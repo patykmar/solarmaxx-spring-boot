@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 public class TasmotaRelayAdapterFactoryTest {
@@ -36,7 +37,7 @@ public class TasmotaRelayAdapterFactoryTest {
     @MethodSource("provideStatuses")
     void updateStatusFromRelay(OutputStatus status, TasmotaOutputDto tasmotaOutputDto) {
         Mockito
-                .when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+                .when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(tasmotaOutputDto);
 
         RelayOutputDataDto relayOutputDataDto = tasmotaRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01);
@@ -55,7 +56,7 @@ public class TasmotaRelayAdapterFactoryTest {
     @Test
     void turnOnRelayOutput() {
         Mockito
-                .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
+                .when(tasmotaClient.setOutputState(any(URI.class), anyInt(), any(String.class)))
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_ON);
 
         RelayOutputDataDto updatedDataDto = tasmotaRelayAdapter.turnOnRelayOutput(
@@ -69,7 +70,7 @@ public class TasmotaRelayAdapterFactoryTest {
     @Test
     void turnOffRelayOutput() {
         Mockito
-                .when(tasmotaClient.setOutputState(any(URI.class), any(Byte.class), any(String.class)))
+                .when(tasmotaClient.setOutputState(any(URI.class), anyInt(), any(String.class)))
                 .thenReturn(RelayAdapterConstants.TASMOTA_POWER_OFF);
 
         RelayOutputDataDto updatedDto = tasmotaRelayAdapter.turnOffRelayOutput(

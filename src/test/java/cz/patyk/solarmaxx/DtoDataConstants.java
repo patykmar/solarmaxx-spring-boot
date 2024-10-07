@@ -22,17 +22,18 @@ public class DtoDataConstants {
     private DtoDataConstants() {
     }
 
+
     public static RelayOutputDataDto getRelayOutputDataDto(
-            Long id, String typeName, SupportedRelayType supportedRelayType, int port
+            Long id, String typeName, SupportedRelayType supportedRelayType, int port, String ip, int outputId
     ) {
         return RelayOutputDataDto.builder()
                 .id(id)
                 .description(ValueConstants.RELAY_OUTPUT_DATA_DTO_DESCRIPTION)
-                .outputId(NumberUtils.BYTE_ONE)
+                .outputId(outputId)
                 .outputStatus(OutputStatus.OFF)
                 .relayId(NumberUtils.LONG_ONE)
                 .relayName("Relay name DTO " + id)
-                .relayIpAddress(RelayAdapterConstants.FAKE_IP)
+                .relayIpAddress(ip)
                 .relayPort(port)
                 .relayTypeId(NumberUtils.LONG_ONE)
                 .relayTypeName("Relay type name " + typeName)
@@ -41,9 +42,27 @@ public class DtoDataConstants {
                 .build();
     }
 
+    public static RelayOutputDataDto getRelayOutputDataDtoSpecificPortAndFakeIp(
+            Long id, String typeName, SupportedRelayType supportedRelayType, int port
+    ) {
+        return getRelayOutputDataDto(id, typeName, supportedRelayType, port, RelayAdapterConstants.FAKE_IP, NumberUtils.INTEGER_ONE);
+    }
+
+    public static RelayOutputDataDto getRelayOutputDataDtoSpecificPortIpAndOutputId(
+            Long id, String typeName, SupportedRelayType supportedRelayType, int port, String ip, int outputId
+    ) {
+        return getRelayOutputDataDto(id, typeName, supportedRelayType, port, ip, outputId);
+    }
+
     public static RelayOutputDataDto getTasmotaRelayOutputDataDto(Long id, int port) {
-        return getRelayOutputDataDto(
+        return getRelayOutputDataDtoSpecificPortAndFakeIp(
                 id, RelayConstants.DEVICE_TYPE_TASMOTA, SupportedRelayType.TASMOTA, port
+        );
+    }
+
+    public static RelayOutputDataDto getTasmotaRelayOutputDataLocalhostDto(int port, int outputId) {
+        return getRelayOutputDataDtoSpecificPortIpAndOutputId(
+                NumberUtils.LONG_ONE, RelayConstants.DEVICE_TYPE_TASMOTA, SupportedRelayType.TASMOTA, port, RelayAdapterConstants.LOCALHOST, outputId
         );
     }
 
@@ -52,12 +71,12 @@ public class DtoDataConstants {
     }
 
     public static RelayOutputDataDto getShellyProRelayOutputDataDto(Long id, int port) {
-        return getRelayOutputDataDto(
+        return getRelayOutputDataDtoSpecificPortAndFakeIp(
                 id, RelayConstants.DEVICE_TYPE_SHELLY_PRO, SupportedRelayType.SHELLY_PRO, Short.parseShort(String.valueOf(port))
         );
     }
 
     public static RelayOutputDataDto getShellyProRelayOutputDataDtoDefaultPort(Long id) {
-        return getShellyProRelayOutputDataDto(id,80);
+        return getShellyProRelayOutputDataDto(id, 80);
     }
 }

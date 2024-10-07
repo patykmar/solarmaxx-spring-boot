@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 
 @ExtendWith(MockitoExtension.class)
 public class ShellyProRelayAdapterTest {
@@ -37,7 +38,7 @@ public class ShellyProRelayAdapterTest {
     @MethodSource("provideStatuses")
     void getOutputStatusWithSpecificPortObjectTest(OutputStatus status, ShellyProStatusOutputDto shellyProStatusOutputDto) {
         Mockito
-                .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+                .when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(shellyProStatusOutputDto);
 
         RelayOutputDataDto relayOutputDataDto = shellyProRelayAdapter.updateStatusFromRelay(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01);
@@ -57,7 +58,7 @@ public class ShellyProRelayAdapterTest {
     @MethodSource("provideToggle")
     void updateStatusFromRelay(OutputStatus status, ShellyProToggleOutputDto shellyProToggleOutputDto) {
         Mockito
-                .when(shellyProClient.setOutputState(any(URI.class), any(Byte.class)))
+                .when(shellyProClient.setOutputState(any(URI.class), anyInt()))
                 .thenReturn(shellyProToggleOutputDto);
 
         assertThat(shellyProRelayAdapter.turnOnRelayOutput(DtoDataConstants.RELAY_OUTPUT_DATA_DTO_01))

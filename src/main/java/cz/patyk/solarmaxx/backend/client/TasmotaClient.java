@@ -15,14 +15,14 @@ public interface TasmotaClient {
     @GetMapping("/cm?cmnd=Power{outputId}%20STATUS")
     TasmotaOutputDto getOutputStatusWithSpecificPortObject(
             URI baseUrl,
-            @PathVariable("outputId") byte outputId
+            @PathVariable("outputId") int outputId
     );
 
     @Headers("Content-Type: application/json")
     @GetMapping("/cm?cmnd=Power{outputId}%20{toggle}")
     TasmotaOutputDto setOutputState(
             URI baseUrl,
-            @PathVariable("outputId") byte outputId,
+            @PathVariable("outputId") int outputId,
             @PathVariable("toggle") String toggle
     );
 
