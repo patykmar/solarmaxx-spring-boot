@@ -10,6 +10,7 @@ import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.RelayOutputMapper;
 import cz.patyk.solarmaxx.backend.repository.RelayOutputRepository;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
+import cz.patyk.solarmaxx.backend.service.AdapterService;
 import cz.patyk.solarmaxx.backend.service.ErrorHandleService;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import cz.patyk.solarmaxx.constants.RelayOutputEntityConstants;
@@ -48,9 +49,10 @@ class RelayOutputScheduledServiceTest {
 
     @BeforeEach
     void setUp() {
+        AdapterService adapterService = new AdapterService();
         relayAdapterFactory = new RelayAdapterFactory(
-                new TasmotaRelayAdapter(tasmotaClient),
-                new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient)
+                new TasmotaRelayAdapter(tasmotaClient, adapterService),
+                new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient, adapterService)
         );
 
         ReflectionTestUtils.setField(relayOutputMapper, "relayRepository", relayRepository);

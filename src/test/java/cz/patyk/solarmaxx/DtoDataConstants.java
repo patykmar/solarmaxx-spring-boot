@@ -48,21 +48,9 @@ public class DtoDataConstants {
         return getRelayOutputDataDto(id, typeName, supportedRelayType, port, RelayAdapterConstants.FAKE_IP, NumberUtils.INTEGER_ONE);
     }
 
-    public static RelayOutputDataDto getRelayOutputDataDtoSpecificPortIpAndOutputId(
-            Long id, String typeName, SupportedRelayType supportedRelayType, int port, String ip, int outputId
-    ) {
-        return getRelayOutputDataDto(id, typeName, supportedRelayType, port, ip, outputId);
-    }
-
     public static RelayOutputDataDto getTasmotaRelayOutputDataDto(Long id, int port) {
         return getRelayOutputDataDtoSpecificPortAndFakeIp(
                 id, RelayConstants.DEVICE_TYPE_TASMOTA, SupportedRelayType.TASMOTA, port
-        );
-    }
-
-    public static RelayOutputDataDto getTasmotaRelayOutputDataLocalhostDto(int port, int outputId) {
-        return getRelayOutputDataDtoSpecificPortIpAndOutputId(
-                NumberUtils.LONG_ONE, RelayConstants.DEVICE_TYPE_TASMOTA, SupportedRelayType.TASMOTA, port, RelayAdapterConstants.LOCALHOST, outputId
         );
     }
 

@@ -30,7 +30,7 @@ class TasmotaRelayAdapterFactoryIT extends AbstractIntegrationTestWithWireMock {
     }
 
     private void setUpStubWireMockTasmota(int outputId, String file) {
-        var url = "/cm?cmnd=Power%id%%20STATUS".replace("%id%", String.valueOf(outputId));
+        String url = "/cm?cmnd=Power%id%%20STATUS".replace("%id%", String.valueOf(outputId));
         setStubGetHttp200UrlEqualTo(url, file);
     }
 
@@ -41,7 +41,7 @@ class TasmotaRelayAdapterFactoryIT extends AbstractIntegrationTestWithWireMock {
         setUpStubWireMockTasmota(outputId, file);
 
         RelayOutputDataDto relayOutputDataDto =
-                tasmotaRelayAdapter.updateStatusFromRelay(DtoDataConstants.getTasmotaRelayOutputDataLocalhostDto(port, outputId));
+                tasmotaRelayAdapter.updateStatusFromRelay(dataDto.makeTasmotaDataDto(outputId));
 
         assertThat(relayOutputDataDto)
                 .returns(status, RelayOutputDataDto::getDeviceOutputStatus);

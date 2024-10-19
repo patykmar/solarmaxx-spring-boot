@@ -4,6 +4,7 @@ import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
+import cz.patyk.solarmaxx.backend.service.AdapterService;
 import feign.RetryableException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
     public static final String TOGGLE_OFF = "OFF";
 
     private final TasmotaClient tasmotaClient;
+    private final AdapterService adapterService;
 
     @Override
     public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
@@ -27,7 +29,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
 
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.getOutputStatusWithSpecificPortObject(
-                    AdapterUtils.createInsecureBasicUrl(relayOutputDataDto),
+                    adapterService.createInsecureBasicUrl(relayOutputDataDto),
                     relayOutputDataDto.getOutputId()
             );
         } catch (RetryableException e) {
@@ -51,7 +53,7 @@ public class TasmotaRelayAdapter implements RelayAdapter {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.setOutputState(
-                    AdapterUtils.createInsecureBasicUrl(relayOutputDataDto), relayOutputDataDto.getOutputId(), toggle
+                    adapterService.createInsecureBasicUrl(relayOutputDataDto), relayOutputDataDto.getOutputId(), toggle
             );
         } catch (RetryableException e) {
             log.warn(LOG_MSG, relayOutputDataDto.getRelayIpAddress());
