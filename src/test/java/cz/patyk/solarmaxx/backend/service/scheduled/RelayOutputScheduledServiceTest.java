@@ -21,6 +21,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.annotation.Profile;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.net.URI;
@@ -29,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 
-
+@Profile("IT")
 @ExtendWith(MockitoExtension.class)
 class RelayOutputScheduledServiceTest {
 
