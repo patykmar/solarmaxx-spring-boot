@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+@Getter
 @AllArgsConstructor
 public enum OutputStatus {
     ON("ON"),
     OFF("OFF"),
     NA("N/A");
 
-    @Getter
     private final String state;
 
     public static OutputStatus fromString(String state) {
