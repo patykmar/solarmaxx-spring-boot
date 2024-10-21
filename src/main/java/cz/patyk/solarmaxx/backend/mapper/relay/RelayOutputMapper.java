@@ -12,7 +12,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, RelayOutputDto, RelayOutputDataDto> {
     @Autowired
     protected RelayRepository relayRepository;
