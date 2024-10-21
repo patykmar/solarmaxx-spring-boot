@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-@Mapper(uses = {UserMapper.class, RelayTypeMapper.class})
+@Mapper(componentModel = "spring", uses = {UserMapper.class, RelayTypeMapper.class})
 public abstract class RelayMapper implements BasicMapper<Relay, RelayDtoIn, RelayDtoOut> {
 
     @Autowired
