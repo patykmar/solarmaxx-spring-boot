@@ -1,6 +1,5 @@
 package cz.patyk.solarmaxx.backend.client;
 
-import cz.patyk.solarmaxx.backend.adapter.ShellyProRelayAdapterTest;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tested relay client to real relay. This test is only for troubleshoot purpose.
  * By default, test methods are disabled, because cannot guarantee connection to
  * real relay. When you want to test it, please update URL constant and removed
- * Disabled annotation. Mocked test are covered in {@link ShellyProRelayAdapterTest}
+ * Disabled annotation.
  */
 class ShellyProClientTest {
     static final String URL = "http://192.168.22.234";
@@ -49,7 +48,7 @@ class ShellyProClientTest {
     @Test
     @Disabled("Test required connection to real relay. This test is for developing purpose")
     void setToggleStatus() {
-        ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(specificUrl, (byte) 1);
+        ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(specificUrl, (byte) 1, false);
         assertEquals(OutputStatus.ON, parseToogleResponseAndUpdateState(shellyProToggleOutputDto));
     }
 

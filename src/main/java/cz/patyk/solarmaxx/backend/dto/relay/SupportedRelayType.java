@@ -1,15 +1,15 @@
 package cz.patyk.solarmaxx.backend.dto.relay;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
-@AllArgsConstructor
+@Getter
+@RequiredArgsConstructor
 public enum SupportedRelayType {
     TASMOTA("tasmota"),
     SHELLY_PRO("shelly-pro");
 
-    @Getter
     private final String relayType;
 
     public static SupportedRelayType fromString(String relayType) {

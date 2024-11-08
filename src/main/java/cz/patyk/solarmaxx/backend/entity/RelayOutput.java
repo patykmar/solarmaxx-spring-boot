@@ -32,7 +32,7 @@ public class RelayOutput implements Serializable, IEntity<Long> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
-    private Byte outputId;
+    private Integer outputId;
     @Enumerated(EnumType.STRING)
     private OutputStatus outputStatus;
     @ToString.Exclude

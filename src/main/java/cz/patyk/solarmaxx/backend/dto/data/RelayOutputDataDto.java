@@ -10,13 +10,13 @@ import lombok.Data;
 public class RelayOutputDataDto implements DtoDataInterface {
     private Long id;
     private String description;
-    private Byte outputId;
+    private Integer outputId;
     private OutputStatus outputStatus;
     private OutputStatus deviceOutputStatus;
     private Long relayId;
     private String relayName;
     private String relayIpAddress;
-    private Short relayPort;
+    private Integer relayPort;
     private Long relayTypeId;
     private String relayTypeName;
     private String relayTypeString;

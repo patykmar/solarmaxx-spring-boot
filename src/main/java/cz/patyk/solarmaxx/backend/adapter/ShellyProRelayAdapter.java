@@ -6,6 +6,7 @@ import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProStatusOutputDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.shellypro.ShellyProToggleOutputDto;
 import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
+import cz.patyk.solarmaxx.backend.service.AdapterService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,23 +19,22 @@ import org.springframework.stereotype.Component;
 public class ShellyProRelayAdapter implements RelayAdapter {
     private final OutputStatusMapper outputStatusMapper;
     private final ShellyProClient shellyProClient;
+    private final AdapterService adapterService;
 
     @Override
     public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
-        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
-
         ShellyProStatusOutputDto shellyProStatusOutputDto = shellyProClient.getOutputStatusWithSpecificPortObject(
-                AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
+                adapterService.createInsecureBasicUrl(relayOutputDataDto), relayOutputDataDto.getOutputId()
         );
         return parseStatusResponseAndUpdateState(relayOutputDataDto, shellyProStatusOutputDto);
     }
 
     @Override
     public RelayOutputDataDto turnOnRelayOutput(@NonNull RelayOutputDataDto relayOutputDataDto) {
-        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
-
         ShellyProToggleOutputDto shellyProToggleOutputDto = shellyProClient.setOutputState(
-                AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId()
+                adapterService.createInsecureBasicUrl(relayOutputDataDto),
+                relayOutputDataDto.getOutputId(),
+                adapterService.convertOutputStatusToBoolean(relayOutputDataDto.getOutputStatus())
         );
         return parseToogleResponseAndUpdateState(relayOutputDataDto, shellyProToggleOutputDto);
     }

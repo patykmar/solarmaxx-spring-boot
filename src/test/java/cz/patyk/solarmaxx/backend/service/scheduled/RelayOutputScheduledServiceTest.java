@@ -10,6 +10,7 @@ import cz.patyk.solarmaxx.backend.mapper.relay.OutputStatusMapper;
 import cz.patyk.solarmaxx.backend.mapper.relay.RelayOutputMapper;
 import cz.patyk.solarmaxx.backend.repository.RelayOutputRepository;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
+import cz.patyk.solarmaxx.backend.service.AdapterService;
 import cz.patyk.solarmaxx.backend.service.ErrorHandleService;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import cz.patyk.solarmaxx.constants.RelayOutputEntityConstants;
@@ -25,8 +26,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.net.URI;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
-
 
 @ExtendWith(MockitoExtension.class)
 class RelayOutputScheduledServiceTest {
@@ -47,9 +48,10 @@ class RelayOutputScheduledServiceTest {
 
     @BeforeEach
     void setUp() {
+        AdapterService adapterService = new AdapterService();
         relayAdapterFactory = new RelayAdapterFactory(
-                new TasmotaRelayAdapter(tasmotaClient),
-                new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient)
+                new TasmotaRelayAdapter(tasmotaClient, adapterService),
+                new ShellyProRelayAdapter(new OutputStatusMapper(), shellyProClient, adapterService)
         );
 
         ReflectionTestUtils.setField(relayOutputMapper, "relayRepository", relayRepository);
@@ -68,7 +70,7 @@ class RelayOutputScheduledServiceTest {
         Mockito.when(relayOutputRepository.findAll())
                 .thenReturn(RelayOutputEntityConstants.RELAY_OUTPUT_TASMOTA_LIST_ON);
 
-        Mockito.when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+        Mockito.when(tasmotaClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(OutputDtoConstants.TASMOTA_OUTPUT_DTO_ON);
 
         relayOutputScheduledService.updateOutputStateFromDevices();
@@ -94,7 +96,7 @@ class RelayOutputScheduledServiceTest {
                 .thenReturn(true);
 
         // from device adapter you receive, that's outputs are ON
-        Mockito.when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), any(Byte.class)))
+        Mockito.when(shellyProClient.getOutputStatusWithSpecificPortObject(any(URI.class), anyInt()))
                 .thenReturn(OutputDtoConstants.SHELLY_PRO_STATUS_TRUE);
 
         // method should update state of output in database

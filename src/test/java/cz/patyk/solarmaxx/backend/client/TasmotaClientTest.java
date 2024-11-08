@@ -3,7 +3,6 @@ package cz.patyk.solarmaxx.backend.client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapter;
-import cz.patyk.solarmaxx.backend.adapter.TasmotaRelayAdapterFactoryTest;
 import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
 import feign.Feign;
 import feign.form.spring.SpringFormEncoder;
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * Tested relay client to real relay. This test is only for troubleshoot purpose.
  * By default, test methods are disabled, because cannot guarantee connection to
  * real relay. When you want to test it, please update URL constant and removed
- * Disabled annotation. Mocked test are covered in {@link TasmotaRelayAdapterFactoryTest}
+ * Disabled annotation.
  */
 class TasmotaClientTest {
     static final String URL = "http://192.168.22.229";

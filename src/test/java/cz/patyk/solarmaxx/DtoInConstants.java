@@ -61,7 +61,7 @@ public class DtoInConstants {
     public static final RelayOutputDto RELAY_OUTPUT_DTO_ON = RelayOutputDto.builder()
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
-            .outputId(NumberUtils.BYTE_ONE)
+            .outputId(NumberUtils.INTEGER_ONE)
             .outputStatus(RelayAdapterConstants.TASMOTA_ON)
             .relayId(NumberUtils.LONG_ONE)
             .build();
@@ -69,7 +69,7 @@ public class DtoInConstants {
     public static final RelayOutputDto RELAY_OUTPUT_DTO_OFF = RelayOutputDto.builder()
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
-            .outputId(NumberUtils.BYTE_ONE)
+            .outputId(NumberUtils.INTEGER_ONE)
             .outputStatus(RelayAdapterConstants.TASMOTA_OFF)
             .relayId(NumberUtils.LONG_ONE)
             .build();
@@ -77,7 +77,7 @@ public class DtoInConstants {
     public static final RelayOutputDto RELAY_OUTPUT_DTO_NA = RelayOutputDto.builder()
             .id(NumberUtils.LONG_ONE)
             .description(ValueConstants.RELAY_OUTPUT_DTO_DESCRIPTION)
-            .outputId(NumberUtils.BYTE_ONE)
+            .outputId(NumberUtils.INTEGER_ONE)
             .outputStatus(RelayAdapterConstants.TASMOTA_NA)
             .relayId(NumberUtils.LONG_ONE)
             .build();

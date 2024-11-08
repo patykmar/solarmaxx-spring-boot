@@ -10,9 +10,12 @@ import cz.patyk.solarmaxx.backend.mapper.BasicDataMapper;
 import cz.patyk.solarmaxx.backend.repository.RelayRepository;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
+import org.mapstruct.ValueMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, RelayOutputDto, RelayOutputDataDto> {
     @Autowired
     protected RelayRepository relayRepository;
@@ -42,7 +45,7 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     @Mapping(target = "relayTypeId", source = "entity.relay.relayType.id")
     @Mapping(target = "relayTypeName", source = "entity.relay.relayType.name")
     @Mapping(target = "relayTypeString", source = "entity.relay.relayType.deviceTypeString")
-    @Mapping(target = "relayTypeEnum", expression = "java(toSupportedRelayType(entity))")
+    @Mapping(target = "relayTypeEnum", source = "relay.relayType.deviceTypeString", qualifiedByName = "stringToBankTransactionCodeMapping")
     public abstract RelayOutputDataDto entityToDataDto(RelayOutput entity);
 
     @Override
@@ -61,4 +64,11 @@ public abstract class RelayOutputMapper implements BasicDataMapper<RelayOutput, 
     protected SupportedRelayType toSupportedRelayType(RelayOutput relayOutput) {
         return SupportedRelayType.fromString(relayOutput.getRelay().getRelayType().getDeviceTypeString());
     }
+
+    @Named("stringToBankTransactionCodeMapping")
+    @ValueMapping(target = "TASMOTA", source = "tasmota")
+    @ValueMapping(target = "SHELLY_PRO", source = "shelly-pro")
+    @ValueMapping(target = MappingConstants.THROW_EXCEPTION, source = MappingConstants.ANY_UNMAPPED)
+    public abstract SupportedRelayType fromStringToSupportedRelayType(String deviceTypeAsAString);
+
 }

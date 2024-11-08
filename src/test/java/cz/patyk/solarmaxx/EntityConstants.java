@@ -43,7 +43,7 @@ public class EntityConstants {
     public static final RelayOutput RELAY_OUTPUT = RelayOutput.builder()
             .id(NumberUtils.LONG_ONE)
             .description("Relay output description")
-            .outputId(NumberUtils.BYTE_ONE)
+            .outputId(NumberUtils.INTEGER_ONE)
             .outputStatus(OutputStatus.ON)
             .relay(RelayEntityConstants.createTasmotaOwnedByAdminOutputOn())
             .build();

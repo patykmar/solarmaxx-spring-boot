@@ -8,7 +8,7 @@ import lombok.Data;
 public class RelayOutputDto implements DtoInterface {
     private Long id;
     private String description;
-    private Byte outputId;
+    private Integer outputId;
     private String outputStatus;
     private Long relayId;
 }

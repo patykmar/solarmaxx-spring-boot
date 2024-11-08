@@ -4,6 +4,7 @@ import cz.patyk.solarmaxx.backend.client.TasmotaClient;
 import cz.patyk.solarmaxx.backend.dto.data.RelayOutputDataDto;
 import cz.patyk.solarmaxx.backend.dto.relay.output.OutputStatus;
 import cz.patyk.solarmaxx.backend.dto.relay.output.TasmotaOutputDto;
+import cz.patyk.solarmaxx.backend.service.AdapterService;
 import feign.RetryableException;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -15,22 +16,24 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TasmotaRelayAdapter implements RelayAdapter {
+    public static final String LOG_MSG = "Cannot connect to {}, due timeout.";
     public static final String TOGGLE_ON = "ON";
     public static final String TOGGLE_OFF = "OFF";
 
     private final TasmotaClient tasmotaClient;
+    private final AdapterService adapterService;
 
     @Override
     public RelayOutputDataDto updateStatusFromRelay(@NonNull RelayOutputDataDto relayOutputDataDto) {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
-        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
+
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.getOutputStatusWithSpecificPortObject(
-                    AdapterUtils.createInsecureBasicUrl(relayIpAddress),
+                    adapterService.createInsecureBasicUrl(relayOutputDataDto),
                     relayOutputDataDto.getOutputId()
             );
         } catch (RetryableException e) {
-            log.warn("Cannot connect to {}, due timeout.", relayIpAddress);
+            log.warn(LOG_MSG, relayOutputDataDto.getRelayIpAddress());
             outputStatusWithSpecificPortObject = TasmotaOutputDto.builder().state("NA").build();
         }
         return parseResponseAndUpdateState(relayOutputDataDto, outputStatusWithSpecificPortObject);
@@ -48,13 +51,12 @@ public class TasmotaRelayAdapter implements RelayAdapter {
 
     private RelayOutputDataDto toggleRelayOutput(RelayOutputDataDto relayOutputDataDto, String toggle) {
         TasmotaOutputDto outputStatusWithSpecificPortObject;
-        String relayIpAddress = relayOutputDataDto.getRelayIpAddress();
         try {
             outputStatusWithSpecificPortObject = tasmotaClient.setOutputState(
-                    AdapterUtils.createInsecureBasicUrl(relayIpAddress), relayOutputDataDto.getOutputId(), toggle
+                    adapterService.createInsecureBasicUrl(relayOutputDataDto), relayOutputDataDto.getOutputId(), toggle
             );
         } catch (RetryableException e) {
-            log.warn("Cannot connect to {}, due timeout.", relayIpAddress);
+            log.warn(LOG_MSG, relayOutputDataDto.getRelayIpAddress());
             outputStatusWithSpecificPortObject = TasmotaOutputDto.builder().state("NA").build();
         }
 

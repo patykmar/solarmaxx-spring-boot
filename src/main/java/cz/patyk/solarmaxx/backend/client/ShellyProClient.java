@@ -14,9 +14,13 @@ import java.net.URI;
 public interface ShellyProClient {
     @Headers("Content-Type: application/json")
     @GetMapping("/rpc/Switch.GetStatus?id={outputId}")
-    ShellyProStatusOutputDto getOutputStatusWithSpecificPortObject(URI baseUrl, @PathVariable("outputId") byte outputId);
+    ShellyProStatusOutputDto getOutputStatusWithSpecificPortObject(URI baseUrl, @PathVariable("outputId") int outputId);
+
+    @Headers("Content-Type: application/json")
+    @GetMapping("/rpc/Switch.Set?id={outputId}&on={state}")
+    ShellyProToggleOutputDto setOutputState(URI baseUrl, @PathVariable("outputId") int outputId, @PathVariable("state") boolean state);
 
     @Headers("Content-Type: application/json")
     @GetMapping("/rpc/Switch.Toggle?id={outputId}")
-    ShellyProToggleOutputDto setOutputState(URI baseUrl, @PathVariable("outputId") byte outputId);
+    ShellyProToggleOutputDto toggleOutputState(URI baseUrl, @PathVariable("outputId") int outputId);
 }

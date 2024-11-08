@@ -8,6 +8,7 @@ import cz.patyk.solarmaxx.backend.factory.adapter.RelayAdapterFactory;
 import cz.patyk.solarmaxx.backend.service.RelayOutputService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
+@Profile("!IT")
 @RequiredArgsConstructor
 public class RelayOutputScheduledService {
     private final RelayOutputService relayOutputService;
